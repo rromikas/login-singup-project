@@ -1,0 +1,212 @@
+$themeMain: #f88888;
+$themeLighterMain: #f7b9b9;
+$themeMainContrast: #4c508f;
+$themWhite: #f0f0f0;
+$convex: 12px 12px 24px #cfcfcf, -12px -12px 24px #f5f5f5;
+$concave: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2),
+  inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
+$convex2: 3px 4px 6px rgba(0, 0, 0, 0.24),
+  -2px -2px 6px rgba(255, 255, 255, 0.35);
+$shifted: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(0, 0, 0, 0.24);
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-size: cover;
+  background-position: center;
+  font-family: poppins !important;
+}
+
+.soft-btn {
+  box-shadow: $convex;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  border-radius: 40px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  background: transparent;
+}
+
+.soft-btn:active {
+  outline: none !important;
+  opacity: 0.8;
+}
+
+.soft-btn:focus {
+  outline: none !important;
+}
+.bg-light {
+  background-color: $themWhite;
+}
+
+.concave {
+  box-shadow: $concave;
+}
+
+.convex {
+  box-shadow: $convex;
+}
+
+.convex-2 {
+  box-shadow: $convex2;
+}
+
+.soft-input {
+  border-radius: 40px;
+  box-shadow: $concave;
+  padding: 1rem !important;
+  //   color: $darkColor;
+  outline: none;
+  border: none;
+  width: 100%;
+  background: transparent;
+}
+
+.soft-box {
+  box-shadow: $convex2;
+  padding: 1rem !important;
+  border-radius: 40px;
+}
+
+.shift {
+  box-shadow: 2px 2px 22px rgba(0, 0, 0, 0.38);
+}
+
+.shn {
+  background: linear-gradient(
+    135deg,
+    rgba(2, 0, 36, 0) 4%,
+    rgba(40, 31, 187, 0) 28%,
+    rgba(255, 255, 255, 1) 48%,
+    rgba(8, 32, 136, 0) 71%,
+    rgba(0, 212, 255, 0) 100%
+  );
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+  background-position: 200% 200%;
+  transition: background-position 1s;
+}
+
+.shn:hover {
+  transition: background-position 1s;
+  animation: shine 1s linear;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% 200%;
+  }
+
+  100% {
+    background-position: -200% -200%;
+  }
+}
+
+.disable-select {
+  user-select: none;
+}
+
+.borderless {
+  border: none;
+  outline: none;
+}
+
+$widths: 100;
+@mixin w-list {
+  @for $i from 0 through $widths {
+    .w-#{$i} {
+      width: #{$i}% !important;
+    }
+  }
+}
+
+@include w-list;
+
+.pointer {
+  cursor: pointer;
+}
+
+$heights: 100;
+@mixin h-list {
+  @for $i from 0 through $heights {
+    .h-#{$i} {
+      height: #{$i}% !important;
+    }
+  }
+}
+
+@include h-list;
+
+.pointer {
+  cursor: pointer;
+}
+
+.img-uploader {
+  position: absolute;
+  bottom: 0;
+  background: radial-gradient(at left top, $themeMainContrast, $themeMain);
+  height: 25%;
+  transition: height 0.4s ease-in-out;
+}
+
+.img-uploader:hover {
+  height: 45%;
+  transition: height 0.3s ease-in-out;
+}
+
+.font-light {
+  color: $themeMain;
+}
+
+.brdr-light {
+  border: 1px solid $themeMain;
+  outline: $themeMain;
+}
+
+.reject {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.bg-theme {
+  background: radial-gradient(at left top, $themeMainContrast, $themeMain);
+  background-size: cover;
+}
+
+.image-bg-theme {
+  background: radial-gradient(circle at left, $themeMain, $themeLighterMain);
+}
