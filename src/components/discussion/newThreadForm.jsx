@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { renderEditor } from "./renderEditor";
 import { getBook, craeteThread } from "../../javascript/requests";
 import { toast } from "react-toastify";
 import history from "../../routing/history";
 import { Editor, EditorState } from "draft-js";
+import { useSelector } from "react-redux";
 
 const NewThreadForm = (props) => {
   const bookId = props.match.params.bookId;
   const [book, setBook] = useState({ image: "", title: "", atuhors: "" });
+  const user = useSelector((state) => state.user);
   const [thread, setThread] = useState({
     description: "",
     title: "",
-    userId: localStorage["userId"],
+    userId: user._id,
     bookId: bookId,
   });
   useEffect(() => {
@@ -92,18 +94,26 @@ const NewThreadForm = (props) => {
         <div className="row no-gutters" id="question-editor"></div>
         <div className="row no-gutters">
           <div
-            className="my-btn bg-theme-simple py-3 px-5 mt-3"
+            className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
             onClick={() => {
               craeteThread(thread, (res) => {
                 if (res.error) {
                   toast.error(res.error.toString());
                 } else {
-                  toast.success("Thread successfuly created");
+                  history.push(`/books/${bookId}`);
                 }
               });
             }}
           >
             Publish
+          </div>
+          <div
+            className="btn btn-outline-secondary py-3 px-5 mt-3"
+            onClick={() => {
+              history.push(`/books/${bookId}`);
+            }}
+          >
+            Cancel
           </div>
         </div>
       </div>

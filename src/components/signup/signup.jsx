@@ -6,7 +6,11 @@ import EmailForm from "./emailForm";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 
-const Signup = () => {
+const Signup = (props) => {
+  const successPath = props?.location?.state?.successPath
+    ? props.location.state.successPath
+    : "/login";
+  console.log("success apath signup", successPath);
   return (
     <div
       className="w-100 overflow-auto bg-theme px-2 py-4"
@@ -35,13 +39,19 @@ const Signup = () => {
             style={{ maxWidth: "400px" }}
           >
             <div className="mb-3">
-              <Facebook text="Sign Up with Facebook"></Facebook>
+              <Facebook
+                text="Sign Up with Facebook"
+                successPath={successPath}
+              ></Facebook>
             </div>
             <div>
-              <Google text="Sign Up with Google"></Google>
+              <Google
+                text="Sign Up with Google"
+                successPath={successPath}
+              ></Google>
             </div>
             <hr className="mt-4"></hr>
-            <EmailForm></EmailForm>
+            <EmailForm successPath={successPath}></EmailForm>
             <div className="text-center mt-2">
               Already have an account?
               <span

@@ -3,7 +3,7 @@ import CheckBox from "../utility/checkbox";
 import history from "../../routing/history";
 import { signup } from "../../javascript/requests";
 
-const EmailForm = () => {
+const EmailForm = ({ successPath }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!checked) {
@@ -21,7 +21,7 @@ const EmailForm = () => {
           setError(res.error.message ? res.error.message : res.error);
         } else {
           localStorage["secret_token"] = res.token;
-          history.push({ pathname: "/login" });
+          history.push(successPath);
         }
       });
     }
@@ -45,7 +45,7 @@ const EmailForm = () => {
       <input
         name="password"
         type="password"
-        className="soft-input mb-2 shn px-4"
+        className="round-input mb-2 shn px-4"
         id="password"
         required
         pattern=".{6,}"

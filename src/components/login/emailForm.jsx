@@ -1,32 +1,36 @@
 import React, { useState } from "react";
 import { login } from "../../javascript/requests";
 import history from "../../routing/history";
+import store from "../../store/store";
 
-const handleSubmit = (e, onError, setLoading) => {
+const handleSubmit = (e, onError, setLoading, successPath) => {
   e.preventDefault();
   setLoading(true);
-  let user = {};
+  let newUser = {};
   const formData = new FormData(e.target);
   for (var [key, value] of formData.entries()) {
-    user[key] = value;
+    newUser[key] = value;
   }
 
-  login(user, (res) => {
+  login(newUser, (res) => {
+    console.log("response email form login", res);
     setLoading(false);
     if (res.error) {
       onError(res.error.message ? res.error.message : res.error);
     } else {
+      console.log("esu čia kur reikia", successPath);
       localStorage["secret_token"] = res.token;
-      history.push("/profile", res.user);
+      store.dispatch({ type: "SET_USER", user: res.user });
+      history.push(successPath);
     }
   });
 };
 
-const EmailForm = () => {
+const EmailForm = ({ successPath }) => {
   const [error, setError] = useState("none");
   const [loading, setLoading] = useState(false);
   return (
-    <form onSubmit={(e) => handleSubmit(e, setError, setLoading)}>
+    <form onSubmit={(e) => handleSubmit(e, setError, setLoading, successPath)}>
       <label htmlFor="email">Email</label>
       <input
         name="email"

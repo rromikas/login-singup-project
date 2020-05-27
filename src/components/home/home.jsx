@@ -3,10 +3,9 @@ import OptionPanel from "../search/optionPanel";
 import Results from "../search/results";
 import { getAllBooks, search, filter } from "../../javascript/requests";
 import { toast } from "react-toastify";
-import history from "../../routing/history";
+import UserMenu from "../UserMenu";
 
-const Main = () => {
-  const [query, setQuery] = useState("");
+const Home = () => {
   const [genres, setGenres] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
@@ -94,21 +93,7 @@ const Main = () => {
             className="col-lg-3 col-md-4 col-sm-5 d-none d-sm-block p-4"
             style={{ background: "rgb(255, 140, 140)" }}
           >
-            <div className="row no-gutters p-3 convex mb-4 bg-light border rounded-8 justify-content-between">
-              <div
-                className="col-auto pl-2"
-                onClick={() => history.push("/login")}
-              >
-                Login
-              </div>
-              <div
-                className="col-auto pl-2"
-                onClick={() => history.push("/search")}
-              >
-                Search
-              </div>
-              <div className="col-auto px-2">Add Book</div>
-            </div>
+            <UserMenu></UserMenu>
             <div className="row no-gutters">
               <OptionPanel
                 title="Genres"
@@ -139,4 +124,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Home;

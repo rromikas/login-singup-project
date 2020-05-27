@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getBook } from "../../javascript/requests";
+import { getBook, addBookToFavorites } from "../../javascript/requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import Discussion from "../discussion/discussion";
 import { FaRegHeart } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Book = (props) => {
   const bookId = props.match.params.bookId;
+  const user = useSelector((state) => state.user);
+  const [tick, setTick] = useState(false);
   const [book, setBook] = useState({
     image: "",
     title: "",
@@ -25,7 +28,7 @@ const Book = (props) => {
         setBook(res.data.filteredBooks[0]);
       }
     });
-  }, []);
+  }, [tick]);
 
   return (
     <div
@@ -35,7 +38,7 @@ const Book = (props) => {
       <div
         className="container-fluid bg-light shift corners-theme p-3 p-sm-4 p-md-5"
         style={{
-          maxWidth: "1000px",
+          maxWidth: "1100px",
           overflow: "hidden",
         }}
       >
@@ -59,7 +62,25 @@ const Book = (props) => {
             </div>
             <div className="row no-gutters">
               <div className="d-flex">
-                <FaRegHeart fontSize="24px"></FaRegHeart>
+                <div className="mr-2">{book.favorite}</div>
+                <FaRegHeart
+                  fontSize="24px"
+                  onClick={() => {
+                    if (user._id) {
+                      addBookToFavorites(bookId, user._id, (res) => {
+                        console.log(res);
+                        if (!res.data.error) {
+                          setTick(!tick);
+                        } else {
+                        }
+                      });
+                    } else {
+                      history.push("/login", {
+                        successPath: `/books/${bookId}`,
+                      });
+                    }
+                  }}
+                ></FaRegHeart>
                 <div className="ml-2">Add to my favorites</div>
               </div>
             </div>

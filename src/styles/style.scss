@@ -1,4 +1,5 @@
 $themeMain: #f88888;
+$themeMainDarker: #da6464;
 $themeLighterMain: #f7b9b9;
 $themeMainContrast: #4c508f;
 $themWhite: #f0f0f0;
@@ -256,7 +257,8 @@ $heights: 100;
 }
 
 .my-btn {
-  @extend .cursor-pointer, .white-font, .rounded-8, .flex-center, .convex;
+  @extend .cursor-pointer, .white-font, .flex-center, .convex;
+  border-radius: 0.25rem;
 }
 
 .outline-btn-rounded {
@@ -367,4 +369,14 @@ $breakpoints: (
   @include respond-to("medium") {
     border-radius: 8px;
   }
+}
+
+.btn-primary {
+  background-color: $themeMain !important;
+  border-color: $themeMain !important;
+}
+
+.btn-primary:hover {
+  background-color: $themeMainDarker !important;
+  border-color: $themeMainDarker !important;
 }

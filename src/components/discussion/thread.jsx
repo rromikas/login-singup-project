@@ -6,17 +6,18 @@ import {
   addView,
 } from "../../javascript/requests";
 import { toast } from "react-toastify";
-import history from "../../routing/history";
 import { uid } from "react-uid";
-import HtmlPreview from "./htmlPreview";
+import HtmlPreview from "../utility/htmlPreview";
 import { format } from "timeago.js";
 import { renderEditor } from "./renderEditor";
-import Emojis from "./emojis";
+import StringPreview from "../utility/StringPreview";
+import history from "../../routing/history";
+import { useSelector } from "react-redux";
 
 const Thread = (props) => {
   const bookId = props.match.params.bookId;
   const threadId = props.match.params.threadId;
-
+  const user = useSelector((state) => state.user);
   const [book, setBook] = useState({ image: "", title: "", authors: "" });
   const [thread, setThread] = useState({
     createdBy: { photo: "", name: "" },
@@ -56,16 +57,32 @@ const Thread = (props) => {
       <div
         className="container-fluid p-3 p-sm-4 p-md-5 bg-light corners-theme shift"
         style={{
-          maxWidth: "1000px",
+          maxWidth: "1100px",
           overflow: "hidden",
         }}
       >
         <div className="row no-gutters">
           <div className="col-12 p-4 border bg-white">
-            <div className="row no-gutters border-bottom justify-content-end justify-content-md-between flex-row-reverse flex-wrap-reverse flex-md-wrap flex-md-row">
-              <div className="col-md col-12 pr-3 mb-3">
-                <div className="row no-gutters" style={{ maxWidth: "450px" }}>
-                  <div className="col-12 h3 mb-4">{thread.title}</div>
+            <div className="row no-gutters border-bottom justify-content-end justify-content-md-between">
+              <div className="col-12 pb-4">
+                <div className="row no-gutters" style={{ maxWidth: "350px" }}>
+                  <div className="col-auto pr-3 mb-3 mb-md-0">
+                    <img src={book.image} width="100" className="img-fluid" />
+                  </div>
+                  <div className="col">
+                    <div className="row no-gutters h4">{book.title}</div>
+                    <div className="row no-gutters">{book.authors}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12 pr-3 mb-3">
+                <div className="row no-gutters">
+                  <div className="col-12 h3 mb-4">
+                    <StringPreview
+                      string={thread.title}
+                      limit="5000"
+                    ></StringPreview>
+                  </div>
                   <div className="col-12">
                     <div className="row no-gutters">
                       <div className="mr-3">{thread.views} views</div>
@@ -77,24 +94,13 @@ const Thread = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="col-auto pb-4">
-                <div className="row no-gutters" style={{ maxWidth: "350px" }}>
-                  <div className="col-auto pr-3 mb-3 mb-md-0">
-                    <img src={book.image} width="100" className="img-fluid" />
-                  </div>
-                  <div className="col">
-                    <div className="row no-gutters h4">{book.title}</div>
-                    <div className="row no-gutters">{book.authors}</div>
-                  </div>
-                </div>
-              </div>
             </div>
             <div className="row no-gutters p-3">
               <div className="col-auto d-flex justify-content-end">
                 <div
                   style={{
-                    width: "40px",
-                    height: "40px",
+                    width: "60px",
+                    height: "60px",
                     backgroundImage: `url(${thread.createdBy.photo})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -103,9 +109,14 @@ const Thread = (props) => {
                 ></div>
               </div>
               <div className="col pl-3">
-                <div className="row no-gutters">{thread.createdBy.name}</div>
+                <div className="row no-gutters mb-3">
+                  {thread.createdBy.name}
+                </div>
                 <div className="row no-gutters mb-2">
-                  <HtmlPreview data={thread.description}></HtmlPreview>
+                  <HtmlPreview
+                    data={thread.description}
+                    limit="5000"
+                  ></HtmlPreview>
                 </div>
               </div>
             </div>
@@ -130,8 +141,8 @@ const Thread = (props) => {
                 <div className="col-auto d-flex justify-content-end">
                   <div
                     style={{
-                      width: "40px",
-                      height: "40px",
+                      width: "60px",
+                      height: "60px",
                       backgroundImage: `url(${x.repliedBy.photo})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
@@ -164,20 +175,25 @@ const Thread = (props) => {
           <div
             className="my-btn bg-theme-simple py-3 px-5 mt-3"
             onClick={() => {
-              let obj = {
-                reply,
-                bookId,
-                threadId,
-                userId: localStorage["userId"],
-              };
-              console.log("reply obj", obj);
-              replyToQuestion(obj, (res) => {
-                if (res.error) {
-                  toast.error(res.error.toString());
-                } else {
-                  toast.success("Thread successfuly created");
-                }
-              });
+              if (user._id) {
+                let obj = {
+                  reply,
+                  bookId,
+                  threadId,
+                  userId: user._id,
+                };
+                replyToQuestion(obj, (res) => {
+                  if (res.error) {
+                    toast.error(res.error.toString());
+                  } else {
+                    history.go();
+                  }
+                });
+              } else {
+                history.push("/login", {
+                  successPath: `/books/${bookId}/threads/${threadId}`,
+                });
+              }
             }}
           >
             Publish

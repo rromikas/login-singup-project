@@ -4,8 +4,9 @@ import { FaFacebook } from "react-icons/fa";
 import { facebookSignup } from "../../javascript/requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
+import store from "../../store/store";
 
-const handleResponse = (response, setLoading) => {
+const handleResponse = (response, setLoading, successPath) => {
   if (response && response.email) {
     setLoading(true); //showing loader to user while waiting response from server
 
@@ -22,13 +23,14 @@ const handleResponse = (response, setLoading) => {
         toast.error(res.error.message ? res.error.message : res.error);
       } else {
         localStorage["secret_token"] = res.token;
-        history.push("/profile", res.user);
+        store.dispatch({ type: "SET_USER", user: res.user });
+        history.push(successPath);
       }
     });
   }
 };
 
-const Facebook = ({ text }) => {
+const Facebook = ({ text, successPath }) => {
   const appId = "267059971103306";
   const [loading, setLoading] = useState(false);
   return (
@@ -37,7 +39,7 @@ const Facebook = ({ text }) => {
       autoLoad={false}
       fields="name,email,picture"
       callback={(res) => {
-        handleResponse(res, setLoading);
+        handleResponse(res, setLoading, successPath);
       }}
       render={(renderProps) => (
         <div

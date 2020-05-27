@@ -5,7 +5,11 @@ import GirlReading from "../../images/girlReading";
 import EmailForm from "./emailForm";
 import history from "../../routing/history";
 
-const Login = () => {
+const Login = (props) => {
+  const successPath = props?.location?.state?.successPath
+    ? props.location.state.successPath
+    : "/";
+  console.log("SUCESS PATH LOGIN", successPath);
   return (
     <div
       className="w-100 overflow-auto bg-theme py-4 px-2"
@@ -30,10 +34,16 @@ const Login = () => {
             style={{ maxWidth: "400px" }}
           >
             <div className="mb-3">
-              <Facebook text="Login with Facebook"></Facebook>
+              <Facebook
+                text="Login with Facebook"
+                successPath={successPath}
+              ></Facebook>
             </div>
             <div>
-              <Google text="Login with Google"></Google>
+              <Google
+                text="Login with Google"
+                successPath={successPath}
+              ></Google>
             </div>
             <div
               style={{
@@ -44,7 +54,7 @@ const Login = () => {
             >
               Or
             </div>
-            <EmailForm></EmailForm>
+            <EmailForm successPath={successPath}></EmailForm>
             <div className="text-center mt-3">
               Forgot password?
               <span
@@ -63,7 +73,9 @@ const Login = () => {
               <span
                 className="btn-link"
                 onClick={() => {
-                  history.push({ pathname: "/signup" });
+                  history.push("/signup", {
+                    successPath,
+                  });
                 }}
                 style={{ color: "#ff8c8c", cursor: "pointer" }}
               >

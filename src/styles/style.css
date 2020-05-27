@@ -1052,7 +1052,7 @@ body {
   border-radius: 40px;
 }
 
-.rounded-8, .square-input, .my-btn {
+.rounded-8, .square-input {
   border-radius: 8px;
 }
 
@@ -1078,6 +1078,10 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+
+.my-btn {
+  border-radius: 0.25rem;
 }
 
 .outline-btn-rounded {
@@ -1182,5 +1186,15 @@ body {
   .corners-theme {
     border-radius: 8px;
   }
+}
+
+.btn-primary {
+  background-color: #f88888 !important;
+  border-color: #f88888 !important;
+}
+
+.btn-primary:hover {
+  background-color: #da6464 !important;
+  border-color: #da6464 !important;
 }
 /*# sourceMappingURL=style.css.map */

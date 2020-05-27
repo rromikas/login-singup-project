@@ -5,6 +5,7 @@ import { format } from "timeago.js";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { getSortedThreads } from "../../javascript/requests";
 import { toast } from "react-toastify";
+import StringPreview from "../utility/StringPreview";
 
 const Discussion = ({ threads, bookId }) => {
   const limit = 15;
@@ -95,9 +96,6 @@ const Discussion = ({ threads, bookId }) => {
                 className="col-12 border p-3"
                 style={{ background: "white" }}
                 key={uid(x)}
-                onClick={() =>
-                  history.push(`/books/${bookId}/threads/${x._id}`)
-                }
               >
                 <div className="row no-gutters">
                   <div className="col-8 pl-3">
@@ -105,7 +103,14 @@ const Discussion = ({ threads, bookId }) => {
                       className="row no-gutters mt-1 mb-4"
                       style={{ fontWeight: "500" }}
                     >
-                      {x.title}
+                      <StringPreview
+                        className="cursor-pointer"
+                        onClick={() =>
+                          history.push(`/books/${bookId}/threads/${x._id}`)
+                        }
+                        string={x.title}
+                        limit={400}
+                      ></StringPreview>
                     </div>
                     <div className="row no-gutters">
                       <div className="d-flex mr-4">

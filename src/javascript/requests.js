@@ -1,8 +1,30 @@
 const axios = require("axios");
-// const origin = "http://localhos.t:8000";
-const origin = "http://192.168.1.183:8000";
+const server = "https://tangy-denim-juice.glitch.me";
+
+export const saveBook = async (data) => {
+  let response = "";
+  try {
+    response = await axios.post(`${server}/books/saveBook`, data);
+  } catch (e) {
+    response = { error: true };
+  }
+  return response;
+};
+
+export const getBooks = (search) => {
+  return axios.get(`${server}/books/getBooks`, {
+    params: isNaN(parseInt(search))
+      ? {
+          title: search,
+        }
+      : {
+          isbn: parseInt(search),
+        },
+  });
+};
+
 export const login = (user, callback = () => {}) => {
-  fetch(`${origin}/users/login`, {
+  fetch(`${server}/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
@@ -16,7 +38,7 @@ export const login = (user, callback = () => {}) => {
 
 export const signup = (user, callback = () => {}) => {
   if (user.password === user.password2) {
-    fetch(`${origin}/users/signup`, {
+    fetch(`${server}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
@@ -32,7 +54,7 @@ export const signup = (user, callback = () => {}) => {
 };
 
 export const facebookSignup = (user, callback = () => {}) => {
-  fetch(`${origin}/users/facebookSignup`, {
+  fetch(`${server}/users/facebookSignup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
@@ -45,7 +67,7 @@ export const facebookSignup = (user, callback = () => {}) => {
 };
 
 export const googleSingup = (user, callback = () => {}) => {
-  fetch(`${origin}/users/googleSignup`, {
+  fetch(`${server}/users/googleSignup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(user),
@@ -56,8 +78,8 @@ export const googleSingup = (user, callback = () => {}) => {
     })
     .catch((er) => callback({ error: er }));
 };
-export const update = (updatedUser, callback = () => {}) => {
-  fetch(`${origin}/users/update`, {
+export const updateUser = (updatedUser, callback = () => {}) => {
+  fetch(`${server}/users/update`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -71,12 +93,12 @@ export const update = (updatedUser, callback = () => {}) => {
     });
 };
 
-export const read = (callback) => {
-  fetch(`${origin}/users/read`, {
+export const readUser = (token, callback) => {
+  fetch(`${server}/users/read`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage["secret_token"]}`,
+      authorization: `Bearer ${token}`,
     },
   })
     .then((res) => res.json())
@@ -89,7 +111,7 @@ export const read = (callback) => {
 };
 
 export const getAllBooks = (callback) => {
-  fetch(`${origin}/books/getAllBooks`, {
+  fetch(`${server}/books/getAllBooks`, {
     method: "GET",
   })
     .then((res) => {
@@ -103,7 +125,7 @@ export const getAllBooks = (callback) => {
 export const getBook = async (bookFilter, callback) => {
   let response = "";
   try {
-    response = await axios.post(`${origin}/books/getBook`, bookFilter);
+    response = await axios.post(`${server}/books/getBook`, bookFilter);
   } catch (e) {
     response = { error: true };
   }
@@ -121,7 +143,7 @@ export const craeteThread = async (thread, callback) => {
   } else if (thread.title === "") {
     response = { error: "Title is empty" };
   } else {
-    response = await axios.post(`${origin}/books/createThread`, thread);
+    response = await axios.post(`${server}/books/createThread`, thread);
   }
 
   callback(response);
@@ -129,34 +151,49 @@ export const craeteThread = async (thread, callback) => {
 
 export const getThread = async (ids, callback) => {
   console.log(ids);
-  let response = await axios.post(`${origin}/books/getThread`, ids);
+  let response = await axios.post(`${server}/books/getThread`, ids);
   callback(response);
 };
 
 export const replyToQuestion = async (reply, callback) => {
-  let response = await axios.post(`${origin}/books/replyToQuestion`, reply);
+  let response = await axios.post(`${server}/books/replyToQuestion`, reply);
   callback(response);
 };
 
 export const search = async (query, callback) => {
-  let response = await axios.post(`${origin}/books/search`, { query });
+  let response = await axios.post(`${server}/books/search`, { query });
   callback(response);
 };
 
 export const filter = async (filters, callback) => {
-  let response = await axios.post(`${origin}/books/filter`, { filters });
+  let response = await axios.post(`${server}/books/filter`, { filters });
   callback(response);
 };
 
 export const addView = async (book, callback) => {
-  let response = await axios.post(`${origin}/books/addView`, book);
+  let response = await axios.post(`${server}/books/addView`, book);
   callback(response);
 };
 
 export const getSortedThreads = async (options, callback) => {
   let response = await axios.post(
-    `${origin}/books/get${options.sortBy}Threads`,
+    `${server}/books/get${options.sortBy}Threads`,
     options
   );
+  callback(response);
+};
+
+export const addBookToFavorites = async (bookId, userId, callback) => {
+  let response = await axios.post(`${server}/books/addToFavorites`, {
+    bookId,
+    userId,
+  });
+  callback(response);
+};
+
+export const getFavoriteBooks = async (userId, callback) => {
+  let response = await axios.post(`${server}/users/getFavoriteBooks`, {
+    userId,
+  });
   callback(response);
 };

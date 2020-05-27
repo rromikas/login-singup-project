@@ -3,6 +3,8 @@ import OptionPanel from "./optionPanel";
 import Results from "./results";
 import { getAllBooks, search, filter } from "../../javascript/requests";
 import { toast } from "react-toastify";
+import UserMenu from "../UserMenu";
+import { useSelector } from "react-redux";
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -10,10 +12,11 @@ const Search = () => {
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [searchResults, setSearchResults] = useState({ title: "", items: [] });
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     getAllBooks((res) => {
-      setSearchResults({ items: res.allBooks, title: "AllBooks" });
+      setSearchResults({ items: res.allBooks, title: "Search results" });
       let choices = { genres: [], publishers: [], authors: [] };
       res.allBooks.forEach((x) => {
         if (x.genre?.length > 0) {
@@ -91,11 +94,7 @@ const Search = () => {
             className="col-lg-3 col-md-4 col-sm-5 d-none d-sm-block p-4"
             style={{ background: "rgb(255, 140, 140)" }}
           >
-            <div className="row no-gutters p-3 convex mb-4 bg-light border rounded-8 justify-content-between">
-              <div className="col-auto pl-2">Login</div>
-              <div className="col-auto pl-2">Search</div>
-              <div className="col-auto px-2">Add Book</div>
-            </div>
+            <UserMenu></UserMenu>
             <div className="row no-gutters">
               <OptionPanel
                 title="Genres"
@@ -149,7 +148,7 @@ const Search = () => {
               </div>
               <div className="col-auto">
                 <div
-                  className="shift my-btn soft-btn px-md-5 px-4"
+                  className="convex btn btn-primary py-3 px-md-5 px-4"
                   style={{ background: "rgb(255, 140, 140)" }}
                   onClick={() => {
                     search(query, (res) => {

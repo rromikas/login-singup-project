@@ -90,7 +90,7 @@ const OptionPanel = ({
                 });
               }}
             ></CheckBox>
-            <div className="mx-2">
+            <div className="mx-2" style={{ wordBreak: "break-word" }}>
               {x?.name?.length > 30 ? x.name.substring(0, 30) + "..." : x.name}
             </div>
             {x.deletable && hovered === i && (
@@ -107,14 +107,19 @@ const OptionPanel = ({
             )}
           </div>
         ))}
-        <div className="col-auto mx-auto" onClick={() => setShowAll(!showAll)}>
-          {showAll ? (
-            <FaCaretUp fontSize="24px"></FaCaretUp>
-          ) : (
-            <FaCaretDown fontSize="24px"></FaCaretDown>
-          )}{" "}
-          {showAll ? "less" : "more"}
-        </div>
+        {choices.length > 4 && (
+          <div
+            className="col-auto mx-auto"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? (
+              <FaCaretUp fontSize="24px"></FaCaretUp>
+            ) : (
+              <FaCaretDown fontSize="24px"></FaCaretDown>
+            )}{" "}
+            {showAll ? "less" : "more"}
+          </div>
+        )}
       </div>
     </div>
   );

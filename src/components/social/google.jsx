@@ -4,8 +4,9 @@ import GoogleIcon from "./googleIcon";
 import { googleSingup } from "../../javascript/requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
+import store from "../../store/store";
 
-const handleResponse = (response, setLoading) => {
+const handleResponse = (response, setLoading, successPath) => {
   var user = {
     accessToken: response.accessToken,
     name: response.profileObj.name,
@@ -22,12 +23,13 @@ const handleResponse = (response, setLoading) => {
       toast.error(res.error.message ? res.error.message : res.error);
     } else {
       localStorage["secret_token"] = res.token;
-      history.push("/profile", res.user);
+      store.dispatch({ type: "SET_USER", user: res.user });
+      history.push(successPath);
     }
   });
 };
 
-const Google = ({ text }) => {
+const Google = ({ text, successPath }) => {
   const clientId =
     "49004644590-v8t3iamk2h7a6r3flrkn3cjor47hrlkn.apps.googleusercontent.com";
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,7 @@ const Google = ({ text }) => {
         </div>
       )}
       onSuccess={(res) => {
-        handleResponse(res, setLoading);
+        handleResponse(res, setLoading, successPath);
       }}
       cookiePolicy={"single_host_origin"}
     />
