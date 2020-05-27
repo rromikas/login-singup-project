@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import CheckBox from "./checkbox";
+import CheckBox from "../utility/checkbox";
 import history from "../../routing/history";
 import { signup } from "../../javascript/requests";
 
@@ -35,7 +35,7 @@ const EmailForm = () => {
     <form onSubmit={handleSubmit}>
       <label htmlFor="email">Email</label>
       <input
-        className="soft-input mb-2 shn px-4"
+        className="round-input mb-2 shn px-4"
         id="email"
         type="email"
         name="email"
@@ -54,7 +54,7 @@ const EmailForm = () => {
       <input
         name="password2"
         type="password"
-        className="soft-input shn px-4"
+        className="round-input shn px-4"
         id="password2"
         required
         pattern=".{6,}"

@@ -7,6 +7,10 @@ body,
   padding: 0;
 }
 
+#root {
+  background: radial-gradient(at left top, #4c508f, #f88888);
+}
+
 body {
   background-size: cover;
   background-position: center;
@@ -44,7 +48,7 @@ body {
           box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2), inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
 }
 
-.convex {
+.convex-wide {
   -webkit-box-shadow: 12px 12px 24px #cfcfcf, -12px -12px 24px #f5f5f5;
           box-shadow: 12px 12px 24px #cfcfcf, -12px -12px 24px #f5f5f5;
 }
@@ -54,8 +58,17 @@ body {
           box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(255, 255, 255, 0.35);
 }
 
-.soft-input {
-  border-radius: 40px;
+.round-input {
+  -webkit-box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2), inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
+          box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2), inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
+  padding: 1rem !important;
+  outline: none;
+  border: none;
+  width: 100%;
+  background: transparent;
+}
+
+.square-input {
   -webkit-box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2), inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
           box-shadow: inset 2px 2px 6px 0 rgba(0, 0, 0, 0.2), inset -3px -3px 5px 0 rgba(255, 255, 255, 0.34);
   padding: 1rem !important;
@@ -1022,6 +1035,10 @@ body {
   }
 }
 
+.bg-theme-simple {
+  background: #f88888;
+}
+
 .bg-theme {
   background: radial-gradient(at left top, #4c508f, #f88888);
   background-size: cover;
@@ -1029,5 +1046,141 @@ body {
 
 .image-bg-theme {
   background: radial-gradient(circle at left, #f88888, #f7b9b9);
+}
+
+.rounded-40, .round-input, .outline-btn-rounded {
+  border-radius: 40px;
+}
+
+.rounded-8, .square-input, .my-btn {
+  border-radius: 8px;
+}
+
+.rounded-25 {
+  border-radius: 25px;
+}
+
+.white-font, .my-btn {
+  color: white;
+}
+
+.cursor-pointer, .my-btn, .outline-btn-rounded, .outline-btn-square {
+  cursor: pointer;
+}
+
+.flex-center, .my-btn, .outline-btn-rounded, .outline-btn-square {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.outline-btn-rounded {
+  border: 2px solid #f88888;
+}
+
+.outline-btn-square {
+  border: 2px solid #f88888 !important;
+  border-radius: 5px;
+}
+
+.convex, .my-btn, .outline-btn-rounded, .outline-btn-square {
+  -webkit-box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(255, 255, 255, 0.35);
+          box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(255, 255, 255, 0.35);
+}
+
+.square {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.fr-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.fr-box .fr-wrapper {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.fr-box .fr-wrapper .fr-element {
+  min-height: 100%;
+}
+
+.sort-item:hover {
+  border-color: #f88888 !important;
+}
+
+.sort-item {
+  border: 2px solid transparent !important;
+}
+
+.editorFocused {
+  border-radius: 9px;
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.editorBlured {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.fr-view {
+  width: 100%;
+}
+
+.ck-editor__editable_inline {
+  height: 259px;
+}
+
+.ck.ck-button .ck.ck-tooltip {
+  display: none;
+}
+
+.theme-font {
+  color: #ff8c8c;
+}
+
+.emojis-icon-custom {
+  background-image: url("https://i.ibb.co/qkvPPXW/smile.png") !important;
+  background-size: 100% !important;
+  background-position: center !important;
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.bg-white {
+  background: white;
+}
+
+.corners-theme {
+  border-radius: 0;
+}
+
+@media (min-width: 992px) {
+  .corners-theme {
+    border-radius: 8px;
+  }
 }
 /*# sourceMappingURL=style.css.map */

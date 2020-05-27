@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEdit, FaCheck, FaCamera } from "react-icons/fa";
 import RelaxReading from "../../images/relaxReading";
-import { update, read } from "../../javascript/requests";
+import { update, read, createQuestion } from "../../javascript/requests";
 import PhotoUploader from "./photoUploader";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
@@ -23,6 +23,8 @@ const Profile = (props) => {
         );
         history.push("/login");
       } else {
+        localStorage["userId"] = res.data._id;
+        console.log("localstorage", localStorage["userId"]);
         setUser((user) => Object.assign({}, user, res.data));
       }
     });
@@ -97,7 +99,6 @@ const Profile = (props) => {
                     onClick={() => {
                       setEditIntro(false);
                       update({ description: user.description });
-                      history.location.state.description = user.description;
                     }}
                   ></FaCheck>
                 ) : (

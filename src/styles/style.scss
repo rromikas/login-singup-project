@@ -18,6 +18,10 @@ body,
   padding: 0;
 }
 
+#root {
+  background: radial-gradient(at left top, #4c508f, #f88888);
+}
+
 body {
   background-size: cover;
   background-position: center;
@@ -52,7 +56,7 @@ body {
   box-shadow: $concave;
 }
 
-.convex {
+.convex-wide {
   box-shadow: $convex;
 }
 
@@ -60,8 +64,8 @@ body {
   box-shadow: $convex2;
 }
 
-.soft-input {
-  border-radius: 40px;
+.round-input {
+  @extend .rounded-40;
   box-shadow: $concave;
   padding: 1rem !important;
   //   color: $darkColor;
@@ -71,6 +75,16 @@ body {
   background: transparent;
 }
 
+.square-input {
+  @extend .rounded-8;
+  box-shadow: $concave;
+  padding: 1rem !important;
+  //   color: $darkColor;
+  outline: none;
+  border: none;
+  width: 100%;
+  background: transparent;
+}
 .soft-box {
   box-shadow: $convex2;
   padding: 1rem !important;
@@ -202,6 +216,10 @@ $heights: 100;
   }
 }
 
+.bg-theme-simple {
+  background: $themeMain;
+}
+
 .bg-theme {
   background: radial-gradient(at left top, $themeMainContrast, $themeMain);
   background-size: cover;
@@ -209,4 +227,144 @@ $heights: 100;
 
 .image-bg-theme {
   background: radial-gradient(circle at left, $themeMain, $themeLighterMain);
+}
+
+.rounded-40 {
+  border-radius: 40px;
+}
+
+.rounded-8 {
+  border-radius: 8px;
+}
+
+.rounded-25 {
+  border-radius: 25px;
+}
+
+.white-font {
+  color: white;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-btn {
+  @extend .cursor-pointer, .white-font, .rounded-8, .flex-center, .convex;
+}
+
+.outline-btn-rounded {
+  @extend .cursor-pointer, .rounded-40, .flex-center, .convex;
+  border: 2px solid $themeMain;
+}
+
+.outline-btn-square {
+  @extend .cursor-pointer, .flex-center, .convex;
+  border: 2px solid $themeMain !important;
+  border-radius: 5px;
+}
+.convex {
+  box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24),
+    -2px -2px 6px hsla(0, 0%, 100%, 0.35);
+}
+
+.square {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.fr-box {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  .fr-wrapper {
+    flex: 1;
+
+    .fr-element {
+      min-height: 100%;
+    }
+  }
+}
+
+.sort-item:hover {
+  border-color: $themeMain !important;
+}
+
+.sort-item {
+  border: 2px solid transparent !important;
+}
+
+.editorFocused {
+  border-radius: 9px;
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  transition: all 0.3s;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.editorBlured {
+  transition: all 0.3s;
+}
+
+.fr-view {
+  width: 100%;
+}
+
+.ck-editor__editable_inline {
+  height: 259px;
+}
+
+.ck.ck-button .ck.ck-tooltip {
+  display: none;
+}
+
+.theme-font {
+  color: #ff8c8c;
+}
+
+.emojis-icon-custom {
+  background-image: url("https://i.ibb.co/qkvPPXW/smile.png") !important;
+  background-size: 100% !important;
+  background-position: center !important;
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.bg-white {
+  background: white;
+}
+
+$breakpoints: (
+  "small": 767px,
+  "medium": 992px,
+  "large": 1200px,
+) !default;
+
+// In `_mixins.scss`
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Please make sure it is defined in `$breakpoints` map.";
+  }
+}
+
+.corners-theme {
+  border-radius: 0;
+  @include respond-to("medium") {
+    border-radius: 8px;
+  }
 }

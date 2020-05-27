@@ -30,7 +30,7 @@ const EmailForm = () => {
       <label htmlFor="email">Email</label>
       <input
         name="email"
-        className="soft-input mb-2 shn px-4"
+        className="round-input mb-2 shn px-4"
         id="email"
         type="email"
         required
@@ -39,7 +39,7 @@ const EmailForm = () => {
       <input
         name="password"
         type="password"
-        className="soft-input shn px-4"
+        className="round-input shn px-4"
         id="password"
         required
         pattern=".{6,}"

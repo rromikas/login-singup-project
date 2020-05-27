@@ -3,7 +3,6 @@ import { FaCheck } from "react-icons/fa";
 const CheckBox = ({ checked, setChecked, size }) => {
   return (
     <div
-      tabIndex={0}
       style={{
         width: `${size}px`,
         height: `${size}px`,
@@ -15,7 +14,7 @@ const CheckBox = ({ checked, setChecked, size }) => {
         setChecked(!checked);
       }}
     >
-      {checked && <FaCheck fontSize={`${size - 5}px`}></FaCheck>}
+      {checked && <FaCheck fontSize={`${size - 10}px`}></FaCheck>}
     </div>
   );
 };
