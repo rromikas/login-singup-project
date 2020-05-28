@@ -150,7 +150,6 @@ export const craeteThread = async (thread, callback) => {
 };
 
 export const getThread = async (ids, callback) => {
-  console.log(ids);
   let response = await axios.post(`${server}/books/getThread`, ids);
   callback(response);
 };

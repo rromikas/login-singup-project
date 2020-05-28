@@ -21,7 +21,6 @@ const Book = (props) => {
   useEffect(() => {
     let filter = { _id: bookId };
     GetBook(filter, (res) => {
-      console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
@@ -68,7 +67,6 @@ const Book = (props) => {
                   onClick={() => {
                     if (user._id) {
                       AddBookToFavorites(bookId, user._id, (res) => {
-                        console.log(res);
                         if (!res.error) {
                           setTick(!tick);
                         } else {

@@ -9,7 +9,6 @@ const Login = (props) => {
   const successPath = props?.location?.state?.successPath
     ? props.location.state.successPath
     : "/";
-  console.log("SUCESS PATH LOGIN", successPath);
   return (
     <div
       className="w-100 overflow-auto bg-theme py-4 px-2"

@@ -15,7 +15,6 @@ const Discussion = ({ threads, bookId }) => {
 
   useEffect(() => {
     GetSortedThreads({ bookId, limit, sortBy }, (res) => {
-      console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {

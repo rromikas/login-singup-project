@@ -41,7 +41,6 @@ export default (props) => {
     isValid,
     setFieldTouched,
   } = props;
-  console.log(isValid, errors, publishedDate);
 
   const [selectedDate, handleDateChange] = useState(null);
   useEffect(() => {
@@ -108,7 +107,6 @@ export default (props) => {
             return option?.volumeInfo?.title || search;
           }}
           onChange={(event, newValue) => {
-            console.log(newValue);
             // Create a new value from the user input
             if (newValue && newValue.inputValue) {
               setSelected(newValue.inputValue);
@@ -144,7 +142,6 @@ export default (props) => {
                 ...params.InputProps,
                 endAdornment: (
                   <React.Fragment>
-                    {console.log(params)}
                     {load ? (
                       <CircularProgress color="inherit" size={20} />
                     ) : null}
@@ -220,7 +217,6 @@ export default (props) => {
               value={selectedDate}
               placeholder="10/10/2018"
               onChange={(date) => {
-                console.log(date);
                 handleDateChange(date);
                 setFieldValue("publishedDate", date);
               }}

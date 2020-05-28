@@ -13,12 +13,10 @@ const handleSubmit = (e, onError, setLoading, successPath) => {
   }
 
   Login(newUser, (res) => {
-    console.log("response email form login", res);
     setLoading(false);
     if (res.error) {
       onError(res.error.message ? res.error.message : res.error);
     } else {
-      console.log("esu čia kur reikia", successPath);
       localStorage["secret_token"] = res.token;
       store.dispatch({ type: "SET_USER", user: res.user });
       history.push(successPath);

@@ -32,7 +32,6 @@ const Thread = (props) => {
   useEffect(() => {
     let filter = { _id: bookId };
     GetBook(filter, (res) => {
-      console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
@@ -41,7 +40,6 @@ const Thread = (props) => {
     });
 
     GetThread({ bookId: bookId, threadId: threadId }, (res) => {
-      console.log("Thread 44", res);
       setThread(res.thread);
     });
     renderEditor("reply-editor", "Reply", reply, (res) => setReply(res));

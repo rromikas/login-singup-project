@@ -22,7 +22,6 @@ const handleResponse = (response, setLoading, successPath) => {
       if (res.error) {
         toast.error(res.error.message ? res.error.message : res.error);
       } else {
-        console.log("token from facebok login", res.token);
         localStorage["secret_token"] = res.token;
         store.dispatch({ type: "SET_USER", user: res.user });
         history.push(successPath);

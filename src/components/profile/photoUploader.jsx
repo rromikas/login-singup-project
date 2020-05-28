@@ -17,7 +17,6 @@ const PhotoUploader = ({ domRef, onUpload }) => {
           false
         );
         let file = e.target.files[0];
-        console.log(file);
         if (file) {
           if (file.type.includes("image")) {
             if (file.size < 10000000) {

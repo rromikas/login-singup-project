@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { renderEditor } from "./renderEditor";
 import { GetBook, CreateThread } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import history from "../../routing/history";
-import { Editor, EditorState } from "draft-js";
 import { useSelector } from "react-redux";
 
 const NewThreadForm = (props) => {
@@ -19,7 +18,6 @@ const NewThreadForm = (props) => {
   useEffect(() => {
     let filter = { _id: bookId };
     GetBook(filter, (res) => {
-      console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
@@ -32,7 +30,6 @@ const NewThreadForm = (props) => {
       "Description",
       thread.description,
       (newDescription) => {
-        console.log(newDescription);
         setThread((prev) =>
           Object.assign({}, prev, { description: newDescription })
         );
@@ -96,9 +93,7 @@ const NewThreadForm = (props) => {
           <div
             className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
             onClick={() => {
-              console.log("VEIKIA", thread);
               CreateThread(thread, (res) => {
-                console.log("REPSONSE AFTER THREAD CRETING", res);
                 if (res.error) {
                   toast.error(res.error.toString());
                 } else {

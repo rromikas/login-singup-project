@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { uid } from "react-uid";
 import history from "../../routing/history";
 
@@ -34,7 +34,7 @@ const Results = ({ results }) => {
               }}
             >
               <div className="col-auto mx-auto mb-2">
-                <img src={x[0].image}></img>
+                <img src={x[0].image} alt={x[0].image}></img>
               </div>
               <div
                 className="col-sm-12 col-md col pl-3"

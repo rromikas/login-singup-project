@@ -14,7 +14,6 @@ const Home = () => {
 
   useEffect(() => {
     GetAllBooks((res) => {
-      console.log("GET ALL BOOKS RES HOME 17", res);
       if (res.allBooks) {
         setResults({ items: res.allBooks, title: title });
         let choices = { genres: [], publishers: [], authors: [] };
@@ -68,11 +67,9 @@ const Home = () => {
     });
 
     GetFilteredBooks(filters, (res) => {
-      console.log("FILTE RESPONSE", res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
-        console.log("RES DATA FOUND BOOKS", res);
         if (res.foundBooks) {
           setResults({
             items: res.foundBooks,

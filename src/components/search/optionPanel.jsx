@@ -46,7 +46,6 @@ const OptionPanel = ({
                 value={newOption.value}
                 onKeyDown={(e) => {
                   e.persist();
-                  console.log(e.keyCode, e);
                   if (e.keyCode === 13) {
                     setChoices((choices) => {
                       let arr = [...choices];

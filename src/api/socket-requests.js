@@ -15,7 +15,6 @@ export const FacebookSignup = (user, callback) => {
   socket
     .emit("/users/facebookSignup", user)
     .once("/users/facebookSignup", (res) => {
-      console.log("facebook signup response 17 socket", res);
       callback(res);
     });
 };
@@ -24,7 +23,6 @@ export const GoogleSignup = (user, callback) => {
   socket
     .emit("/users/googleSignup", user)
     .once("/users/googleSignup", (res) => {
-      console.log("google signup response 26 socket", res);
       callback(res);
     });
 };
@@ -102,7 +100,6 @@ export const CreateThread = async (thread, callback) => {
 
 export const GetSortedThreads = async (options, callback) => {
   let path = `/books/get${options.sortBy}Threads`;
-  console.log("PATH", path);
   socket.emit(path, options).once(path, (res) => {
     callback(res);
   });

@@ -15,7 +15,6 @@ const Search = () => {
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [searchResults, setSearchResults] = useState({ title: "", items: [] });
-  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     GetAllBooks((res) => {
@@ -69,7 +68,6 @@ const Search = () => {
     });
 
     GetFilteredBooks(filters, (res) => {
-      console.log("FILER EROR N SEARCH 69", res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
