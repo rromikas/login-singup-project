@@ -1,7 +1,7 @@
 import { GoogleLogin } from "react-google-login";
 import React, { useState } from "react";
 import GoogleIcon from "./googleIcon";
-import { googleSingup } from "../../javascript/requests";
+import { GoogleSignup } from "../../api/socket-requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import store from "../../store/store";
@@ -16,7 +16,7 @@ const handleResponse = (response, setLoading, successPath) => {
 
   setLoading(true); //show loading for user while waiting response from server
 
-  googleSingup(user, (res) => {
+  GoogleSignup(user, (res) => {
     setLoading(false); // hide loader
 
     if (res.error) {

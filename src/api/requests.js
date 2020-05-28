@@ -1,5 +1,5 @@
 const axios = require("axios");
-const server = "https://tangy-denim-juice.glitch.me";
+const server = "https://tangy-denim-juice.glitch.me"; // proxy is set
 
 export const saveBook = async (data) => {
   let response = "";
@@ -166,8 +166,15 @@ export const search = async (query, callback) => {
 };
 
 export const filter = async (filters, callback) => {
-  let response = await axios.post(`${server}/books/filter`, { filters });
-  callback(response);
+  // let response = await axios.post(`${server}/books/filter`, { filters });
+  fetch(`${server}/books/filter`, {
+    method: "POST",
+    body: JSON.stringify({ filters: filters }),
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      callback(res);
+    });
 };
 
 export const addView = async (book, callback) => {
@@ -180,6 +187,7 @@ export const getSortedThreads = async (options, callback) => {
     `${server}/books/get${options.sortBy}Threads`,
     options
   );
+
   callback(response);
 };
 

@@ -41,6 +41,7 @@
     "react-truncate-html": "^0.1.7",
     "react-uid": "^2.2.0",
     "redux": "^4.0.5",
+    "socket.io-client": "^2.3.0",
     "throttle-debounce": "^2.1.0",
     "timeago.js": "^4.0.2",
     "yup": "^0.29.1"
@@ -65,5 +66,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://tangy-denim-juice.glitch.me"
 }

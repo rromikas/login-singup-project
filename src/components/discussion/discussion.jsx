@@ -3,7 +3,7 @@ import { uid } from "react-uid";
 import history from "../../routing/history";
 import { format } from "timeago.js";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-import { getSortedThreads } from "../../javascript/requests";
+import { GetSortedThreads } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import StringPreview from "../utility/StringPreview";
 
@@ -14,12 +14,12 @@ const Discussion = ({ threads, bookId }) => {
   const [discussionThreads, setDiscussionThreads] = useState([]);
 
   useEffect(() => {
-    getSortedThreads({ bookId, limit, sortBy }, (res) => {
+    GetSortedThreads({ bookId, limit, sortBy }, (res) => {
       console.log(res);
-      if (res.data.error) {
-        toast.error(res.data.error.toString());
+      if (res.error) {
+        toast.error(res.error.toString());
       } else {
-        setDiscussionThreads(res.data.threads);
+        setDiscussionThreads(res.threads);
       }
     });
   }, [sortBy]);

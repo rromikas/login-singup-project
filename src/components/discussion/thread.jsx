@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  getBook,
-  getThread,
-  replyToQuestion,
-  addView,
-} from "../../javascript/requests";
+  GetBook,
+  GetThread,
+  ReplyToQuestion,
+  AddView,
+} from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import { uid } from "react-uid";
 import HtmlPreview from "../utility/htmlPreview";
@@ -31,22 +31,22 @@ const Thread = (props) => {
 
   useEffect(() => {
     let filter = { _id: bookId };
-    getBook(filter, (res) => {
+    GetBook(filter, (res) => {
       console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
-        setBook(res.data.filteredBooks[0]);
+        setBook(res.filteredBooks[0]);
       }
     });
 
-    getThread({ bookId: bookId, threadId: threadId }, (res) => {
-      console.log(res);
-      setThread(res.data.thread);
+    GetThread({ bookId: bookId, threadId: threadId }, (res) => {
+      console.log("Thread 44", res);
+      setThread(res.thread);
     });
     renderEditor("reply-editor", "Reply", reply, (res) => setReply(res));
 
-    addView({ bookId: bookId, threadId: threadId }, (res) => {});
+    AddView({ bookId: bookId, threadId: threadId }, (res) => {});
   }, []);
 
   return (
@@ -95,7 +95,7 @@ const Thread = (props) => {
                 </div>
               </div>
             </div>
-            <div className="row no-gutters p-3">
+            <div className="row no-gutters py-3 px-2">
               <div className="col-auto d-flex justify-content-end">
                 <div
                   style={{
@@ -109,7 +109,7 @@ const Thread = (props) => {
                 ></div>
               </div>
               <div className="col pl-3">
-                <div className="row no-gutters mb-3">
+                <div className="row no-gutters text-primary">
                   {thread.createdBy.name}
                 </div>
                 <div className="row no-gutters mb-2">
@@ -151,7 +151,10 @@ const Thread = (props) => {
                   ></div>
                 </div>
                 <div className="col pl-3">
-                  <div className="row no-gutters">{x.repliedBy.name}</div>
+                  <div className="row no-gutters">
+                    <div className="mr-3 text-primary">{x.repliedBy.name}</div>
+                    <div>{format(x.date)}</div>
+                  </div>
                   <div className="row no-gutters mb-2">
                     <HtmlPreview data={x.reply}></HtmlPreview>
                   </div>
@@ -182,7 +185,7 @@ const Thread = (props) => {
                   threadId,
                   userId: user._id,
                 };
-                replyToQuestion(obj, (res) => {
+                ReplyToQuestion(obj, (res) => {
                   if (res.error) {
                     toast.error(res.error.toString());
                   } else {

@@ -10,8 +10,9 @@ import TextField from "@material-ui/core/TextField";
 import { debounce } from "throttle-debounce";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Paper } from "@material-ui/core";
-import { getBooks, saveBook } from "../../javascript/requests";
+import { getBooks } from "../../api/requests";
 import DateFnsUtils from "@date-io/date-fns";
+import { AddBook, GetBooks } from "../../api/socket-requests";
 
 export default (props) => {
   const [search, setSearch] = useState("");
@@ -48,17 +49,15 @@ export default (props) => {
     else {
       debounce(300, () => {
         setLoading(true);
-        getBooks(search)
-          .then((res) => {
-            if (res.data.found) {
-              setBooks(res.data.books, res.data.books);
-            } else setBooks([]);
-            setLoading(false);
-          })
-          .catch((err) => {
+        GetBooks(search, (res) => {
+          if (res.error) {
             setBooks([]);
             setLoading(false);
-          });
+          } else if (res.found) {
+            setBooks(res.books, res.books);
+          } else setBooks([]);
+          setLoading(false);
+        });
       })();
     }
   }, [search]);
@@ -161,12 +160,12 @@ export default (props) => {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            const response = await saveBook(props.values);
-            if (response.data.success) {
-              // console.log(props);
-              props.history.push("/");
-            }
-            // alert("submitted");
+            AddBook(props.values, (response) => {
+              if (response.success) {
+                props.history.push("/");
+              }
+              // alert("submitted");
+            });
           }}
         >
           <TextField

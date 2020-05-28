@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import OptionPanel from "./optionPanel";
 import Results from "./results";
-import { getAllBooks, search, filter } from "../../javascript/requests";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
 import { useSelector } from "react-redux";
-
+import {
+  GetFilteredBooks,
+  GetAllBooks,
+  SearchBooks,
+} from "../../api/socket-requests";
 const Search = () => {
   const [query, setQuery] = useState("");
   const [genres, setGenres] = useState([]);
@@ -15,7 +18,7 @@ const Search = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    getAllBooks((res) => {
+    GetAllBooks((res) => {
       setSearchResults({ items: res.allBooks, title: "Search results" });
       let choices = { genres: [], publishers: [], authors: [] };
       res.allBooks.forEach((x) => {
@@ -65,12 +68,13 @@ const Search = () => {
       }
     });
 
-    filter(filters, (res) => {
-      if (res.data.error) {
-        toast.error(res.data.error.toString());
+    GetFilteredBooks(filters, (res) => {
+      console.log("FILER EROR N SEARCH 69", res);
+      if (res.error) {
+        toast.error(res.error.toString());
       } else {
         setSearchResults({
-          items: res.data.foundBooks,
+          items: res.foundBooks,
           title: `Search results`,
         });
       }
@@ -91,7 +95,7 @@ const Search = () => {
       >
         <div className="row no-gutters">
           <div
-            className="col-lg-3 col-md-4 col-sm-5 d-none d-sm-block p-4"
+            className="col-lg-3 col-md-4 col-sm-5 p-4"
             style={{ background: "rgb(255, 140, 140)" }}
           >
             <UserMenu></UserMenu>
@@ -124,12 +128,12 @@ const Search = () => {
                   onKeyDown={(e) => {
                     e.persist();
                     if (e.keyCode === 13) {
-                      search(query, (res) => {
-                        if (res.data.error) {
-                          toast.error(res.data.error.toString());
+                      SearchBooks(query, (res) => {
+                        if (res.error) {
+                          toast.error(res.error.toString());
                         } else {
                           setSearchResults({
-                            items: res.data.foundBooks,
+                            items: res.foundBooks,
                             title: `Search results for "${query}"`,
                           });
                         }
@@ -151,12 +155,12 @@ const Search = () => {
                   className="convex btn btn-primary py-3 px-md-5 px-4"
                   style={{ background: "rgb(255, 140, 140)" }}
                   onClick={() => {
-                    search(query, (res) => {
-                      if (res.data.error) {
-                        toast.error(res.data.error.toString());
+                    SearchBooks(query, (res) => {
+                      if (res.error) {
+                        toast.error(res.error.toString());
                       } else {
                         setSearchResults({
-                          items: res.data.foundBooks,
+                          items: res.foundBooks,
                           title: `Search results for "${query}"`,
                         });
                       }

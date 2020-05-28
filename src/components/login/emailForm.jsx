@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { login } from "../../javascript/requests";
+import { Login } from "../../api/socket-requests";
 import history from "../../routing/history";
 import store from "../../store/store";
 
@@ -12,7 +12,7 @@ const handleSubmit = (e, onError, setLoading, successPath) => {
     newUser[key] = value;
   }
 
-  login(newUser, (res) => {
+  Login(newUser, (res) => {
     console.log("response email form login", res);
     setLoading(false);
     if (res.error) {

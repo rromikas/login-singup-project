@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { readUser } from "../javascript/requests";
+import { ReadUser } from "../api/socket-requests";
 
 const PrivateRoute = ({ Component, bearerPath, ...rest }) => {
   const successPath = rest.computedMatch.url;
   const [validity, setValidity] = useState({ ready: false, valid: false });
 
   useEffect(() => {
-    readUser(localStorage["secret_token"], (res) => {
+    ReadUser(localStorage["secret_token"], (res) => {
       console.log("response", res);
       setValidity((val) =>
         Object.assign({}, val, { ready: true, valid: res.error ? false : true })

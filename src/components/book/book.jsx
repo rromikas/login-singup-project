@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getBook, addBookToFavorites } from "../../javascript/requests";
+import { GetBook, AddBookToFavorites } from "../../api/socket-requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import Discussion from "../discussion/discussion";
@@ -20,12 +20,12 @@ const Book = (props) => {
 
   useEffect(() => {
     let filter = { _id: bookId };
-    getBook(filter, (res) => {
+    GetBook(filter, (res) => {
       console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
-        setBook(res.data.filteredBooks[0]);
+        setBook(res.filteredBooks[0]);
       }
     });
   }, [tick]);
@@ -67,9 +67,9 @@ const Book = (props) => {
                   fontSize="24px"
                   onClick={() => {
                     if (user._id) {
-                      addBookToFavorites(bookId, user._id, (res) => {
+                      AddBookToFavorites(bookId, user._id, (res) => {
                         console.log(res);
-                        if (!res.data.error) {
+                        if (!res.error) {
                           setTick(!tick);
                         } else {
                         }

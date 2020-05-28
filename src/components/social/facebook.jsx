@@ -1,7 +1,7 @@
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import React, { useState } from "react";
 import { FaFacebook } from "react-icons/fa";
-import { facebookSignup } from "../../javascript/requests";
+import { FacebookSignup } from "../../api/socket-requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import store from "../../store/store";
@@ -16,12 +16,13 @@ const handleResponse = (response, setLoading, successPath) => {
       photoUrl: response.picture.data.url,
       accessToken: response.accessToken,
     };
-    facebookSignup(newUser, (res) => {
+    FacebookSignup(newUser, (res) => {
       setLoading(false);
 
       if (res.error) {
         toast.error(res.error.message ? res.error.message : res.error);
       } else {
+        console.log("token from facebok login", res.token);
         localStorage["secret_token"] = res.token;
         store.dispatch({ type: "SET_USER", user: res.user });
         history.push(successPath);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import OptionPanel from "../search/optionPanel";
 import Results from "../search/results";
-import { getAllBooks, search, filter } from "../../javascript/requests";
+import { GetAllBooks, GetFilteredBooks } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
 
@@ -13,23 +13,26 @@ const Home = () => {
   const [title, setTitle] = useState("Recently added");
 
   useEffect(() => {
-    getAllBooks((res) => {
-      setResults({ items: res.allBooks, title: title });
-      let choices = { genres: [], publishers: [], authors: [] };
-      res.allBooks.forEach((x) => {
-        if (x.genre?.length > 0) {
-          choices.genres.push({ name: x.genre, checked: false });
-        }
-        if (x.authors?.length > 0) {
-          choices.authors.push({ name: x.authors, checked: false });
-        }
-        if (x.publisher?.length > 0) {
-          choices.publishers.push({ name: x.publisher, checked: false });
-        }
-      });
-      setGenres(choices.genres);
-      setAuthors(choices.authors);
-      setPublishers(choices.publishers);
+    GetAllBooks((res) => {
+      console.log("GET ALL BOOKS RES HOME 17", res);
+      if (res.allBooks) {
+        setResults({ items: res.allBooks, title: title });
+        let choices = { genres: [], publishers: [], authors: [] };
+        res.allBooks.forEach((x) => {
+          if (x.genre?.length > 0) {
+            choices.genres.push({ name: x.genre, checked: false });
+          }
+          if (x.authors?.length > 0) {
+            choices.authors.push({ name: x.authors, checked: false });
+          }
+          if (x.publisher?.length > 0) {
+            choices.publishers.push({ name: x.publisher, checked: false });
+          }
+        });
+        setGenres(choices.genres);
+        setAuthors(choices.authors);
+        setPublishers(choices.publishers);
+      }
     });
   }, []);
 
@@ -64,14 +67,18 @@ const Home = () => {
       }
     });
 
-    filter(filters, (res) => {
-      if (res.data.error) {
-        toast.error(res.data.error.toString());
+    GetFilteredBooks(filters, (res) => {
+      console.log("FILTE RESPONSE", res);
+      if (res.error) {
+        toast.error(res.error.toString());
       } else {
-        setResults({
-          items: res.data.foundBooks,
-          title: title,
-        });
+        console.log("RES DATA FOUND BOOKS", res);
+        if (res.foundBooks) {
+          setResults({
+            items: res.foundBooks,
+            title: title,
+          });
+        }
       }
     });
   }, [genres, authors, publishers]);
@@ -90,7 +97,7 @@ const Home = () => {
       >
         <div className="row no-gutters">
           <div
-            className="col-lg-3 col-md-4 col-sm-5 d-none d-sm-block p-4"
+            className="col-lg-3 col-md-4 col-sm-5 p-4"
             style={{ background: "rgb(255, 140, 140)" }}
           >
             <UserMenu></UserMenu>

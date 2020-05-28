@@ -17,7 +17,7 @@ const OptionPanel = ({
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <div className="col-12">
+    <div className="col-12 d-none d-sm-block">
       <div className="row no-gutters p-4 convex bg-light mb-4 shn disable-select text-dark rounded-8">
         <div className="col-12 mb-2">{title}</div>
         {insertEnabled && (

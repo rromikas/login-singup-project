@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import CheckBox from "../utility/checkbox";
 import history from "../../routing/history";
-import { signup } from "../../javascript/requests";
+import { Signup } from "../../api/socket-requests";
 
 const EmailForm = ({ successPath }) => {
   const handleSubmit = (e) => {
@@ -15,7 +15,7 @@ const EmailForm = ({ successPath }) => {
       for (var [key, value] of formData.entries()) {
         user[key] = value;
       }
-      signup(user, (res) => {
+      Signup(user, (res) => {
         setLoading(false);
         if (res.error) {
           setError(res.error.message ? res.error.message : res.error);

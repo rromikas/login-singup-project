@@ -14,12 +14,12 @@ import Thread from "./components/discussion/thread";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import PrivateRoute from "./routing/privateRoute";
-import { readUser, signup } from "./javascript/requests";
+import { ReadUser } from "./api/socket-requests";
 import Form from "./components/addBook/Form";
 
 function App() {
   useEffect(() => {
-    readUser(localStorage["secret_token"], (res) => {
+    ReadUser(localStorage["secret_token"], (res) => {
       if (!res.error && res.user) {
         store.dispatch({ type: "SET_USER", user: res.user });
       }

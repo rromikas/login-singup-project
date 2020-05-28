@@ -3,7 +3,6 @@ import { uid } from "react-uid";
 import history from "../../routing/history";
 
 const Results = ({ results }) => {
-  console.log("RESULTS", results);
   let pairedResults = [];
   results.items.forEach((element, i) => {
     if (i % 2 === 0) {

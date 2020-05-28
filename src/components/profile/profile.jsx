@@ -1,11 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEdit, FaCheck, FaCamera } from "react-icons/fa";
 import RelaxReading from "../../images/relaxReading";
-import {
-  updateUser,
-  readUser,
-  getFavoriteBooks,
-} from "../../javascript/requests";
+import { ReadUser, UpdateUser } from "../../api/socket-requests";
 import PhotoUploader from "./photoUploader";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
@@ -21,7 +17,7 @@ const Profile = (props) => {
   const [editIntro, setEditIntro] = useState(false);
 
   useEffect(() => {
-    readUser(localStorage["secret_token"], (res) => {
+    ReadUser(localStorage["secret_token"], (res) => {
       if (res.error) {
         toast.error(
           "Fetch failed. Configure your origin url variable in javascript/requests.js file"
@@ -75,7 +71,10 @@ const Profile = (props) => {
                         setUser((usr) =>
                           Object.assign({}, usr, { photo: photo })
                         );
-                        updateUser({ photo: photo }, (res) => {});
+                        UpdateUser(
+                          { photo: photo, token: localStorage["secret_token"] },
+                          (res) => {}
+                        );
                       }}
                     ></PhotoUploader>
                   </div>
@@ -101,7 +100,10 @@ const Profile = (props) => {
                     fontSize="24px"
                     onClick={() => {
                       setEditIntro(false);
-                      updateUser({ description: user.description });
+                      UpdateUser({
+                        description: user.description,
+                        token: localStorage["secret_token"],
+                      });
                     }}
                   ></FaCheck>
                 ) : (

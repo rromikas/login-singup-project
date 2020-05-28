@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { renderEditor } from "./renderEditor";
-import { getBook, craeteThread } from "../../javascript/requests";
+import { GetBook, CreateThread } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import history from "../../routing/history";
 import { Editor, EditorState } from "draft-js";
@@ -18,12 +18,12 @@ const NewThreadForm = (props) => {
   });
   useEffect(() => {
     let filter = { _id: bookId };
-    getBook(filter, (res) => {
+    GetBook(filter, (res) => {
       console.log(res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
-        setBook(res.data.filteredBooks[0]);
+        setBook(res.filteredBooks[0]);
       }
     });
 
@@ -96,7 +96,9 @@ const NewThreadForm = (props) => {
           <div
             className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
             onClick={() => {
-              craeteThread(thread, (res) => {
+              console.log("VEIKIA", thread);
+              CreateThread(thread, (res) => {
+                console.log("REPSONSE AFTER THREAD CRETING", res);
                 if (res.error) {
                   toast.error(res.error.toString());
                 } else {
