@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import OptionPanel from "../search/optionPanel";
 import Results from "../search/results";
-import { GetAllBooks, GetFilteredBooks } from "../../api/socket-requests";
+import {
+  GetFilteredBooks,
+  GetRecentlyAddedBooks,
+} from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
 
@@ -10,14 +13,14 @@ const Home = () => {
   const [authors, setAuthors] = useState([]);
   const [publishers, setPublishers] = useState([]);
   const [results, setResults] = useState({ title: "", items: [] });
-  const [title, setTitle] = useState("Recently added");
+  const title = "Recently added";
 
   useEffect(() => {
-    GetAllBooks((res) => {
-      if (res.allBooks) {
-        setResults({ items: res.allBooks, title: title });
+    GetRecentlyAddedBooks((res) => {
+      if (res.recentlyAddedBooks) {
+        setResults({ items: res.recentlyAddedBooks, title: title });
         let choices = { genres: [], publishers: [], authors: [] };
-        res.allBooks.forEach((x) => {
+        res.recentlyAddedBooks.forEach((x) => {
           if (x.genre?.length > 0) {
             choices.genres.push({ name: x.genre, checked: false });
           }
@@ -60,24 +63,35 @@ const Home = () => {
       ],
     };
 
-    Object.keys(filters).forEach((x) => {
-      if (filters[x].length === 0) {
-        filters[x].push({ title: { $regex: "", $options: "i" } });
-      }
-    });
-
-    GetFilteredBooks(filters, (res) => {
-      if (res.error) {
-        toast.error(res.error.toString());
-      } else {
-        if (res.foundBooks) {
-          setResults({
-            items: res.foundBooks,
-            title: title,
-          });
+    if (
+      filters.genres.length > 0 ||
+      filters.authors.length > 0 ||
+      filters.publishers.length > 0
+    ) {
+      Object.keys(filters).forEach((x) => {
+        if (filters[x].length === 0) {
+          filters[x].push({ title: { $regex: "", $options: "i" } });
         }
-      }
-    });
+      });
+      GetFilteredBooks(filters, (res) => {
+        if (res.error) {
+          toast.error(res.error.toString());
+        } else {
+          if (res.foundBooks) {
+            setResults({
+              items: res.foundBooks,
+              title: title,
+            });
+          }
+        }
+      });
+    } else {
+      GetRecentlyAddedBooks((res) => {
+        if (res.recentlyAddedBooks) {
+          setResults({ items: res.recentlyAddedBooks, title: title });
+        }
+      });
+    }
   }, [genres, authors, publishers]);
 
   return (

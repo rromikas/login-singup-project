@@ -27,6 +27,14 @@ export const GoogleSignup = (user, callback) => {
     });
 };
 
+export const GetRecentlyAddedBooks = async (callback) => {
+  socket
+    .emit("/books/getRecentlyAddedBooks")
+    .once("/books/getRecentlyAddedBooks", (res) => {
+      callback(res);
+    });
+};
+
 export const GetFilteredBooks = async (filters, callback) => {
   socket
     .emit("/books/getFiltered", filters)
@@ -64,6 +72,7 @@ export const GetBooks = (search, callback) => {
     });
 };
 export const AddBook = async (book, callback) => {
+  book.dateAdded = Date.now();
   socket.emit("/books/add", book).once("/books/add", (res) => {
     callback(res);
   });
