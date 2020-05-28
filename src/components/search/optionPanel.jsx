@@ -9,9 +9,17 @@ const OptionPanel = ({
   itemName = "option",
   choices = [],
   setChoices,
-  onSet,
   insertEnabled = false,
 }) => {
+  const uniqNames = [];
+  const uniqChoices = [];
+  choices.forEach((x) => {
+    if (!uniqNames.includes(x.name)) {
+      uniqNames.push(x.name);
+      uniqChoices.push(x);
+    }
+  });
+
   const [newOption, setNewOption] = useState({ initiated: false, value: "" });
   const [hovered, setHovered] = useState(-1);
   const [showAll, setShowAll] = useState(false);
@@ -71,7 +79,7 @@ const OptionPanel = ({
             </div>
           </div>
         )}
-        {choices.slice(0, showAll ? choices.length : 4).map((x, i) => (
+        {uniqChoices.slice(0, showAll ? choices.length : 4).map((x, i) => (
           <div
             className="col-12 d-flex align-items-center p-2"
             key={uid(x)}
@@ -106,7 +114,7 @@ const OptionPanel = ({
             )}
           </div>
         ))}
-        {choices.length > 4 && (
+        {uniqChoices.length > 4 && (
           <div
             className="col-auto mx-auto"
             onClick={() => setShowAll(!showAll)}
