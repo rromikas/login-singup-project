@@ -3,12 +3,14 @@ import OptionPanel from "./optionPanel";
 import Results from "./results";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
-import { useSelector } from "react-redux";
 import {
   GetFilteredBooks,
   GetAllBooks,
   SearchBooks,
 } from "../../api/socket-requests";
+
+import { GetUniqChoices } from "../utility/getUniqChoices";
+
 const Search = () => {
   const [query, setQuery] = useState("");
   const [genres, setGenres] = useState([]);
@@ -31,9 +33,9 @@ const Search = () => {
           choices.publishers.push({ name: x.publisher, checked: false });
         }
       });
-      setGenres(choices.genres);
-      setAuthors(choices.authors);
-      setPublishers(choices.publishers);
+      setGenres(GetUniqChoices(choices.genres));
+      setAuthors(GetUniqChoices(choices.authors));
+      setPublishers(GetUniqChoices(choices.publishers));
     });
   }, []);
 

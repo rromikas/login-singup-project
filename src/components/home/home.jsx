@@ -7,6 +7,7 @@ import {
 } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
+import { GetUniqChoices } from "../utility/getUniqChoices";
 
 const Home = () => {
   const [genres, setGenres] = useState([]);
@@ -31,9 +32,9 @@ const Home = () => {
             choices.publishers.push({ name: x.publisher, checked: false });
           }
         });
-        setGenres(choices.genres);
-        setAuthors(choices.authors);
-        setPublishers(choices.publishers);
+        setGenres(GetUniqChoices(choices.genres));
+        setAuthors(GetUniqChoices(choices.authors));
+        setPublishers(GetUniqChoices(choices.publishers));
       }
     });
   }, []);
