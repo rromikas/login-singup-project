@@ -17,7 +17,7 @@ const OptionPanel = ({
 
   return (
     <div className="col-12 d-none d-sm-block">
-      <div className="row no-gutters p-4 convex bg-light mb-4 shn disable-select text-dark rounded-8">
+      <div className="row no-gutters p-4 bg-white convex border mb-4 shn disable-select text-dark rounded-8">
         <div className="col-12 mb-2">{title}</div>
         {insertEnabled && (
           <div className="col-12 d-flex align-items-center p-2">
@@ -80,28 +80,13 @@ const OptionPanel = ({
             <CheckBox
               size="25"
               checked={x.checked}
-              setChecked={(checked) => {
-                setChoices((choices) => {
-                  let arr = [...choices];
-                  arr[i].checked = checked;
-                  return arr;
-                });
-              }}
+              setChecked={() => setChoices(!x.checked, i)}
             ></CheckBox>
             <div className="mx-2" style={{ wordBreak: "break-word" }}>
               {x?.name?.length > 30 ? x.name.substring(0, 30) + "..." : x.name}
             </div>
             {x.deletable && hovered === i && (
-              <FaTimes
-                fontSize="18px"
-                onClick={() =>
-                  setChoices((choices) => {
-                    let arr = [...choices];
-                    arr.splice(i, 1);
-                    return arr;
-                  })
-                }
-              ></FaTimes>
+              <FaTimes fontSize="18px" onClick={() => setChoices(i)}></FaTimes>
             )}
           </div>
         ))}

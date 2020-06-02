@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { renderEditor } from "./renderEditor";
-import { GetBook, CreateThread } from "../../api/socket-requests";
+import { renderEditor } from "../../utility/renderEditor";
+import { GetBook, CreateThread } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
-import history from "../../routing/history";
+import history from "../../../routing/history";
 import { useSelector } from "react-redux";
 
 const NewThreadForm = (props) => {

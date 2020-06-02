@@ -8,7 +8,7 @@ const PrivateRoute = ({ Component, bearerPath, ...rest }) => {
 
   useEffect(() => {
     ReadUser(localStorage["secret_token"], (res) => {
-      console.log("response", res);
+      console.log("PRIVATE ROUTE RESPONSE", res);
       setValidity((val) =>
         Object.assign({}, val, { ready: true, valid: res.error ? false : true })
       );

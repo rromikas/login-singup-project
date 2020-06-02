@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { uid } from "react-uid";
-import history from "../../routing/history";
+import history from "../../../routing/history";
 import { format } from "timeago.js";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-import { GetSortedThreads } from "../../api/socket-requests";
+import { GetSortedThreads } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
-import StringPreview from "../utility/StringPreview";
+import StringPreview from "../../utility/StringPreview";
 
 const Discussion = ({ threads, bookId }) => {
   const limit = 15;

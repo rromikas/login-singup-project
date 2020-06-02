@@ -4,19 +4,24 @@ import Results from "../search/results";
 import {
   GetFilteredBooks,
   GetRecentlyAddedBooks,
+  connect,
 } from "../../api/socket-requests";
 import { toast } from "react-toastify";
 import UserMenu from "../UserMenu";
 import { GetUniqChoices } from "../utility/getUniqChoices";
+import store from "../../store/store";
 
 const Home = () => {
-  const [genres, setGenres] = useState([]);
-  const [authors, setAuthors] = useState([]);
-  const [publishers, setPublishers] = useState([]);
+  const [filters, setFilters] = useState({
+    genres: [],
+    authors: [],
+    publishers: [],
+  });
   const [results, setResults] = useState({ title: "", items: [] });
   const title = "Recently added";
 
   useEffect(() => {
+    console.log("GET RECENTLY BOOK USE EFFECT");
     GetRecentlyAddedBooks((res) => {
       if (res.recentlyAddedBooks) {
         setResults({ items: res.recentlyAddedBooks, title: title });
@@ -32,31 +37,33 @@ const Home = () => {
             choices.publishers.push({ name: x.publisher, checked: false });
           }
         });
-        setGenres(GetUniqChoices(choices.genres));
-        setAuthors(GetUniqChoices(choices.authors));
-        setPublishers(GetUniqChoices(choices.publishers));
+        choices.genres = GetUniqChoices(choices.genres);
+        choices.authors = GetUniqChoices(choices.authors);
+        choices.publishers = GetUniqChoices(choices.publishers);
+        setFilters(choices);
       }
     });
   }, []);
 
   useEffect(() => {
-    let filters = {
+    console.log("FILTERS use effect", filters);
+    let newFilters = {
       genres: [
-        ...genres
+        ...filters.genres
           .filter((x) => x.checked)
           .map((x) => {
             return { genre: x.name };
           }),
       ],
       authors: [
-        ...authors
+        ...filters.authors
           .filter((x) => x.checked)
           .map((x) => {
             return { authors: x.name };
           }),
       ],
       publishers: [
-        ...publishers
+        ...filters.publishers
           .filter((x) => x.checked)
           .map((x) => {
             return { publisher: x.name };
@@ -65,16 +72,16 @@ const Home = () => {
     };
 
     if (
-      filters.genres.length > 0 ||
-      filters.authors.length > 0 ||
-      filters.publishers.length > 0
+      newFilters.genres.length > 0 ||
+      newFilters.authors.length > 0 ||
+      newFilters.publishers.length > 0
     ) {
-      Object.keys(filters).forEach((x) => {
-        if (filters[x].length === 0) {
-          filters[x].push({ title: { $regex: "", $options: "i" } });
+      Object.keys(newFilters).forEach((x) => {
+        if (newFilters[x].length === 0) {
+          newFilters[x].push({ title: { $regex: "", $options: "i" } });
         }
       });
-      GetFilteredBooks(filters, (res) => {
+      GetFilteredBooks(newFilters, (res) => {
         if (res.error) {
           toast.error(res.error.toString());
         } else {
@@ -87,57 +94,64 @@ const Home = () => {
         }
       });
     } else {
+      console.log("GOT RECENTLY BOOKS 22222222222");
       GetRecentlyAddedBooks((res) => {
         if (res.recentlyAddedBooks) {
           setResults({ items: res.recentlyAddedBooks, title: title });
         }
       });
     }
-  }, [genres, authors, publishers]);
+  }, [filters]);
 
   return (
-    <div
-      className="w-100 overflow-auto bg-theme p-lg-4 p-0"
-      style={{ minHeight: "100%" }}
-    >
+    <div className="row no-gutters">
       <div
-        className="container-fluid px-0 bg-light corners-theme"
-        style={{
-          maxWidth: "1200px",
-          overflow: "hidden",
-        }}
+        className="col-lg-3 col-md-4 col-sm-5 p-4"
+        style={{ background: "rgb(255, 140, 140)" }}
       >
+        <UserMenu></UserMenu>
         <div className="row no-gutters">
-          <div
-            className="col-lg-3 col-md-4 col-sm-5 p-4"
-            style={{ background: "rgb(255, 140, 140)" }}
-          >
-            <UserMenu></UserMenu>
-            <div className="row no-gutters">
-              <OptionPanel
-                title="Genres"
-                itemName="genre"
-                choices={genres}
-                setChoices={setGenres}
-              ></OptionPanel>
-              <OptionPanel
-                title="Authors"
-                itemName="author"
-                choices={authors}
-                setChoices={setAuthors}
-              ></OptionPanel>
-              <OptionPanel
-                title="Publishers"
-                itemName="publisher"
-                choices={publishers}
-                setChoices={setPublishers}
-              ></OptionPanel>
-            </div>
-          </div>
-          <div className="col-md-8 col-lg-9 col-sm-7 px-md-4 px-sm-3 px-2 py-4">
-            <Results results={results}></Results>
-          </div>
+          <OptionPanel
+            title="Genres"
+            itemName="genre"
+            choices={filters.genres}
+            setChoices={(checked, i) =>
+              setFilters((f) => {
+                let arr = [...f.genres];
+                arr[i].checked = checked;
+                return Object.assign({}, f, { genres: arr });
+              })
+            }
+          ></OptionPanel>
+          <OptionPanel
+            title="Authors"
+            itemName="author"
+            choices={filters.authors}
+            setChoices={(checked, i) =>
+              setFilters((f) => {
+                let arr = [...f.authors];
+                arr[i].checked = checked;
+                return Object.assign({}, f, { authors: arr });
+              })
+            }
+          ></OptionPanel>
+          <OptionPanel
+            title="Publishers"
+            itemName="publisher"
+            choices={filters.publishers}
+            setChoices={(checked, i) =>
+              setFilters((f) => {
+                let arr = [...f.publishers];
+                console.log(arr[i].checked);
+                arr[i].checked = checked;
+                return Object.assign({}, f, { publishers: arr });
+              })
+            }
+          ></OptionPanel>
         </div>
+      </div>
+      <div className="col-md-8 col-lg-9 col-sm-7 px-md-4 px-sm-3 px-2 py-4">
+        <Results results={results}></Results>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Results = ({ results }) => {
   const color = "white";
   return (
     <div className="row no-gutters text-dark">
-      <div className="col-12 h1 my-3 px-2">{results.title}</div>
+      <div className="col-12 h1 mb-3 px-2">{results.title}</div>
       {pairedResults.map((x) => (
         <div className="h-100 w-100 row no-gutters" key={uid(x)}>
           <div
@@ -24,7 +24,7 @@ const Results = ({ results }) => {
             onClick={() => history.push(`/books/${x[0]._id}`)}
           >
             <div
-              className="row h-100 no-gutters border overflow-hidden p-4 text-dark rounded-8"
+              className="row h-100 no-gutters border convex overflow-hidden p-4 text-dark rounded-8"
               style={{
                 background:
                   color === "red"
@@ -60,7 +60,7 @@ const Results = ({ results }) => {
               onClick={() => history.push(`/books/${x[1]._id}`)}
             >
               <div
-                className="row h-100 no-gutters border overflow-hidden p-4 text-dark rounded-8"
+                className="row h-100 no-gutters convex border overflow-hidden p-4 text-dark rounded-8"
                 style={{
                   background:
                     color === "red"

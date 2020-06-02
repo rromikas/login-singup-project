@@ -1,6 +1,6 @@
 const io = require("socket.io-client");
 
-const socket = io("https://tangy-denim-juice.glitch.me", {
+const socket = io("http://localhost:5000", {
   secure: true,
   transports: ["websocket", "polling", "flashsocket"],
 });
@@ -20,6 +20,7 @@ export const FacebookSignup = (user, callback) => {
 };
 
 export const GoogleSignup = (user, callback) => {
+  console.log("GOOGLE SINGUP API USER", user);
   socket
     .emit("/users/googleSignup", user)
     .once("/users/googleSignup", (res) => {
@@ -28,6 +29,7 @@ export const GoogleSignup = (user, callback) => {
 };
 
 export const GetRecentlyAddedBooks = async (callback) => {
+  console.log("API GOT RECENTLY BOOKS");
   socket
     .emit("/books/getRecentlyAddedBooks")
     .once("/books/getRecentlyAddedBooks", (res) => {
@@ -121,11 +123,15 @@ export const GetThread = async (ids, callback) => {
 };
 
 export const ReplyToQuestion = async (reply, callback) => {
-  socket
-    .emit("/books/replyToQuestion", reply)
-    .once("/books/replyToQuestion", (res) => {
-      callback(res);
-    });
+  if (reply.reply === "") {
+    callback({ error: "Reply is empty" });
+  } else {
+    socket
+      .emit("/books/replyToQuestion", reply)
+      .once("/books/replyToQuestion", (res) => {
+        callback(res);
+      });
+  }
 };
 
 export const AddView = async (book, callback) => {
@@ -138,6 +144,14 @@ export const AddBookToFavorites = async (bookId, userId, callback) => {
   socket
     .emit("/books/addToFavorites", { bookId, userId })
     .once("/books/addToFavorites", (res) => {
+      callback(res);
+    });
+};
+
+export const RemoveBookFromFavorites = async (bookId, userId, callback) => {
+  socket
+    .emit("/books/removeFromFavorites", { bookId, userId })
+    .once("/books/removeFromFavorites", (res) => {
       callback(res);
     });
 };
@@ -162,4 +176,27 @@ export const UpdateUser = (updatedUser, callback = () => {}) => {
   socket.emit("/users/update", updatedUser).once("/users/update", (res) => {
     callback(res);
   });
+};
+
+export const AddSummary = (props, callback = () => {}) => {
+  console.log("add sumarry before sending", props);
+  socket.emit("/books/addSummary", props).once("/books/addSummary", (res) => {
+    callback(res);
+  });
+};
+
+export const GetSortedSummaries = (props, callback) => {
+  let path = `/books/get${props.sortBy}Summaries`;
+  console.log("Get top rated summaries path", path);
+  socket.emit(path, props).once(path, (res) => {
+    callback(res);
+  });
+};
+
+export const VoteForReply = (props, callback) => {
+  socket
+    .emit("/books/voteForReply", props)
+    .once("/books/voteForReply", (res) => {
+      callback(res);
+    });
 };

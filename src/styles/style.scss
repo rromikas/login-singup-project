@@ -272,8 +272,7 @@ $heights: 100;
   border-radius: 5px;
 }
 .convex {
-  box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24),
-    -2px -2px 6px hsla(0, 0%, 100%, 0.35);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.11), -2px -2px 6px rgba(0, 0, 0, 0.11);
 }
 
 .square {
@@ -379,4 +378,122 @@ $breakpoints: (
 .btn-primary:hover {
   background-color: $themeMainDarker !important;
   border-color: $themeMainDarker !important;
+}
+
+.click-effect-like {
+  animation: click-effect-like 0.6s forwards;
+}
+
+.click-effect-dislike {
+  animation: click-effect-dislike 0.6s forwards;
+}
+
+@keyframes click-effect-like {
+  0% {
+    background: #4c508f;
+  }
+
+  100% {
+    background: white;
+  }
+}
+
+@keyframes click-effect-dislike {
+  0% {
+    background: #f88888;
+  }
+
+  100% {
+    background: white;
+  }
+}
+
+.btn-outline-primary {
+  color: darkslategrey !important;
+  border-color: $themeMain !important;
+  border-width: 2px !important;
+}
+
+.btn-outline-primary:hover {
+  color: #fff !important;
+  background-color: $themeMain !important;
+  border-color: $themeMain !important;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: $themeMain !important;
+  outline: 0;
+  box-shadow: 0 0 0 0.15rem rgb(255, 182, 182) !important;
+}
+
+.menu-btn {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 28px;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  /* border: 3px solid #fff; */
+}
+.menu-btn__burger {
+  width: 32px;
+  height: 4px;
+  background: $themeMain;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+.menu-btn__burger::before,
+.menu-btn__burger::after {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 4px;
+  background: $themeMain;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+.menu-btn__burger::before {
+  transform: translateY(-10px);
+}
+.menu-btn__burger::after {
+  transform: translateY(10px);
+}
+/* ANIMATION */
+.menu-btn.open .menu-btn__burger {
+  transform: translateX(-50px);
+  background: transparent;
+  box-shadow: none;
+}
+.menu-btn.open .menu-btn__burger::before {
+  transform: rotate(45deg) translate(35px, -35px);
+}
+.menu-btn.open .menu-btn__burger::after {
+  transform: rotate(-45deg) translate(35px, 35px);
+}
+
+.menu-item-custom {
+  cursor: pointer;
+}
+
+.menu-item-custom::after {
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 0;
+  height: 3px;
+  background: $themeMain;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  transition: width 0.3s;
+}
+
+.menu-item-custom:hover::after {
+  width: 100%;
+  //transition: width .3s;
 }

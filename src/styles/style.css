@@ -1094,8 +1094,8 @@ body {
 }
 
 .convex, .my-btn, .outline-btn-rounded, .outline-btn-square {
-  -webkit-box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(255, 255, 255, 0.35);
-          box-shadow: 3px 4px 6px rgba(0, 0, 0, 0.24), -2px -2px 6px rgba(255, 255, 255, 0.35);
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.11), -2px -2px 6px rgba(0, 0, 0, 0.11);
+          box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.11), -2px -2px 6px rgba(0, 0, 0, 0.11);
 }
 
 .square {
@@ -1196,5 +1196,167 @@ body {
 .btn-primary:hover {
   background-color: #da6464 !important;
   border-color: #da6464 !important;
+}
+
+.click-effect-like {
+  -webkit-animation: click-effect-like 0.6s forwards;
+          animation: click-effect-like 0.6s forwards;
+}
+
+.click-effect-dislike {
+  -webkit-animation: click-effect-dislike 0.6s forwards;
+          animation: click-effect-dislike 0.6s forwards;
+}
+
+@-webkit-keyframes click-effect-like {
+  0% {
+    background: #4c508f;
+  }
+  100% {
+    background: white;
+  }
+}
+
+@keyframes click-effect-like {
+  0% {
+    background: #4c508f;
+  }
+  100% {
+    background: white;
+  }
+}
+
+@-webkit-keyframes click-effect-dislike {
+  0% {
+    background: #f88888;
+  }
+  100% {
+    background: white;
+  }
+}
+
+@keyframes click-effect-dislike {
+  0% {
+    background: #f88888;
+  }
+  100% {
+    background: white;
+  }
+}
+
+.btn-outline-primary {
+  color: darkslategrey !important;
+  border-color: #f88888 !important;
+  border-width: 2px !important;
+}
+
+.btn-outline-primary:hover {
+  color: #fff !important;
+  background-color: #f88888 !important;
+  border-color: #f88888 !important;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #f88888 !important;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0.15rem #ffb6b6 !important;
+          box-shadow: 0 0 0 0.15rem #ffb6b6 !important;
+}
+
+.menu-btn {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 35px;
+  height: 28px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  /* border: 3px solid #fff; */
+}
+
+.menu-btn__burger {
+  width: 32px;
+  height: 4px;
+  background: #f88888;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+          box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-btn__burger::before,
+.menu-btn__burger::after {
+  content: "";
+  position: absolute;
+  width: 32px;
+  height: 4px;
+  background: #f88888;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+          box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-btn__burger::before {
+  -webkit-transform: translateY(-10px);
+          transform: translateY(-10px);
+}
+
+.menu-btn__burger::after {
+  -webkit-transform: translateY(10px);
+          transform: translateY(10px);
+}
+
+/* ANIMATION */
+.menu-btn.open .menu-btn__burger {
+  -webkit-transform: translateX(-50px);
+          transform: translateX(-50px);
+  background: transparent;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.menu-btn.open .menu-btn__burger::before {
+  -webkit-transform: rotate(45deg) translate(35px, -35px);
+          transform: rotate(45deg) translate(35px, -35px);
+}
+
+.menu-btn.open .menu-btn__burger::after {
+  -webkit-transform: rotate(-45deg) translate(35px, 35px);
+          transform: rotate(-45deg) translate(35px, 35px);
+}
+
+.menu-item-custom {
+  cursor: pointer;
+}
+
+.menu-item-custom::after {
+  content: "";
+  display: block;
+  margin-top: 5px;
+  width: 0;
+  height: 3px;
+  background: #f88888;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+          box-shadow: 0 2px 5px rgba(255, 101, 47, 0.2);
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.menu-item-custom:hover::after {
+  width: 100%;
 }
 /*# sourceMappingURL=style.css.map */
