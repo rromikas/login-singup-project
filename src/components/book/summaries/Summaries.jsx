@@ -7,32 +7,38 @@ import { GetSortedSummaries, AddSummary } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
 import StringPreview from "../../utility/StringPreview";
 import Ratings from "react-ratings-declarative";
+import HtmlPreview from "../../utility/htmlPreview";
 
-const Summaries = ({ threads, bookId }) => {
+const Summaries = ({ bookId }) => {
   const limit = 15;
-  const [sortBy, setSortBy] = useState("TopRated");
+  const [sortBy, setSortBy] = useState("Top Rated");
   const [changingSort, setChangingSort] = useState(false);
   const [summaries, setSummaries] = useState([]);
 
   useEffect(() => {
-    GetSortedSummaries({ bookId, limit, sortBy }, (res) => {
-      console.log("Response get sorted summeris SUmarries.js", res);
-      if (res.error) {
-        toast.error(res.error.toString());
-      } else {
-        setSummaries(res.summaries.map((x) => x.summary));
+    GetSortedSummaries(
+      { bookId, limit, sortBy: sortBy.replace(" ", "") },
+      (res) => {
+        console.log("Response get sorted summeris SUmarries.js", res);
+        if (res.error) {
+          toast.error(res.error.toString());
+        } else {
+          setSummaries(res.summaries.map((x) => x));
+        }
       }
-    });
+    );
   }, [sortBy]);
 
   return (
     <div className="row no-gutters text-dark">
-      <div className="col-12 h1">Summaries</div>
       <div className="col-12">
-        <div className="row no-gutters my-3">
-          <div className="col-12 border" style={{ background: "white" }}>
-            <div className="row no-gutters">
-              <div className="col-6 py-3" style={{ position: "relative" }}>
+        <div className="row no-gutters">
+          <div
+            className="col-12 border-top border-right border-left"
+            style={{ background: "white" }}
+          >
+            <div className="row no-gutters py-2">
+              <div className="col-7" style={{ position: "relative" }}>
                 <div
                   className="px-3 d-flex disable-select align-items-center h-100"
                   onClick={() => setChangingSort(!changingSort)}
@@ -53,13 +59,13 @@ const Summaries = ({ threads, bookId }) => {
                     >
                       <div
                         className="pl-3 pr-5 py-3 bg-white cursor-pointer sort-item"
-                        onClick={() => setSortBy("Top rated")}
+                        onClick={() => setSortBy("Top Rated")}
                       >
                         Top rated
                       </div>
                       <div
                         className="pl-3 pr-5 py-3 bg-white cursor-pointer sort-item"
-                        onClick={() => setSortBy("Most recent")}
+                        onClick={() => setSortBy("Most Recent")}
                       >
                         Most recent
                       </div>
@@ -67,24 +73,12 @@ const Summaries = ({ threads, bookId }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-6">
+              <div className="col-5">
                 <div className="row no-gutters justify-content-end px-3 h-100 align-items-center">
                   <div
-                    className="outline-btn-square h-85 px-3 bg-white"
+                    className="outline-btn-square h-85 px-3 bg-white text-center py-3"
                     onClick={() => {
-                      AddSummary(
-                        {
-                          bookId: bookId,
-                          summary: {
-                            authorId: "5ed2c382b4080c6b3705ef71",
-                            summary: "Test summary",
-                            private: false,
-                          },
-                        },
-                        (res) => {
-                          console.log("Response after adding summary", res);
-                        }
-                      );
+                      history.push(`/books/${bookId}/summaries/new`);
                     }}
                   >
                     Write summary
@@ -121,7 +115,9 @@ const Summaries = ({ threads, bookId }) => {
                     <Ratings.Widget />
                   </Ratings>
                 </div>
-                <div className="row no-gutters">{x.summary}</div>
+                <div className="row no-gutters">
+                  <HtmlPreview data={x.summary}></HtmlPreview>
+                </div>
               </div>
             ))
           ) : (
@@ -129,7 +125,7 @@ const Summaries = ({ threads, bookId }) => {
               className="col-12 p-3 flex-center border"
               style={{ height: "150px", background: "white" }}
             >
-              No threads yet. Open the first thread.
+              No summaries yet. Write the first one.
             </div>
           )}
         </div>

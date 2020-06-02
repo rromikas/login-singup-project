@@ -1,6 +1,6 @@
 const io = require("socket.io-client");
 
-const socket = io("http://localhost:5000", {
+const socket = io("http://192.168.1.183:5000", {
   secure: true,
   transports: ["websocket", "polling", "flashsocket"],
 });
@@ -29,7 +29,6 @@ export const GoogleSignup = (user, callback) => {
 };
 
 export const GetRecentlyAddedBooks = async (callback) => {
-  console.log("API GOT RECENTLY BOOKS");
   socket
     .emit("/books/getRecentlyAddedBooks")
     .once("/books/getRecentlyAddedBooks", (res) => {

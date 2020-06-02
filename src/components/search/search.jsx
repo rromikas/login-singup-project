@@ -9,7 +9,6 @@ import { GetUniqChoices } from "../utility/getUniqChoices";
 import store from "../../store/store";
 
 const Search = ({ query, ...rest }) => {
-  const paramsQuery = rest.match.params ? rest.match.params.query : null;
   const [filters, setFilters] = useState({
     genres: [],
     authors: [],
@@ -22,11 +21,19 @@ const Search = ({ query, ...rest }) => {
   });
 
   useEffect(() => {
-    query = query === "" ? (paramsQuery ? paramsQuery : "") : query;
-    store.dispatch({
-      type: "ADD_BREADCRUMB",
-      breadCrumb: { title: `search ${query}`, path: `/search/${query}` },
-    });
+    let query = rest.match.params
+      ? rest.match.params.query
+        ? rest.match.params.query
+        : ""
+      : "";
+    let bc = store.getState().breadCrumbs;
+    if (bc[bc.length - 1].path !== `/search/${query}`) {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        breadCrumb: { title: `search ${query}`, path: `/search/${query}` },
+      });
+    }
+
     SearchBooks(query, (res) => {
       console.log("query serh", query);
       if (res.error) {
@@ -54,7 +61,7 @@ const Search = ({ query, ...rest }) => {
         setFilters(choices);
       }
     });
-  }, [query]);
+  }, [rest.match.params]);
 
   useEffect(() => {
     let arr = [];

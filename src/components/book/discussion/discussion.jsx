@@ -31,12 +31,14 @@ const Discussion = ({ threads, bookId }) => {
 
   return (
     <div className="row no-gutters text-dark">
-      <div className="col-12 h1">Discussion</div>
       <div className="col-12">
-        <div className="row no-gutters my-3">
-          <div className="col-12 border" style={{ background: "white" }}>
-            <div className="row no-gutters">
-              <div className="col-6 py-3" style={{ position: "relative" }}>
+        <div className="row no-gutters">
+          <div
+            className="col-12 border-top border-right border-left"
+            style={{ background: "white" }}
+          >
+            <div className="row no-gutters py-2">
+              <div className="col-6" style={{ position: "relative" }}>
                 <div
                   className="px-3 d-flex disable-select align-items-center h-100"
                   onClick={() => setChangingSort(!changingSort)}
@@ -80,7 +82,7 @@ const Discussion = ({ threads, bookId }) => {
               <div className="col-6">
                 <div className="row no-gutters justify-content-end px-3 h-100 align-items-center">
                   <div
-                    className="outline-btn-square h-85 px-3 bg-white"
+                    className="outline-btn-square h-85 px-3 bg-white py-3"
                     onClick={() => history.push(`/books/${bookId}/threads/new`)}
                   >
                     New thread

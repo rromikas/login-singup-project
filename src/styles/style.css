@@ -1359,4 +1359,22 @@ body {
 .menu-item-custom:hover::after {
   width: 100%;
 }
+
+.menu-item-border-bottom {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  cursor: pointer;
+}
+
+.menu-item-border-bottom-active {
+  border-bottom: 4px solid #f88888 !important;
+}
+
+.btn-link {
+  color: #f88888 !important;
+}
+
+.input-group .form-control {
+  margin: 0px !important;
+}
 /*# sourceMappingURL=style.css.map */

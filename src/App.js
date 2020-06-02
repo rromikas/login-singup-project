@@ -19,6 +19,7 @@ import Form from "./components/addBook/Form";
 import Navbar from "./components/navbar/navbar";
 import SideNavbar from "./components/navbar/SideNavbar";
 import BreadCrumbs from "./components/navbar/BreadCrumbs";
+import WriteSummaryForm from "./components/book/summaries/Form";
 
 function App() {
   const [isMenuOpened, setMenu] = useState(false);
@@ -48,7 +49,10 @@ function App() {
             <Navbar setMenu={setMenu} isMenuOpened={isMenuOpened}></Navbar>
             <BreadCrumbs></BreadCrumbs>
             <div className="row no-gutters" style={{ position: "relative" }}>
-              <SideNavbar isMenuOpened={isMenuOpened}></SideNavbar>
+              <SideNavbar
+                isMenuOpened={isMenuOpened}
+                setMenu={setMenu}
+              ></SideNavbar>
               <div
                 className="w-100 h-100"
                 style={{
@@ -80,6 +84,12 @@ function App() {
                     exact
                     path="/books/:bookId/threads/new"
                     Component={NewThreadForm}
+                  ></PrivateRoute>
+                  <PrivateRoute
+                    bearerPath="/login"
+                    exact
+                    path="/books/:bookId/summaries/new"
+                    Component={WriteSummaryForm}
                   ></PrivateRoute>
                   <Route
                     exact

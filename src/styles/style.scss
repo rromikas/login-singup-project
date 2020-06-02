@@ -497,3 +497,21 @@ $breakpoints: (
   width: 100%;
   //transition: width .3s;
 }
+
+.menu-item-border-bottom {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  cursor: pointer;
+}
+
+.menu-item-border-bottom-active {
+  border-bottom: 4px solid $themeMain !important;
+}
+
+.btn-link {
+  color: $themeMain !important;
+}
+
+.input-group .form-control {
+  margin: 0px !important;
+}

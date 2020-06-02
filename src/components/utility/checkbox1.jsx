@@ -6,10 +6,9 @@ const CheckBox = ({ checked, setChecked, size }) => {
       style={{
         width: `${size}px`,
         height: `${size}px`,
-        borderRadius: `${size / 3}px`,
         flexShrink: 0,
       }}
-      className="d-flex justify-content-center align-items-center concave border"
+      className="d-flex justify-content-center align-items-center border border-secondary bg-white"
       onClick={() => {
         setChecked(!checked);
       }}

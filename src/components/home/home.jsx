@@ -22,6 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     console.log("GET RECENTLY BOOK USE EFFECT");
+    store.dispatch({ type: "SELECT_BREADCRUMB", breadCrumbIndex: 1 });
     GetRecentlyAddedBooks((res) => {
       if (res.recentlyAddedBooks) {
         setResults({ items: res.recentlyAddedBooks, title: title });
@@ -107,9 +108,8 @@ const Home = () => {
     <div className="row no-gutters">
       <div
         className="col-lg-3 col-md-4 col-sm-5 p-4"
-        style={{ background: "rgb(255, 140, 140)" }}
+        style={{ background: "#ffb4b4" }}
       >
-        <UserMenu></UserMenu>
         <div className="row no-gutters">
           <OptionPanel
             title="Genres"

@@ -92,7 +92,7 @@ const Thread = (props) => {
   }, []);
 
   return (
-    <div className="row no-gutters">
+    <div className="row no-gutters px-2 px-sm-3 px-md-4 px-lg-5 pt-3 pb-5">
       <div className="col-12 p-4 border bg-white">
         <div className="row no-gutters border-bottom justify-content-end justify-content-md-between">
           <div className="col-12 pb-4">

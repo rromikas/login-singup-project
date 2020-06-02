@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { renderEditor } from "../../utility/renderEditor";
-import { GetBook, CreateThread } from "../../../api/socket-requests";
+import { GetBook, AddSummary } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
 import history from "../../../routing/history";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
+import CheckBox from "../../utility/checkbox1";
+import Popover from "../../utility/popover";
 
-const NewThreadForm = (props) => {
+const WriteSummaryForm = (props) => {
   const bookId = props.match.params.bookId;
   const [book, setBook] = useState({ image: "", title: "", atuhors: "" });
-  const user = useSelector((state) => state.user);
-  const [thread, setThread] = useState({
+  const user = props.user;
+  const [summary, setSummary] = useState({
     description: "",
     title: "",
-    userId: user._id,
+    authorId: user._id,
     bookId: bookId,
+    private: false,
   });
   useEffect(() => {
     let filter = { _id: bookId };
@@ -27,10 +30,10 @@ const NewThreadForm = (props) => {
 
     renderEditor(
       "question-editor",
-      "Description",
-      thread.description,
+      "Summary",
+      summary.description,
       (newDescription) => {
-        setThread((prev) =>
+        setSummary((prev) =>
           Object.assign({}, prev, { description: newDescription })
         );
       }
@@ -43,9 +46,10 @@ const NewThreadForm = (props) => {
         <div className="row no-gutters justify-content-between border p-4 bg-white mb-3">
           <div className="col-auto pb-5">
             <div className="row no-gutters" style={{ maxWidth: "436px" }}>
-              <div className="h1 col-12">Write new post</div>
+              <div className="h1 col-12">Write a Summary</div>
               <div className="col-12">
-                Start a conversation, ask a question or share your idea.
+                Share your impressions about the book. What topics and themes
+                stood out?
               </div>
             </div>
           </div>
@@ -66,10 +70,10 @@ const NewThreadForm = (props) => {
             Title
           </label>
           <input
-            value={thread.title}
+            value={summary.title}
             onChange={(e) => {
               e.persist();
-              setThread((prev) =>
+              setSummary((prev) =>
                 Object.assign({}, prev, { title: e.target.value })
               );
             }}
@@ -80,17 +84,42 @@ const NewThreadForm = (props) => {
           />
         </div>
         <div className="row no-gutters" id="question-editor"></div>
+        <div className="row no-gutters align-items-center my-4">
+          <div className="mr-2">
+            <CheckBox
+              size="30"
+              checked={summary.private}
+              setChecked={(checked) =>
+                setSummary((s) => Object.assign({}, s, { private: checked }))
+              }
+            ></CheckBox>
+          </div>
+          <div className="mr-2">Make summary private</div>
+          <Popover
+            info={"Private summaries won't appear on book page"}
+          ></Popover>
+        </div>
         <div className="row no-gutters">
           <div
             className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
             onClick={() => {
-              CreateThread(thread, (res) => {
-                if (res.error) {
-                  toast.error(res.error.toString());
-                } else {
-                  history.push(`/books/${bookId}`);
+              let summarryObj = { ...summary };
+
+              AddSummary(
+                {
+                  bookId,
+                  summary: Object.assign({}, summarryObj, {
+                    authorId: user._id,
+                  }),
+                },
+                (res) => {
+                  if (res.error) {
+                    toast.error(res.error.toString());
+                  } else {
+                    history.push(`/books/${bookId}`);
+                  }
                 }
-              });
+              );
             }}
           >
             Publish
@@ -109,4 +138,11 @@ const NewThreadForm = (props) => {
   );
 };
 
-export default NewThreadForm;
+function mapStateToProps(state, ownProps) {
+  return {
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapStateToProps)(WriteSummaryForm);

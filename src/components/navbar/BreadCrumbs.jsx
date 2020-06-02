@@ -15,7 +15,7 @@ const BreadCrumbs = ({ breadCrumbs }) => {
     };
   }, []);
   return (
-    <div className="row no-gutters py-1 px-3 border">
+    <div className="row no-gutters py-1 px-3 border-right border-left border-bottom">
       {breadCrumbs.map((x, i) => {
         return (
           <div className="d-flex align-items-center">

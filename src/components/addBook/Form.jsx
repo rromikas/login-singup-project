@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Container from "@material-ui/core/Container";
 import InputForm from "./InputForm";
 import * as Yup from "yup";
+import store from "../../store/store";
 
 const validationSchema = Yup.object({
   title: Yup.string().required(),
@@ -47,25 +48,32 @@ const Form = (routerProps) => {
   };
 
   const classes = routerProps;
+
+  useEffect(() => {
+    let bc = store.getState().breadCrumbs;
+    if (bc[bc.length - 1].path !== `/add-book`) {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        breadCrumb: { title: `Add`, category: "books", path: `/add-book` },
+      });
+    }
+  }, []);
+
   return (
-    <div className="w-100 bg-theme p-lg-4 p-0">
+    <Container maxWidth="sm">
       <div
-        style={{ maxWidth: "800px" }}
-        className="p-4 py-5 border bg-light mx-auto corners-theme"
+        className={classes.container}
+        style={{ marginTop: "25px", marginBottom: "50px" }}
       >
-        <Container maxWidth="sm">
-          <div className={classes.container}>
-            <h1 className={classes.heading}>Add Book</h1>
-            <Formik
-              enableReinitialize={true}
-              render={(props) => <InputForm {...props} {...routerProps} />}
-              initialValues={values}
-              validationSchema={validationSchema}
-            />
-          </div>
-        </Container>
+        <h1 className={classes.heading}>Add Book</h1>
+        <Formik
+          enableReinitialize={true}
+          render={(props) => <InputForm {...props} {...routerProps} />}
+          initialValues={values}
+          validationSchema={validationSchema}
+        />
       </div>
-    </div>
+    </Container>
   );
 };
 

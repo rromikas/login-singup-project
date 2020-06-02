@@ -6,6 +6,7 @@ import PhotoUploader from "./photoUploader";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import Results from "../search/results";
+import store from "../../store/store";
 
 const initialProfile = { name: "", photo: "", description: "" };
 
@@ -26,12 +27,22 @@ const Profile = (props) => {
       } else {
         console.log("user read repsonse profile", res.user);
         setUser((user) => Object.assign({}, user, res.user));
+        let breadCrumbs = store.getState().breadCrumbs;
+        if (breadCrumbs[breadCrumbs.length - 1].path !== `/profile`) {
+          store.dispatch({
+            type: "ADD_BREADCRUMB",
+            breadCrumb: {
+              title: "profile",
+              path: `/profile`,
+            },
+          });
+        }
       }
     });
   }, []);
 
   return (
-    <div className="row justify-content-center bg-light">
+    <div className="row no-gutters justify-content-center bg-light">
       <div
         className="col-12 col-sm-4 bg-light px-sm-4 px-3 py-4"
         style={{
@@ -84,7 +95,7 @@ const Profile = (props) => {
           </div>
         </div>
       </div>
-      <div className="col-12 col-sm-8 px-md-4 px-sm-3 px-2 py-4">
+      <div className="col-12 col-sm-8 px-4 py-4">
         <div className="d-flex align-items-center px-2">
           <h1 className="mt-3">Intro</h1>
           <div className="mx-3">
