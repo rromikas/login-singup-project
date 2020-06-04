@@ -92,7 +92,7 @@ const Search = ({ query, ...rest }) => {
   return (
     <div className="row no-gutters">
       <div
-        className="col-lg-3 col-md-4 col-sm-5 p-4 d-sm-flex d-none"
+        className="col-lg-3 col-md-4 col-sm-5 p-4 d-sm-block d-none"
         style={{ background: "#ffb4b4" }}
       >
         <div className="row no-gutters">
