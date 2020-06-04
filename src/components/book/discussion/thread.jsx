@@ -213,7 +213,7 @@ const Thread = (props) => {
                   <div className="row no-gutters">
                     {formatVotes(x.votes)}
                     <div
-                      className={`flex-center mr-2${
+                      className={`icon-btn flex-center mr-2${
                         vote[0] === i && vote[1] === 1
                           ? " click-effect-like"
                           : ""
@@ -281,7 +281,7 @@ const Thread = (props) => {
                       ></FaRegThumbsUp>
                     </div>
                     <div
-                      className={`flex-center${
+                      className={`icon-btn flex-center${
                         vote[0] === i && vote[1] === -1
                           ? " click-effect-dislike"
                           : ""
