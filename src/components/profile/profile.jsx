@@ -7,8 +7,15 @@ import history from "../../routing/history";
 import { toast } from "react-toastify";
 import Results from "../search/results";
 import store from "../../store/store";
+import Summaries from "./Summaries";
 
-const initialProfile = { name: "", photo: "", description: "" };
+const initialProfile = {
+  name: "",
+  photo: "",
+  description: "",
+  summaries: [],
+  favoriteBooks: [],
+};
 
 const Profile = (props) => {
   const hiddenUploader = useRef(null);
@@ -25,7 +32,6 @@ const Profile = (props) => {
         );
         history.push("/login");
       } else {
-        console.log("user read repsonse profile", res.user);
         setUser((user) => Object.assign({}, user, res.user));
         let breadCrumbs = store.getState().breadCrumbs;
         if (breadCrumbs[breadCrumbs.length - 1].path !== `/profile`) {
@@ -89,15 +95,12 @@ const Profile = (props) => {
             <div className="text-center mt-3 h1" style={{ color: "white" }}>
               {user.name}
             </div>
-            <div className="text-center lead" style={{ color: "white" }}>
-              Member since 2018
-            </div>
           </div>
         </div>
       </div>
       <div className="col-12 col-sm-8 px-4 py-4">
         <div className="d-flex align-items-center px-2">
-          <h1 className="mt-3">Intro</h1>
+          <div className="h1">Intro</div>
           <div className="mx-3">
             {editIntro ? (
               <FaCheck
@@ -139,24 +142,22 @@ const Profile = (props) => {
             );
           }}
         ></textarea>
-
-        {user.favoriteBooks?.length > 0 ? (
-          <div>
-            <Results
-              results={{
-                items: user.favoriteBooks,
-                title: "Favorite books",
-              }}
-            ></Results>
-          </div>
-        ) : (
-          <div
-            className="w-100 d-none d-md-flex pr-4 justify-content-end mt-5 pb-2"
-            style={{ height: "55vh" }}
-          >
-            <RelaxReading></RelaxReading>
-          </div>
-        )}
+        <div className="mb-5">
+          <Results
+            results={{
+              items: user.favoriteBooks,
+              title: "Favorite books",
+            }}
+          ></Results>
+        </div>
+        {/* ) : (
+        <div
+          className="w-100 d-none d-md-flex pr-4 justify-content-end mt-5 pb-2"
+          style={{ height: "55vh" }}
+        >
+          <RelaxReading></RelaxReading>
+        </div> */}
+        <Summaries summaries={user.summaries}></Summaries>
       </div>
     </div>
   );

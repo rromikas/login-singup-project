@@ -8,7 +8,7 @@ const CheckBox = ({ checked, setChecked, size }) => {
         height: `${size}px`,
         flexShrink: 0,
       }}
-      className="d-flex justify-content-center align-items-center border border-secondary bg-white"
+      className="d-flex justify-content-center align-items-center border border-secondary bg-white cursor-pointer"
       onClick={() => {
         setChecked(!checked);
       }}

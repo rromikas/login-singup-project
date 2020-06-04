@@ -24,11 +24,11 @@ const Book = (props) => {
     description: "",
     threads: [],
     favoriteFor: [],
+    summaries: [],
   });
 
   useEffect(() => {
     if (book.title !== "") {
-      console.log("BOOK TITLE CHANGED", book.title);
       let breadCrumbs = store.getState().breadCrumbs;
       if (breadCrumbs[breadCrumbs.length - 1].path !== `/books/${book._id}`) {
         store.dispatch({
@@ -48,10 +48,13 @@ const Book = (props) => {
   useEffect(() => {
     let filter = { _id: bookId };
     GetBook(filter, (res) => {
-      console.log("Book response", res);
       if (res.error) {
         toast.error(res.error.toString());
       } else {
+        res.filteredBooks[0].summaries.sort((a, b) =>
+          a.rating < b.rating ? 1 : a.rating > b.rating ? -1 : 0
+        );
+        res.filteredBooks[0].threads.reverse();
         setBook(res.filteredBooks[0]);
       }
     });
@@ -59,7 +62,10 @@ const Book = (props) => {
 
   return (
     <div className="row no-gutters py-3 px-2 px-md-4 px-sm-2 px-lg-5 bg-light justify-content-center mb-5">
-      <div className="col-12 px-2 px-sm-3 px-md-4">
+      <div
+        className="col-12 px-2 px-sm-3 px-md-4"
+        style={{ minHeight: "1000px" }}
+      >
         <div className="row no-gutters">
           <div className="col-12 bg-white p-4 border">
             <div className="row no-gutters">
@@ -67,13 +73,13 @@ const Book = (props) => {
                 <img src={book.image} width="200" className="img-fluid" />
               </div>
               <div className="col-12 col-md">
-                <div className="row no-gutters h1 mb-2 text-center text-md-left justify-content-center justify-content-md-start">
+                <div className="row no-gutters h4 mb-2 text-center text-md-left justify-content-center justify-content-md-start book-title">
                   {book.title}
                 </div>
-                <div className="row no-gutters mb-4 h5 text-center text-md-left justify-content-center justify-content-md-start">
+                <div className="row no-gutters mb-4 lead text-center text-md-left justify-content-center justify-content-md-start">
                   {book.authors}
                 </div>
-                <div className="row no-gutters disable-select">
+                <div className="row no-gutters justify-content-center justify-content-sm-start disable-select">
                   <div className="d-flex">
                     <div className="mr-2">{book.favoriteFor.length}</div>
                     {book.favoriteFor.filter((x) => x._id === user._id).length >
@@ -167,7 +173,7 @@ const Book = (props) => {
               </div>
             </div>
             <div className="row no-gutters">
-              <div className="col-12" style={{ minHeight: "500px" }}>
+              <div className="col-12">
                 {currentSection === 0 ? (
                   <div className="row no-gutters p-5 bg-white border">
                     <div className="col-12 h5">Description</div>
@@ -178,10 +184,7 @@ const Book = (props) => {
                     </div>
                   </div>
                 ) : currentSection === 1 ? (
-                  <Discussion
-                    threads={book.threads}
-                    bookId={bookId}
-                  ></Discussion>
+                  <Discussion bookId={bookId}></Discussion>
                 ) : (
                   <Summaries bookId={bookId}></Summaries>
                 )}

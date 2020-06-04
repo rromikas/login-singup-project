@@ -24,7 +24,18 @@ function queryReducer(state = "", action) {
 function breadcrumbsReducer(state = [{ title: "home", path: "/" }], action) {
   switch (action.type) {
     case "ADD_BREADCRUMB":
-      return state.concat([action.breadCrumb]);
+      return state
+        .concat([
+          {
+            title:
+              action.breadCrumb.title.length > 10
+                ? action.breadCrumb.title.substring(0, 10) + ". . ."
+                : action.breadCrumb.title,
+            category: action.breadCrumb.category,
+            path: action.breadCrumb.path,
+          },
+        ])
+        .filter((x, i) => i === 0 || i > state.length - 3);
     case "SELECT_BREADCRUMB":
       console.log("index breadcurumb", action.breadCrumbIndex);
       return state.filter((x, i) => i < action.breadCrumbIndex);

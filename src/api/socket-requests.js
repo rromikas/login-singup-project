@@ -1,6 +1,6 @@
 const io = require("socket.io-client");
 
-const socket = io("http://192.168.1.183:5000", {
+const socket = io("https://tasteful-jeweled-ferry.glitch.me", {
   secure: true,
   transports: ["websocket", "polling", "flashsocket"],
 });
@@ -20,7 +20,6 @@ export const FacebookSignup = (user, callback) => {
 };
 
 export const GoogleSignup = (user, callback) => {
-  console.log("GOOGLE SINGUP API USER", user);
   socket
     .emit("/users/googleSignup", user)
     .once("/users/googleSignup", (res) => {
@@ -178,16 +177,12 @@ export const UpdateUser = (updatedUser, callback = () => {}) => {
 };
 
 export const AddSummary = (props, callback = () => {}) => {
-  console.log("add sumarry before sending", props);
   socket.emit("/books/addSummary", props).once("/books/addSummary", (res) => {
     callback(res);
   });
 };
-
-export const GetSortedSummaries = (props, callback) => {
-  let path = `/books/get${props.sortBy}Summaries`;
-  console.log("Get top rated summaries path", path);
-  socket.emit(path, props).once(path, (res) => {
+export const EditSummary = (props, callback = () => {}) => {
+  socket.emit("/books/editSummary", props).once("/books/editSummary", (res) => {
     callback(res);
   });
 };
@@ -198,4 +193,35 @@ export const VoteForReply = (props, callback) => {
     .once("/books/voteForReply", (res) => {
       callback(res);
     });
+};
+
+export const GetSummary = (props, callback) => {
+  socket
+    .emit("/books/summaries/getSummary", props)
+    .once("/books/getSummary", (res) => {
+      callback(res);
+    });
+};
+
+export const CommentSummary = (props, callback) => {
+  socket
+    .emit("/books/summaries/commentSummary", props)
+    .once("/books/summaries/commentSummary", (res) => {
+      callback(res);
+    });
+};
+
+export const RateSummary = (props, callback) => {
+  socket
+    .emit("/books/summaries/rateSummary", props)
+    .once("/books/summaries/rateSummary", (res) => {
+      callback(res);
+    });
+};
+
+export const GetSortedSummaries = (props, callback) => {
+  let path = `/books/summaries/get${props.sortBy}Summaries`;
+  socket.emit(path, props).once(path, (res) => {
+    callback(res);
+  });
 };

@@ -6,13 +6,15 @@ import history from "../../../routing/history";
 import { connect } from "react-redux";
 import CheckBox from "../../utility/checkbox1";
 import Popover from "../../utility/popover";
+import store from "../../../store/store";
 
 const WriteSummaryForm = (props) => {
   const bookId = props.match.params.bookId;
   const [book, setBook] = useState({ image: "", title: "", atuhors: "" });
   const user = props.user;
+  const breadCrumbs = props.breadCrumbs;
   const [summary, setSummary] = useState({
-    description: "",
+    summary: "",
     title: "",
     authorId: user._id,
     bookId: bookId,
@@ -25,16 +27,39 @@ const WriteSummaryForm = (props) => {
         toast.error(res.error.toString());
       } else {
         setBook(res.filteredBooks[0]);
+        if (
+          breadCrumbs[breadCrumbs.length - 1].path !==
+          `/books/${bookId}/summaries/new`
+        ) {
+          if (breadCrumbs[breadCrumbs.length - 1].path !== `/books/${bookId}`) {
+            store.dispatch({
+              type: "ADD_BREADCRUMB",
+              breadCrumb: {
+                title: res.filteredBooks[0].title,
+                path: `/books/${bookId}`,
+                category: "books",
+              },
+            });
+          }
+          store.dispatch({
+            type: "ADD_BREADCRUMB",
+            breadCrumb: {
+              title: "new",
+              path: `/books/${bookId}/summaries/new`,
+              category: "summaries",
+            },
+          });
+        }
       }
     });
 
     renderEditor(
       "question-editor",
       "Summary",
-      summary.description,
+      summary.summary,
       (newDescription) => {
         setSummary((prev) =>
-          Object.assign({}, prev, { description: newDescription })
+          Object.assign({}, prev, { summary: newDescription })
         );
       }
     );
@@ -54,34 +79,16 @@ const WriteSummaryForm = (props) => {
             </div>
           </div>
           <div className="col-auto pb-4">
-            <div className="row no-gutters" style={{ maxWidth: "350px" }}>
+            <div className="row no-gutters">
               <div className="col-auto pr-3 mb-3 mb-md-0">
                 <img src={book.image} width="100" className="img-fluid" />
               </div>
               <div className="col">
-                <div className="row no-gutters h4">{book.title}</div>
+                <div className="row no-gutters h5 book-title">{book.title}</div>
                 <div className="row no-gutters">{book.authors}</div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="title" className="lead" style={{ fontWeight: "500" }}>
-            Title
-          </label>
-          <input
-            value={summary.title}
-            onChange={(e) => {
-              e.persist();
-              setSummary((prev) =>
-                Object.assign({}, prev, { title: e.target.value })
-              );
-            }}
-            type="text"
-            className="form-control"
-            style={{ borderRadius: "8px" }}
-            id="title"
-          />
         </div>
         <div className="row no-gutters" id="question-editor"></div>
         <div className="row no-gutters align-items-center my-4">
@@ -141,6 +148,7 @@ const WriteSummaryForm = (props) => {
 function mapStateToProps(state, ownProps) {
   return {
     user: state.user,
+    breadCrumbs: state.breadCrumbs,
     ...ownProps,
   };
 }

@@ -1064,7 +1064,7 @@ body {
   color: white;
 }
 
-.cursor-pointer, .my-btn, .outline-btn-rounded, .outline-btn-square {
+.cursor-pointer, .my-btn, .outline-btn-rounded, .outline-btn-square, .btn-link {
   cursor: pointer;
 }
 
@@ -1376,5 +1376,25 @@ body {
 
 .input-group .form-control {
   margin: 0px !important;
+}
+
+.icon-btn {
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: #f1f1f1;
+}
+
+.book-title {
+  line-height: 1.5 !important;
+}
+
+.h5,
+.h4,
+.h3,
+.h2,
+.h1 {
+  font-weight: inherit !important;
 }
 /*# sourceMappingURL=style.css.map */

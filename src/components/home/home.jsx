@@ -21,7 +21,6 @@ const Home = () => {
   const title = "Recently added";
 
   useEffect(() => {
-    console.log("GET RECENTLY BOOK USE EFFECT");
     store.dispatch({ type: "SELECT_BREADCRUMB", breadCrumbIndex: 1 });
     GetRecentlyAddedBooks((res) => {
       if (res.recentlyAddedBooks) {
@@ -47,7 +46,6 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log("FILTERS use effect", filters);
     let newFilters = {
       genres: [
         ...filters.genres
@@ -95,7 +93,6 @@ const Home = () => {
         }
       });
     } else {
-      console.log("GOT RECENTLY BOOKS 22222222222");
       GetRecentlyAddedBooks((res) => {
         if (res.recentlyAddedBooks) {
           setResults({ items: res.recentlyAddedBooks, title: title });
@@ -107,7 +104,7 @@ const Home = () => {
   return (
     <div className="row no-gutters">
       <div
-        className="col-lg-3 col-md-4 col-sm-5 p-4"
+        className="col-lg-3 col-md-4 col-sm-5 p-4 d-sm-flex d-none"
         style={{ background: "#ffb4b4" }}
       >
         <div className="row no-gutters">
@@ -142,7 +139,6 @@ const Home = () => {
             setChoices={(checked, i) =>
               setFilters((f) => {
                 let arr = [...f.publishers];
-                console.log(arr[i].checked);
                 arr[i].checked = checked;
                 return Object.assign({}, f, { publishers: arr });
               })

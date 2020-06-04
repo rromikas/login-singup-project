@@ -3,9 +3,9 @@ import { FaHome, FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { connect } from "react-redux";
 import history from "../../routing/history";
 import store from "../../store/store";
+import { uid } from "react-uid";
 
 const BreadCrumbs = ({ breadCrumbs }) => {
-  console.log("breadCrumbs", breadCrumbs);
   useEffect(() => {
     window.onpopstate = () => {
       store.dispatch({
@@ -18,7 +18,7 @@ const BreadCrumbs = ({ breadCrumbs }) => {
     <div className="row no-gutters py-1 px-3 border-right border-left border-bottom">
       {breadCrumbs.map((x, i) => {
         return (
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center" key={uid(x)}>
             <FaAngleRight style={{ marginRight: "5px" }}></FaAngleRight>
             {x.category && (
               <div>

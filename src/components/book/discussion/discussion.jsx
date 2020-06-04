@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { uid } from "react-uid";
 import history from "../../../routing/history";
 import { format } from "timeago.js";
@@ -7,32 +7,28 @@ import { GetSortedThreads } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
 import StringPreview from "../../utility/StringPreview";
 
-const Discussion = ({ threads, bookId }) => {
+const Discussion = ({ bookId }) => {
   const limit = 15;
   const [sortBy, setSortBy] = useState("Latest");
   const [changingSort, setChangingSort] = useState(false);
   const [discussionThreads, setDiscussionThreads] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     GetSortedThreads({ bookId, limit, sortBy }, (res) => {
       if (res.error) {
         toast.error(res.error.toString());
       } else {
         setDiscussionThreads(res.threads);
       }
+      setLoading(false);
     });
   }, [sortBy]);
-
-  useEffect(() => {
-    if (threads.length === 0) {
-      setDiscussionThreads(threads);
-    }
-  }, [threads]);
 
   return (
     <div className="row no-gutters text-dark">
       <div className="col-12">
-        <div className="row no-gutters">
+        <div className="row no-gutters" style={{ opacity: loading ? 0.5 : 1 }}>
           <div
             className="col-12 border-top border-right border-left"
             style={{ background: "white" }}

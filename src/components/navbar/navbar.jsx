@@ -50,7 +50,11 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
             style={{ paddingTop: "19px", paddingBottom: "19px" }}
             className="form-control shn"
             spellCheck={false}
-            placeholder="Search by the title, isbn, author, genre . . ."
+            placeholder={
+              window.innerWidth > 457
+                ? "Search by the title, isbn, author, genre . . ."
+                : "Search"
+            }
           ></input>
           <div
             className="input-group-append"
@@ -60,30 +64,30 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
           >
             <span
               onClick={() => searchBar.current.blur()}
-              className=" bg-white input-group-text btn btn-outline-primary d-sm-block d-none"
+              className="bg-white input-group-text btn btn-outline-primary d-sm-block d-none"
               id="basic-addon2"
               style={{ borderRadius: "0 5px 5px 0" }}
             >
               Search
             </span>
             <span
-              className="input-group-text btn btn-outline-primary bg-white d-block d-sm-none"
-              style={{ borderRadius: "0 5px 5px 0" }}
+              className="input-group-text btn bg-white d-block d-sm-none"
+              style={{
+                borderRadius: "0 5px 5px 0",
+                border: "2px solid #f88888",
+              }}
             >
               <FaSearch fontSize="20px" color="#f88888"></FaSearch>
             </span>
           </div>
         </div>
       </div>
-      <div
-        className="col-auto d-flex d-md-none align-items-center pr-2 mx-1 rounded"
-        style={{ color: "#f88888" }}
-      ></div>
+
       <div className="col-auto">
         {user.email !== "" ? (
           <div
             onClick={() => history.push("/profile")}
-            className="border mr-1"
+            className="border mr-1 cursor-pointer"
             style={{
               width: "40px",
               height: "40px",
@@ -94,9 +98,16 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
             }}
           ></div>
         ) : (
-          <div>
-            <div className="btn mr-1">Login</div>
-            <div className="btn btn-outline-primary">Sign Up</div>
+          <div className="d-flex">
+            <div className="btn mr-1" onClick={() => history.push("/login")}>
+              Login
+            </div>
+            <div
+              className="btn btn-outline-primary d-none d-sm-block"
+              onClick={() => history.push("/signup")}
+            >
+              Sign Up
+            </div>
           </div>
         )}
       </div>

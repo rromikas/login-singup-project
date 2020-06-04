@@ -8,7 +8,7 @@ const Popover = ({ info }) => {
   return (
     <Tooltip
       title={info}
-      position="bottom"
+      position="top"
       trigger="click"
       theme="light"
       arrow={true}
@@ -25,7 +25,7 @@ const Popover = ({ info }) => {
           borderRadius: "50%",
           border: "1px solid",
         }}
-        className="flex-center bg-white"
+        className="flex-center bg-white cursor-pointer"
       >
         ?
       </div>

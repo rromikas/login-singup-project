@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { renderEditor } from "../../utility/renderEditor";
-import { GetBook, CreateThread } from "../../../api/socket-requests";
+import { GetBook, EditSummary, GetSummary } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
 import history from "../../../routing/history";
 import { connect } from "react-redux";
+import CheckBox from "../../utility/checkbox1";
+import Popover from "../../utility/popover";
 import store from "../../../store/store";
 
-const NewThreadForm = (props) => {
+const SummaryEditForm = (props) => {
   const bookId = props.match.params.bookId;
+  const summaryId = props.match.params.summaryId;
   const [book, setBook] = useState({ image: "", title: "", atuhors: "" });
   const user = props.user;
   const breadCrumbs = props.breadCrumbs;
-  const [thread, setThread] = useState({
+  const [summary, setSummary] = useState({
     description: "",
     title: "",
-    userId: user._id,
+    authorId: user._id,
     bookId: bookId,
+    private: false,
   });
   useEffect(() => {
     let filter = { _id: bookId };
@@ -26,7 +30,7 @@ const NewThreadForm = (props) => {
         setBook(res.filteredBooks[0]);
         if (
           breadCrumbs[breadCrumbs.length - 1].path !==
-          `/books/${bookId}/threads/new`
+          `/books/${bookId}/summaries/new`
         ) {
           if (breadCrumbs[breadCrumbs.length - 1].path !== `/books/${bookId}`) {
             store.dispatch({
@@ -42,22 +46,30 @@ const NewThreadForm = (props) => {
             type: "ADD_BREADCRUMB",
             breadCrumb: {
               title: "new",
-              path: `/books/${bookId}/threads/new`,
-              category: "threads",
+              path: `/books/${bookId}/summaries/new`,
+              category: "summaries",
             },
           });
         }
       }
     });
 
-    renderEditor(
-      "question-editor",
-      "Description",
-      thread.description,
-      (newDescription) => {
-        setThread((prev) =>
-          Object.assign({}, prev, { description: newDescription })
-        );
+    GetSummary(
+      { summaryId: summaryId, userToken: localStorage["secret_token"] },
+      (res) => {
+        if (res.summary) {
+          setSummary(res.summary);
+          renderEditor(
+            "question-editor",
+            "Summary",
+            res.summary.summary,
+            (newDescription) => {
+              setSummary((prev) =>
+                Object.assign({}, prev, { summary: newDescription })
+              );
+            }
+          );
+        }
       }
     );
   }, []);
@@ -68,13 +80,14 @@ const NewThreadForm = (props) => {
         <div className="row no-gutters justify-content-between border p-4 bg-white mb-3">
           <div className="col-auto pb-5">
             <div className="row no-gutters" style={{ maxWidth: "436px" }}>
-              <div className="h1 col-12">Write new post</div>
+              <div className="h1 col-12">Edit a Summary</div>
               <div className="col-12">
-                Start a conversation, ask a question or share your idea.
+                Share your impressions about the book. What topics and themes
+                stood out?
               </div>
             </div>
           </div>
-          <div className="col-12 pb-4">
+          <div className="col-auto pb-4">
             <div className="row no-gutters">
               <div className="col-auto pr-3 mb-3 mb-md-0">
                 <img src={book.image} width="100" className="img-fluid" />
@@ -86,36 +99,43 @@ const NewThreadForm = (props) => {
             </div>
           </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="title" className="lead" style={{ fontWeight: "500" }}>
-            Title
-          </label>
-          <input
-            value={thread.title}
-            onChange={(e) => {
-              e.persist();
-              setThread((prev) =>
-                Object.assign({}, prev, { title: e.target.value })
-              );
-            }}
-            type="text"
-            className="form-control"
-            style={{ borderRadius: "8px" }}
-            id="title"
-          />
-        </div>
         <div className="row no-gutters" id="question-editor"></div>
+        <div className="row no-gutters align-items-center my-4">
+          <div className="mr-2">
+            <CheckBox
+              size="30"
+              checked={summary.private}
+              setChecked={(checked) =>
+                setSummary((s) => Object.assign({}, s, { private: checked }))
+              }
+            ></CheckBox>
+          </div>
+          <div className="mr-2">Make summary private</div>
+          <Popover
+            info={"Private summaries won't appear on book page"}
+          ></Popover>
+        </div>
         <div className="row no-gutters">
           <div
             className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
             onClick={() => {
-              CreateThread(thread, (res) => {
-                if (res.error) {
-                  toast.error(res.error.toString());
-                } else {
-                  history.push(`/books/${bookId}`);
+              let summarryObj = { ...summary };
+
+              EditSummary(
+                {
+                  summaryId,
+                  summary: Object.assign({}, summarryObj, {
+                    authorId: user._id,
+                  }),
+                },
+                (res) => {
+                  if (res.error) {
+                    toast.error(res.error.toString());
+                  } else {
+                    history.push(`/books/${bookId}`);
+                  }
                 }
-              });
+              );
             }}
           >
             Publish
@@ -142,4 +162,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(NewThreadForm);
+export default connect(mapStateToProps)(SummaryEditForm);

@@ -20,6 +20,8 @@ import Navbar from "./components/navbar/navbar";
 import SideNavbar from "./components/navbar/SideNavbar";
 import BreadCrumbs from "./components/navbar/BreadCrumbs";
 import WriteSummaryForm from "./components/book/summaries/Form";
+import Summary from "./components/book/summaries/Summary";
+import SummaryEditForm from "./components/book/summaries/SummaryEditForm";
 
 function App() {
   const [isMenuOpened, setMenu] = useState(false);
@@ -40,7 +42,7 @@ function App() {
           style={{ minHeight: "100%" }}
         >
           <div
-            className="container-fluid px-0 bg-light corners-theme"
+            className="container-fluid px-0 bg-light corners-theme shift"
             style={{
               maxWidth: "1200px",
               overflow: "hidden",
@@ -72,6 +74,22 @@ function App() {
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/signup" component={Signup}></Route>
                   <Route exact path="/profile" component={Profile}></Route>
+                  <PrivateRoute
+                    bearerPath="/login"
+                    exact
+                    path="/books/:bookId/summaries/new"
+                    Component={WriteSummaryForm}
+                  ></PrivateRoute>
+                  <Route
+                    exact
+                    path="/books/:bookId/summaries/:summaryId/edit"
+                    component={SummaryEditForm}
+                  ></Route>
+                  <Route
+                    exact
+                    path="/books/:bookId/summaries/:summaryId"
+                    component={Summary}
+                  ></Route>
                   <Route exact path="/search/:query" component={Search}></Route>
                   <Route exact path="/search" component={Search}></Route>
                   <Route
@@ -85,12 +103,7 @@ function App() {
                     path="/books/:bookId/threads/new"
                     Component={NewThreadForm}
                   ></PrivateRoute>
-                  <PrivateRoute
-                    bearerPath="/login"
-                    exact
-                    path="/books/:bookId/summaries/new"
-                    Component={WriteSummaryForm}
-                  ></PrivateRoute>
+
                   <Route
                     exact
                     path="/books/:bookId/threads/:threadId"

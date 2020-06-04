@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { uid } from "react-uid";
 import history from "../../../routing/history";
 import { format } from "timeago.js";
-import { FaCaretDown, FaCaretUp } from "react-icons/fa";
-import { GetSortedSummaries, AddSummary } from "../../../api/socket-requests";
+import { FaCaretDown } from "react-icons/fa";
+import { GetSortedSummaries } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
-import StringPreview from "../../utility/StringPreview";
 import Ratings from "react-ratings-declarative";
 import HtmlPreview from "../../utility/htmlPreview";
 
@@ -13,18 +12,19 @@ const Summaries = ({ bookId }) => {
   const limit = 15;
   const [sortBy, setSortBy] = useState("Top Rated");
   const [changingSort, setChangingSort] = useState(false);
-  const [summaries, setSummaries] = useState([]);
-
+  const [localSummaries, setSummaries] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     GetSortedSummaries(
       { bookId, limit, sortBy: sortBy.replace(" ", "") },
       (res) => {
-        console.log("Response get sorted summeris SUmarries.js", res);
         if (res.error) {
           toast.error(res.error.toString());
         } else {
           setSummaries(res.summaries.map((x) => x));
         }
+        setLoading(false);
       }
     );
   }, [sortBy]);
@@ -32,7 +32,7 @@ const Summaries = ({ bookId }) => {
   return (
     <div className="row no-gutters text-dark">
       <div className="col-12">
-        <div className="row no-gutters">
+        <div className="row no-gutters" style={{ opacity: loading ? 0.5 : 1 }}>
           <div
             className="col-12 border-top border-right border-left"
             style={{ background: "white" }}
@@ -87,8 +87,8 @@ const Summaries = ({ bookId }) => {
               </div>
             </div>
           </div>
-          {summaries.length > 0 ? (
-            summaries.map((x) => (
+          {localSummaries.length > 0 ? (
+            localSummaries.map((x) => (
               <div
                 className="col-12 border p-3"
                 style={{ background: "white" }}
@@ -101,7 +101,7 @@ const Summaries = ({ bookId }) => {
                   </div>
                   <div>{format(x.date)}</div>
                 </div>
-                <div className="row no-gutters">
+                <div className="row no-gutters mb-1">
                   <Ratings
                     rating={x.rating}
                     widgetRatedColors="orange"
@@ -116,7 +116,19 @@ const Summaries = ({ bookId }) => {
                   </Ratings>
                 </div>
                 <div className="row no-gutters">
-                  <HtmlPreview data={x.summary}></HtmlPreview>
+                  <HtmlPreview
+                    data={x.summary}
+                    limit="1000"
+                    expandOption={false}
+                  ></HtmlPreview>
+                  <div
+                    className="btn-link text-primary cursor-pointer col-12"
+                    onClick={() =>
+                      history.push(`/books/${bookId}/summaries/${x._id}`)
+                    }
+                  >
+                    See more
+                  </div>
                 </div>
               </div>
             ))

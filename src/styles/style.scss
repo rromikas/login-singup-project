@@ -510,8 +510,29 @@ $breakpoints: (
 
 .btn-link {
   color: $themeMain !important;
+  @extend .cursor-pointer;
 }
 
 .input-group .form-control {
   margin: 0px !important;
+}
+
+.icon-btn {
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: rgb(241, 241, 241);
+}
+
+.book-title {
+  line-height: 1.5 !important;
+}
+
+.h5,
+.h4,
+.h3,
+.h2,
+.h1 {
+  font-weight: inherit !important;
 }

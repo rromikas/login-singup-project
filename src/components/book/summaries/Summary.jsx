@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  GetBook,
-  GetThread,
-  ReplyToQuestion,
-  AddView,
-  VoteForReply,
-} from "../../../api/socket-requests";
+import * as Api from "../../../api/socket-requests";
+import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import { uid } from "react-uid";
 import HtmlPreview from "../../utility/htmlPreview";
 import { format } from "timeago.js";
-import { renderEditor } from "../../utility/renderEditor";
-import StringPreview from "../../utility/StringPreview";
-import history from "../../../routing/history";
-import { useSelector } from "react-redux";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import history from "../../../routing/history";
 import store from "../../../store/store";
+import Rating from "../../utility/Rating";
+import { renderEditor } from "../../utility/renderEditor";
 
 const clickAnimation = (setVote, vote, replyIndex) => {
   setVote([replyIndex, vote]);
@@ -31,125 +25,136 @@ const formatVotes = (votes) => {
   return (
     <div
       className={`d-flex align-items-center${
-        sum > 0 ? " text-success" : sum < 0 ? " text-danger" : " text-secondary"
+        sum > 0 ? " text-primary" : sum < 0 ? " text-danger" : " text-secondary"
       }`}
       style={{
         marginRight: "15px",
         width: "20px",
       }}
     >
-      {sum > 0 ? "+" : ""}
+      {sum > 0 ? "+ " : ""}
       {sum}
     </div>
   );
 };
 
-const Thread = (props) => {
+const Summary = (props) => {
+  const summaryId = props.match.params.summaryId;
   const bookId = props.match.params.bookId;
-  const threadId = props.match.params.threadId;
-  const user = useSelector((state) => state.user);
-
-  const [book, setBook] = useState({ image: "", title: "", authors: "" });
-  const [thread, setThread] = useState({
-    createdBy: { photo: "", name: "" },
-    description: "",
-    title: "",
-    replies: [],
-    views: 0,
+  const user = props.user;
+  const [summary, setSummary] = useState({
+    summary: "",
+    author: { name: "", photo: "" },
+    rating: 0,
+    ratings: [],
+    bookId: { _id: 0 },
+    comments: [],
   });
-  const [replies, setReplies] = useState([]);
+
   const [reply, setReply] = useState("");
   const [vote, setVote] = useState("");
-  useEffect(() => {
-    let filter = { _id: bookId };
-    let bc = store.getState().breadCrumbs;
+  const [replies, setReplies] = useState([]);
 
-    GetBook(filter, (res) => {
-      if (res.error) {
-        toast.error(res.error.toString());
-      } else {
-        setBook(res.filteredBooks[0]);
-        if (bc[bc.length - 1].path !== `/books/${bookId}`) {
-          store.dispatch({
-            type: "ADD_BREADCRUMB",
-            breadCrumb: {
-              title: res.filteredBooks[0].title,
-              path: `/books/${bookId}`,
-              category: "books",
-            },
-          });
+  useEffect(() => {
+    Api.GetSummary(
+      { summaryId, userToken: localStorage["secret_token"] },
+      (res) => {
+        if (res.summary) {
+          setSummary(res.summary);
+          setReplies(res.summary.comments);
+
+          let bc = store.getState().breadCrumbs;
+          if (
+            bc[bc.length - 1].path !==
+            `/books/${bookId}/summaries/${res.summary._id}`
+          ) {
+            if (bc[bc.length - 1].path !== `/books/${bookId}`) {
+              store.dispatch({
+                type: "ADD_BREADCRUMB",
+                breadCrumb: {
+                  title: res.summary.bookId.title,
+                  path: `/books/${bookId}`,
+                  category: "books",
+                },
+              });
+            }
+
+            store.dispatch({
+              type: "ADD_BREADCRUMB",
+              breadCrumb: {
+                title: `By ${res.summary.author.name}`,
+                path: `/books/${bookId}/summaries/${res.summary._id}`,
+                category: "summaries",
+              },
+            });
+          }
         }
       }
-
-      GetThread({ bookId: bookId, threadId: threadId }, (res) => {
-        setThread(res.thread);
-        setReplies(res.thread.replies);
-        if (
-          bc[bc.length - 1].path !==
-          `/books/${bookId}/threads/${res.thread._id}`
-        ) {
-          store.dispatch({
-            type: "ADD_BREADCRUMB",
-            breadCrumb: {
-              title: res.thread.title,
-              path: `/books/${bookId}/threads/${res.thread._id}`,
-              category: "discussions",
-            },
-          });
-        }
-      });
-    });
-
-    renderEditor("reply-editor", "Reply", reply, (res) => setReply(res));
-
-    AddView({ bookId: bookId, threadId: threadId }, (res) => {});
+    );
+    renderEditor("reply-editor", "Comment", reply, (res) => setReply(res));
   }, []);
 
   return (
-    <div className="row no-gutters px-3 px-md-4  px-lg-5 pt-3 pb-5">
+    <div className="row no-gutters px-3 px-md-4 px-lg-5 pt-3 pb-5 text-dark">
       <div className="col-12 p-4 border bg-white">
-        <div className="row no-gutters h1 mb-4">Thread</div>
-        <div className="row no-gutters justify-content-end justify-content-md-between">
+        <div className="row no-gutters h1 mb-4">Summary</div>
+        <div className="row no-gutters justify-content-end justify-content-md-between text-dark">
           <div className="col-12 pb-4">
             <div
               className="row no-gutters cursor-pointer"
-              onClick={() => history.push(`/books/${book._id}`)}
+              onClick={() => history.push(`/books/${summary.bookId._id}`)}
             >
               <div className="col-12 col-sm-auto pr-3 mb-3 mb-md-0">
-                <img src={book.image} width="120" className="img-fluid" />
+                <img
+                  src={summary.bookId.image}
+                  width="120"
+                  className="img-fluid"
+                />
               </div>
               <div className="col-12 col-sm">
-                <div className="row no-gutters h4 book-title">{book.title}</div>
-                <div className="row no-gutters">{book.authors}</div>
+                <div className="row no-gutters h4 book-title">
+                  {summary.bookId.title}
+                </div>
+                <div className="row no-gutters">{summary.bookId.authors}</div>
               </div>
             </div>
           </div>
-          <div className="col-12 pr-3 border-top border-bottom py-3">
+          <div className="col-12 pr-3 py-3 border-top border-bottom">
             <div className="row no-gutters">
               <div className="col-12">
-                <div className="row no-gutters">
-                  <div className="col-auto d-flex justify-content-end pr-3">
-                    <div
-                      style={{
-                        width: "60px",
-                        height: "60px",
-                        backgroundImage: `url(${thread.createdBy.photo})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        borderRadius: "50%",
-                      }}
-                    ></div>
+                <div className="row no-gutters align-items-bottom text-secondary">
+                  <div className="col-auto pr-3">
+                    <div className="row no-gutters justify-content-end">
+                      <div className="col-12">
+                        <div
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            backgroundImage: `url(${summary.author.photo})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            borderRadius: "50%",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
                   </div>
                   <div className="col">
-                    <div className="row no-gutters text-primary mb-2">
-                      {thread.createdBy.name}
+                    <div className="row no-gutters text-primary mb-3">
+                      {summary.author.name}
+                    </div>
+                    <div className="row no-gutters pb-2">
+                      <div className="mr-3 col-auto">{summary.views} views</div>
+                      <div className="mr-3 col-auto">
+                        {replies.length} comments
+                      </div>
+                      <div className="mr-3 col-auto">
+                        {format(summary.date)}
+                      </div>
                     </div>
                     <div className="row no-gutters">
-                      <div className="mr-3 col-auto">{thread.views} views</div>
-                      <div className="mr-3 col-auto">
-                        {thread.replies.length} replies
-                      </div>
-                      <div className="col-auto">{format(thread.date)}</div>
+                      <Rating rating={summary.rating}></Rating>
+                      <div className="ml-2 text-muted">({summary.rating})</div>
                     </div>
                   </div>
                 </div>
@@ -160,14 +165,37 @@ const Thread = (props) => {
         <div className="row no-gutters py-3">
           <div className="col">
             <div className="row no-gutters mb-2">
-              <div className="col-12 h4 mb-4">
-                <StringPreview
-                  string={thread.title}
-                  limit="5000"
-                ></StringPreview>
-              </div>
-              <HtmlPreview data={thread.description} limit="5000"></HtmlPreview>
+              <HtmlPreview data={summary.summary} limit="5000"></HtmlPreview>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="col-12">
+        <div className="row no-gutters lead p-4 bg-white border my-3">
+          <div className="col-12 text-center">How is the summary?</div>
+          <div className="col-12 text-center mt-2">
+            <Rating
+              rating={
+                summary.ratings.find((x) => x.ratedBy === user._id)?.rating
+              }
+              size="40px"
+              onSet={(newRating) => {
+                if (user._id) {
+                  Api.RateSummary(
+                    {
+                      rating: newRating,
+                      userId: user._id,
+                      summaryId: summary._id,
+                    },
+                    (res) => {}
+                  );
+                } else {
+                  history.push("/login", {
+                    successPath: `/books/${bookId}/summaries/${summary._id}`,
+                  });
+                }
+              }}
+            ></Rating>
           </div>
         </div>
       </div>
@@ -176,7 +204,7 @@ const Thread = (props) => {
           className="row lead no-gutters ml-sm-5 ml-0 mt-4 mb-2"
           style={{ fontWeight: "500" }}
         >
-          {replies.length} replies
+          {replies.length} comments
         </div>
         <div
           className="row no-gutters ml-sm-5 ml-0 mb-4 border"
@@ -213,7 +241,7 @@ const Thread = (props) => {
                   <div className="row no-gutters">
                     {formatVotes(x.votes)}
                     <div
-                      className={`flex-center mr-2${
+                      className={`icon-btn flex-center mr-2${
                         vote[0] === i && vote[1] === 1
                           ? " click-effect-like"
                           : ""
@@ -267,7 +295,7 @@ const Thread = (props) => {
                               });
                             }
 
-                            VoteForReply(
+                            Api.VoteForReply(
                               {
                                 userId: user._id,
                                 replyId: x._id,
@@ -281,7 +309,7 @@ const Thread = (props) => {
                       ></FaRegThumbsUp>
                     </div>
                     <div
-                      className={`flex-center${
+                      className={`icon-btn flex-center${
                         vote[0] === i && vote[1] === -1
                           ? " click-effect-dislike"
                           : ""
@@ -335,7 +363,7 @@ const Thread = (props) => {
                               });
                             }
 
-                            VoteForReply(
+                            Api.VoteForReply(
                               {
                                 userId: user._id,
                                 replyId: x._id,
@@ -353,14 +381,14 @@ const Thread = (props) => {
               </div>
             </div>
           ))}
-          {thread.replies.length === 0 && (
+          {replies.length === 0 && (
             <div
               className="col-12 p-3 flex-center"
               style={{
                 height: "150px",
               }}
             >
-              No replies yet. Be the first to reply
+              No comments yet. Be the first to comment
             </div>
           )}
         </div>
@@ -373,10 +401,10 @@ const Thread = (props) => {
                 let obj = {
                   reply,
                   bookId,
-                  threadId,
+                  summaryId,
                   userId: user._id,
                 };
-                ReplyToQuestion(obj, (res) => {
+                Api.CommentSummary(obj, (res) => {
                   if (res.error) {
                     toast.error(res.error.toString());
                   } else {
@@ -385,7 +413,7 @@ const Thread = (props) => {
                 });
               } else {
                 history.push("/login", {
-                  successPath: `/books/${bookId}/threads/${threadId}`,
+                  successPath: `/books/${bookId}/summaries/${summaryId}`,
                 });
               }
             }}
@@ -398,4 +426,11 @@ const Thread = (props) => {
   );
 };
 
-export default Thread;
+function mapStateToProps(state, ownProps) {
+  return {
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapStateToProps)(Summary);
