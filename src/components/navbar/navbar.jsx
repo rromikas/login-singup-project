@@ -83,7 +83,7 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
         </div>
       </div>
 
-      <div className="col-auto">
+      <div className="col-auto pl-1">
         {user.email !== "" ? (
           <div
             onClick={() => history.push("/profile")}
