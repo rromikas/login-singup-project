@@ -6,7 +6,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { GetSortedSummaries } from "../../../api/socket-requests";
 import { toast } from "react-toastify";
 import Ratings from "react-ratings-declarative";
-import HtmlPreview from "../../utility/htmlPreview";
+import StringPreview from "../../utility/StringPreview";
 
 const Summaries = ({ bookId }) => {
   const limit = 15;
@@ -116,19 +116,15 @@ const Summaries = ({ bookId }) => {
                   </Ratings>
                 </div>
                 <div className="row no-gutters">
-                  <HtmlPreview
-                    data={x.summary}
-                    limit="1000"
-                    expandOption={false}
-                  ></HtmlPreview>
-                  <div
-                    className="btn-link text-primary cursor-pointer col-12"
+                  <StringPreview
+                    style={{ fontWeight: 500, cursor: "pointer" }}
                     onClick={() =>
                       history.push(`/books/${bookId}/summaries/${x._id}`)
                     }
-                  >
-                    See more
-                  </div>
+                    string={x.title}
+                    limit="1000"
+                    expandOption={false}
+                  ></StringPreview>
                 </div>
               </div>
             ))

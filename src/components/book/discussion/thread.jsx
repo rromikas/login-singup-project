@@ -162,6 +162,7 @@ const Thread = (props) => {
             <div className="row no-gutters mb-2">
               <div className="col-12 h4 mb-4">
                 <StringPreview
+                  className="thread-title"
                   string={thread.title}
                   limit="5000"
                 ></StringPreview>

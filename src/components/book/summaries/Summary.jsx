@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import { uid } from "react-uid";
 import HtmlPreview from "../../utility/htmlPreview";
+import StringPreview from "../../utility/StringPreview";
 import { format } from "timeago.js";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import history from "../../../routing/history";
@@ -44,6 +45,7 @@ const Summary = (props) => {
   const user = props.user;
   const [summary, setSummary] = useState({
     summary: "",
+    title: "",
     author: { name: "", photo: "" },
     rating: 0,
     ratings: [],
@@ -165,6 +167,13 @@ const Summary = (props) => {
         <div className="row no-gutters py-3">
           <div className="col">
             <div className="row no-gutters mb-2">
+              <div className="col-12 h4 mb-4">
+                <StringPreview
+                  string={summary.title}
+                  limit="5000"
+                  className="thread-title"
+                ></StringPreview>
+              </div>
               <HtmlPreview data={summary.summary} limit="5000"></HtmlPreview>
             </div>
           </div>

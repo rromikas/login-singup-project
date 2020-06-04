@@ -1,6 +1,11 @@
 const io = require("socket.io-client");
 
-const socket = io("https://tasteful-jeweled-ferry.glitch.me", {
+const server =
+  process.env.NODE_ENV === "production"
+    ? "https://tasteful-jeweled-ferry.glitch.me"
+    : "http://localhost:5000";
+
+const socket = io(server, {
   secure: true,
   transports: ["websocket", "polling", "flashsocket"],
 });
@@ -97,7 +102,7 @@ export const CreateThread = async (thread, callback) => {
   }
 
   if (response.error) {
-    callback(response.error);
+    callback(response);
   } else {
     socket
       .emit("/books/createThread", thread)
@@ -177,9 +182,24 @@ export const UpdateUser = (updatedUser, callback = () => {}) => {
 };
 
 export const AddSummary = (props, callback = () => {}) => {
-  socket.emit("/books/addSummary", props).once("/books/addSummary", (res) => {
-    callback(res);
-  });
+  console.log("ADD SUMMARY PROPS", props);
+  let response = {};
+  if (!props.summary.authorId) {
+    response = { error: "You have to login to craete new summaries" };
+  } else if (!props.bookId) {
+    response = { error: "Wrong book id" };
+  } else if (props.summary.description === "") {
+    response = { error: "Explain your question in description" };
+  } else if (props.summary.title === "") {
+    response = { error: "Title is empty" };
+  }
+  if (response.error) {
+    callback(response);
+  } else {
+    socket.emit("/books/addSummary", props).once("/books/addSummary", (res) => {
+      callback(res);
+    });
+  }
 };
 export const EditSummary = (props, callback = () => {}) => {
   socket.emit("/books/editSummary", props).once("/books/editSummary", (res) => {

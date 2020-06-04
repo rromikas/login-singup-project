@@ -37,7 +37,6 @@ function breadcrumbsReducer(state = [{ title: "home", path: "/" }], action) {
         ])
         .filter((x, i) => i === 0 || i > state.length - 3);
     case "SELECT_BREADCRUMB":
-      console.log("index breadcurumb", action.breadCrumbIndex);
       return state.filter((x, i) => i < action.breadCrumbIndex);
     default:
       return state;

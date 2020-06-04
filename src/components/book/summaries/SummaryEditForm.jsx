@@ -99,6 +99,24 @@ const SummaryEditForm = (props) => {
             </div>
           </div>
         </div>
+        <div className="form-group">
+          <label htmlFor="title" className="lead" style={{ fontWeight: "500" }}>
+            Title
+          </label>
+          <input
+            value={summary.title}
+            onChange={(e) => {
+              e.persist();
+              setSummary((prev) =>
+                Object.assign({}, prev, { title: e.target.value })
+              );
+            }}
+            type="text"
+            className="form-control"
+            style={{ borderRadius: "8px" }}
+            id="title"
+          />
+        </div>
         <div className="row no-gutters" id="question-editor"></div>
         <div className="row no-gutters align-items-center my-4">
           <div className="mr-2">

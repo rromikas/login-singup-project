@@ -17,7 +17,6 @@ const handleResponse = (response, setLoading, successPath) => {
   setLoading(true); //show loading for user while waiting response from server
 
   GoogleSignup(user, (res) => {
-    console.log("RESPONSE GOOLGLE LOGIN", res);
     setLoading(false); // hide loader
     if (res.error) {
       toast.error(res.error.message ? res.error.message : res.error);
@@ -52,9 +51,7 @@ const Google = ({ text, successPath }) => {
       onSuccess={(res) => {
         handleResponse(res, setLoading, successPath);
       }}
-      onFailure={(er) => {
-        console.log("GOOGLE FAILURE", er);
-      }}
+      onFailure={(er) => {}}
       cookiePolicy={"single_host_origin"}
     />
   );

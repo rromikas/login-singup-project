@@ -1,5 +1,5 @@
 import React from "react";
-import HtmlPreview from "../utility/htmlPreview";
+import StringPreview from "../utility/StringPreview";
 import history from "../../routing/history";
 import Rating from "../utility/Rating";
 import { FaPen } from "react-icons/fa";
@@ -15,7 +15,6 @@ const Summaries = ({ summaries }) => {
             <div
               key={uid(x)}
               className="col-12 p-4 border bg-white mb-4 convex rounded-8"
-              style={{ minHeight: "310px" }}
             >
               <div className="row no-gutters">
                 <div className="col-auto pr-md-4 mb-3 mb-md-0 mx-auto">
@@ -27,30 +26,26 @@ const Summaries = ({ summaries }) => {
                   />
                 </div>
                 <div className="col-md col-12">
-                  <div className="row no-gutters">
+                  <div className="row no-gutters mb-2">
                     {x.private ? "Private" : "Public"}
                   </div>
                   <div className="row no-gutters">
                     <Rating></Rating>
                   </div>
                   <div className="row no-gutters">
-                    <HtmlPreview
-                      data={x.summary}
-                      limit={300}
-                      expandOption={false}
-                    ></HtmlPreview>
-                  </div>
-                  <div className="row no-gutters">
-                    <div
-                      className="btn-link mr-4"
+                    <StringPreview
+                      className="thread-title cursor-pointer"
+                      style={{ fontWeight: "500" }}
+                      string={x.title}
+                      limit={1000}
                       onClick={() =>
                         history.push(
                           `/books/${x.bookId._id}/summaries/${x._id}`
                         )
                       }
-                    >
-                      preview
-                    </div>
+                    ></StringPreview>
+                  </div>
+                  <div className="row no-gutters">
                     <div
                       className="btn-link"
                       onClick={() =>
