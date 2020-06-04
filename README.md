@@ -1,6 +1,10 @@
-# [Visit website](https://loginsignin.netlify.app/)
+# [Demo: https://booksapp.netlify.app](https://booksapp.netlify.app/)
 
-## Login, Sign up and Profile pages using both third party apis and plain email form.
+**3 rd iteration**. Books app that allows to add google books to database and search from them. Users can write summaries, open discussions about certain book, reply in discussions, vote on replies, rate summaries. Website is designed to use both on mobile and computer devices.
+
+Communication with backend uses socket connection but it's easy to migrate to https request based communication.
+
+Server repo: [https://github.com/rromikas/saugauserveri](https://github.com/rromikas/saugauserveri)
 
 To run project:
 
