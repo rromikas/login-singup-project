@@ -17,7 +17,7 @@ const Signup = (props) => {
     >
       <div
         onClick={() => history.push("/")}
-        className="convex py-2 px-3 rounded-40 cursor-pointer"
+        className="convex py-2 px-3 rounded-40 cursor-pointer d-none d-md-block"
         style={{
           position: "absolute",
           top: "20px",
@@ -45,6 +45,14 @@ const Signup = (props) => {
         className="col-12 col-sm-9 col-md-6 py-4 px-5 bg-light"
         style={{ maxWidth: "400px" }}
       >
+        <div className="row no-gutters mb-3 d-flex d-md-none">
+          <div
+            onClick={() => history.push("/")}
+            className="convex py-2 px-3 rounded-40 cursor-pointer col-auto mx-auto"
+          >
+            <FaAngleLeft></FaAngleLeft> Back to home
+          </div>
+        </div>
         <div className="mb-3">
           <Facebook
             text="Sign Up with Facebook"
