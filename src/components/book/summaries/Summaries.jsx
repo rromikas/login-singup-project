@@ -101,6 +101,18 @@ const Summaries = ({ bookId }) => {
                   </div>
                   <div>{format(x.date)}</div>
                 </div>
+                <div className="row no-gutters">
+                  <StringPreview
+                    style={{ fontWeight: 500, cursor: "pointer" }}
+                    onClick={() =>
+                      history.push(`/books/${bookId}/summaries/${x._id}`)
+                    }
+                    string={x.title}
+                    limit="1000"
+                    expandOption={false}
+                    className="mb-2"
+                  ></StringPreview>
+                </div>
                 <div className="row no-gutters mb-1">
                   <Ratings
                     rating={x.rating}
@@ -114,17 +126,6 @@ const Summaries = ({ bookId }) => {
                     <Ratings.Widget />
                     <Ratings.Widget />
                   </Ratings>
-                </div>
-                <div className="row no-gutters">
-                  <StringPreview
-                    style={{ fontWeight: 500, cursor: "pointer" }}
-                    onClick={() =>
-                      history.push(`/books/${bookId}/summaries/${x._id}`)
-                    }
-                    string={x.title}
-                    limit="1000"
-                    expandOption={false}
-                  ></StringPreview>
                 </div>
               </div>
             ))

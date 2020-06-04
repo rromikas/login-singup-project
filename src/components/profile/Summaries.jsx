@@ -29,10 +29,7 @@ const Summaries = ({ summaries }) => {
                   <div className="row no-gutters mb-2">
                     {x.private ? "Private" : "Public"}
                   </div>
-                  <div className="row no-gutters">
-                    <Rating></Rating>
-                  </div>
-                  <div className="row no-gutters">
+                  <div className="row no-gutters mb-2">
                     <StringPreview
                       className="thread-title cursor-pointer"
                       style={{ fontWeight: "500" }}
@@ -44,6 +41,9 @@ const Summaries = ({ summaries }) => {
                         )
                       }
                     ></StringPreview>
+                  </div>
+                  <div className="row no-gutters">
+                    <Rating></Rating>
                   </div>
                   <div className="row no-gutters">
                     <div

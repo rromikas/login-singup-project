@@ -154,10 +154,6 @@ const Summary = (props) => {
                         {format(summary.date)}
                       </div>
                     </div>
-                    <div className="row no-gutters">
-                      <Rating rating={summary.rating}></Rating>
-                      <div className="ml-2 text-muted">({summary.rating})</div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -166,13 +162,19 @@ const Summary = (props) => {
         </div>
         <div className="row no-gutters py-3">
           <div className="col">
-            <div className="row no-gutters mb-2">
-              <div className="col-12 h4 mb-4">
+            <div className="row no-gutters">
+              <div className="col-12 h4">
                 <StringPreview
                   string={summary.title}
                   limit="5000"
                   className="thread-title"
                 ></StringPreview>
+              </div>
+              <div className="col-12 py-3">
+                <div className="row no-gutters">
+                  <Rating rating={summary.rating}></Rating>
+                  <div className="ml-2 text-muted">({summary.rating})</div>
+                </div>
               </div>
               <HtmlPreview data={summary.summary} limit="5000"></HtmlPreview>
             </div>
