@@ -96,6 +96,20 @@ const Profile = (props) => {
               {user.name}
             </div>
           </div>
+          <div
+            className="mt-3 col-auto mx-auto px-4 cursor-pointer py-2 rounded-8"
+            style={{ border: "2px solid white", color: "white" }}
+            onClick={() => {
+              store.dispatch({
+                type: "SET_USER",
+                user: { email: "", _id: "", photo: "", name: "" },
+              });
+              localStorage["secret_token"] = "";
+              history.push("/");
+            }}
+          >
+            Logout
+          </div>
         </div>
       </div>
       <div className="col-12 col-sm-8 px-4 py-4">
@@ -150,13 +164,6 @@ const Profile = (props) => {
             }}
           ></Results>
         </div>
-        {/* ) : (
-        <div
-          className="w-100 d-none d-md-flex pr-4 justify-content-end mt-5 pb-2"
-          style={{ height: "55vh" }}
-        >
-          <RelaxReading></RelaxReading>
-        </div> */}
         <Summaries summaries={user.summaries}></Summaries>
       </div>
     </div>

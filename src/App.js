@@ -25,6 +25,7 @@ import SummaryEditForm from "./components/book/summaries/SummaryEditForm";
 
 function App() {
   const [isMenuOpened, setMenu] = useState(false);
+  const [isAuthenticationPage, setIsAuthenticationPage] = useState(false);
 
   useEffect(() => {
     ReadUser(localStorage["secret_token"], (res) => {
@@ -33,6 +34,25 @@ function App() {
       }
     });
   }, []);
+  useEffect(() => {
+    if (
+      history.location.pathname === "/login" ||
+      history.location.pathname === "/signup"
+    ) {
+      setIsAuthenticationPage(true);
+    }
+    const unlisten = history.listen((location) => {
+      console.log(location);
+      if (location.pathname === "/login" || location.pathname === "/signup") {
+        setIsAuthenticationPage(true);
+      } else {
+        setIsAuthenticationPage(false);
+      }
+    });
+    return () => {
+      unlisten();
+    };
+  });
 
   return (
     <Provider store={store}>
@@ -48,8 +68,13 @@ function App() {
               overflow: "hidden",
             }}
           >
-            <Navbar setMenu={setMenu} isMenuOpened={isMenuOpened}></Navbar>
-            <BreadCrumbs></BreadCrumbs>
+            {!isAuthenticationPage && (
+              <React.Fragment>
+                <Navbar setMenu={setMenu} isMenuOpened={isMenuOpened}></Navbar>
+                <BreadCrumbs></BreadCrumbs>
+              </React.Fragment>
+            )}
+
             <div className="row no-gutters" style={{ position: "relative" }}>
               <SideNavbar
                 isMenuOpened={isMenuOpened}
