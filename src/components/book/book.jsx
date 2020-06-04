@@ -64,7 +64,7 @@ const Book = (props) => {
     <div className="row no-gutters py-3 px-2 px-md-4 px-sm-2 px-lg-5 bg-light justify-content-center mb-5">
       <div
         className="col-12 px-2 px-sm-3 px-md-4"
-        style={{ minHeight: "1000px" }}
+        style={{ minHeight: "800px" }}
       >
         <div className="row no-gutters">
           <div className="col-12 bg-white p-4 border">
