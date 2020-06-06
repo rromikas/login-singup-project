@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import store from "../../store/store";
 
 const handleResponse = (response, setLoading, successPath) => {
+  alert(JSON.stringify(response));
   if (response && response.email) {
     setLoading(true); //showing loader to user while waiting response from server
 
