@@ -39,6 +39,7 @@ const Facebook = ({ text, successPath }) => {
   return (
     <FacebookLogin
       appId={appId}
+      isMobile={false}
       autoLoad={false}
       fields="name,email,picture"
       callback={(res) => {
