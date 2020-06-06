@@ -43,7 +43,7 @@ const Summaries = ({ summaries }) => {
                     ></StringPreview>
                   </div>
                   <div className="row no-gutters">
-                    <Rating></Rating>
+                    <Rating rating={x.rating}></Rating>
                   </div>
                   <div className="row no-gutters">
                     <div

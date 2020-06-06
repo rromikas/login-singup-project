@@ -30,7 +30,6 @@ const formatVotes = (votes) => {
       }`}
       style={{
         marginRight: "15px",
-        width: "20px",
       }}
     >
       {sum > 0 ? "+ " : ""}
@@ -94,6 +93,8 @@ const Summary = (props) => {
       }
     );
     renderEditor("reply-editor", "Comment", reply, (res) => setReply(res));
+
+    Api.AddViewToSummary({ summaryId }, (res) => {});
   }, []);
 
   return (

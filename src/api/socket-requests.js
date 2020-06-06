@@ -1,9 +1,6 @@
 const io = require("socket.io-client");
 
-const server =
-  process.env.NODE_ENV === "production"
-    ? "https://tasteful-jeweled-ferry.glitch.me"
-    : "http://localhost:5000";
+const server = "https://tasteful-jeweled-ferry.glitch.me";
 
 const socket = io(server, {
   secure: true,
@@ -244,4 +241,12 @@ export const GetSortedSummaries = (props, callback) => {
   socket.emit(path, props).once(path, (res) => {
     callback(res);
   });
+};
+
+export const AddViewToSummary = (props, callback) => {
+  socket
+    .emit("/books/summaries/addView", props)
+    .once("/books/summaries/addView", (res) => {
+      callback(res);
+    });
 };

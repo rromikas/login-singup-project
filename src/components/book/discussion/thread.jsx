@@ -34,8 +34,7 @@ const formatVotes = (votes) => {
         sum > 0 ? " text-success" : sum < 0 ? " text-danger" : " text-secondary"
       }`}
       style={{
-        marginRight: "15px",
-        width: "20px",
+        marginRight: "15px"
       }}
     >
       {sum > 0 ? "+" : ""}
