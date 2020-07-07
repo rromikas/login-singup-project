@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import store from "../../store/store";
 import { BsBell, BsSearch } from "react-icons/bs";
 import { GetNotifications } from "../../api/socket-requests";
-import Popover from "../utility/Popover";
+import Popover from "../utility/popover";
 import { format } from "timeago.js";
 
 const Navbar = ({ user, isMenuOpened, setMenu }) => {

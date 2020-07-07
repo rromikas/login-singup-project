@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Popover from "../utility/Popover";
+import Popover from "../utility/popover";
 import { connect } from "react-redux";
 import { uid } from "react-uid";
 import { BsX } from "react-icons/bs";

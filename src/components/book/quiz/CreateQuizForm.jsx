@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import Popover from "../../utility/Popover";
+import Popover from "../../utility/popover";
 import CheckBox from "../../utility/checkbox";
 import TextareaAutosize from "react-autosize-textarea";
 import { BsChevronLeft, BsClock, BsChevronUp, BsTrash } from "react-icons/bs";

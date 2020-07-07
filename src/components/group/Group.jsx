@@ -10,7 +10,7 @@ import {
   AcceptInvitationToGroup,
 } from "../../api/socket-requests";
 import { connect } from "react-redux";
-import Popover from "../utility/Popover";
+import Popover from "../utility/popover";
 import CheckBox from "../utility/checkbox";
 import {
   BsImage,
