@@ -3,14 +3,16 @@ import {
   GetBook,
   AddBookToFavorites,
   RemoveBookFromFavorites,
+  AddBookToGroup,
 } from "../../api/socket-requests";
 import history from "../../routing/history";
 import { toast } from "react-toastify";
 import Discussion from "./discussion/discussion";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { BsHeart, BsHeartFill, BsPlus } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import Summaries from "./summaries/Summaries";
 import store from "../../store/store";
+import QuizList from "./quiz/QuizList";
 
 const Book = (props) => {
   const bookId = props.match.params.bookId;
@@ -27,6 +29,9 @@ const Book = (props) => {
     summaries: [],
   });
 
+  const groupId = user.groupMember ? user.groupMember.group_id : null;
+  console.log("groupId book", groupId);
+
   useEffect(() => {
     if (book.title !== "") {
       let breadCrumbs = store.getState().breadCrumbs;
@@ -34,9 +39,7 @@ const Book = (props) => {
         store.dispatch({
           type: "ADD_BREADCRUMB",
           breadCrumb: {
-            title:
-              `${book.title}`.substring(0, 25) +
-              (book.title.length > 25 ? "..." : ""),
+            title: book.title,
             path: `/books/${book._id}`,
             category: "books",
           },
@@ -63,11 +66,11 @@ const Book = (props) => {
   return (
     <div className="row no-gutters py-3 px-2 px-md-4 px-sm-2 px-lg-5 bg-light justify-content-center mb-5">
       <div
-        className="col-12 px-2 px-sm-3 px-md-4"
+        className="col-12 col-xl-9 col-lg-10 px-2 px-sm-3 px-md-4"
         style={{ minHeight: "800px" }}
       >
         <div className="row no-gutters">
-          <div className="col-12 bg-white p-4 border">
+          <div className="col-12 bg-white p-4 static-card">
             <div className="row no-gutters">
               <div className="col-auto pr-md-4 mb-3 mb-md-0 mx-auto">
                 <img src={book.image} width="200" className="img-fluid" />
@@ -79,74 +82,122 @@ const Book = (props) => {
                 <div className="row no-gutters mb-4 lead text-center text-md-left justify-content-center justify-content-md-start">
                   {book.authors}
                 </div>
-                <div className="row no-gutters justify-content-center justify-content-sm-start disable-select">
-                  <div className="d-flex">
-                    <div className="mr-2">{book.favoriteFor.length}</div>
-                    {book.favoriteFor.filter((x) => x._id === user._id).length >
-                    0 ? (
-                      <div className="d-flex">
-                        <FaHeart
-                          onClick={() => {
-                            setBook((b) => {
-                              let arr = [...b.favoriteFor];
-                              arr.splice(
-                                arr.findIndex((x) => x === user._id),
-                                1
-                              );
-                              return Object.assign({}, b, { favoriteFor: arr });
+                <div className="row no-gutters justify-content-center justify-content-sm-start disable-select mb-2">
+                  <div
+                    className="col-auto fb-btn-pro"
+                    onClick={() => {
+                      if (
+                        book.favoriteFor.filter((x) => x._id === user._id)
+                          .length > 0
+                      ) {
+                        setBook((b) => {
+                          let arr = [...b.favoriteFor];
+                          arr.splice(
+                            arr.findIndex((x) => x === user._id),
+                            1
+                          );
+                          return Object.assign({}, b, {
+                            favoriteFor: arr,
+                          });
+                        });
+                        RemoveBookFromFavorites(bookId, user._id, (res) => {});
+                      } else {
+                        if (user._id) {
+                          setBook((b) => {
+                            let arr = [...b.favoriteFor];
+                            return Object.assign({}, b, {
+                              favoriteFor: [
+                                ...b.favoriteFor,
+                                { _id: user._id },
+                              ],
                             });
-                            RemoveBookFromFavorites(
-                              bookId,
-                              user._id,
-                              (res) => {}
-                            );
-                          }}
-                          fontSize="24px"
-                          style={{
-                            color: "#f88888",
-                            marginRight: "10px",
-                            cursor: "pointer",
-                          }}
-                        ></FaHeart>
-                        <div>This book is your favorite</div>
-                      </div>
-                    ) : (
-                      <div className="d-flex">
-                        <FaRegHeart
-                          fontSize="24px"
-                          style={{ marginRight: "10px", cursor: "pointer" }}
-                          onClick={() => {
-                            if (user._id) {
-                              setBook((b) => {
-                                let arr = [...b.favoriteFor];
-                                return Object.assign({}, b, {
-                                  favoriteFor: [
-                                    ...b.favoriteFor,
-                                    { _id: user._id },
-                                  ],
-                                });
-                              });
-                              AddBookToFavorites(bookId, user._id, (res) => {});
-                            } else {
-                              history.push("/login", {
-                                successPath: `/books/${bookId}`,
-                              });
-                            }
-                          }}
-                        ></FaRegHeart>
-                        <div>Add to my favorites</div>
-                      </div>
-                    )}
-
-                    <div className="ml-2"></div>
+                          });
+                          AddBookToFavorites(bookId, user._id, (res) => {});
+                        } else {
+                          history.push("/login", {
+                            successPath: `/books/${bookId}`,
+                          });
+                        }
+                      }
+                    }}
+                  >
+                    <div className="row no-gutters align-items-center">
+                      {book.favoriteFor.filter((x) => x._id === user._id)
+                        .length > 0 ? (
+                        <div className="d-flex align-items-center">
+                          <BsHeartFill
+                            fontSize="24px"
+                            style={{
+                              color: "#f88888",
+                              marginRight: "10px",
+                              cursor: "pointer",
+                            }}
+                          ></BsHeartFill>
+                          <div className="mx-2 px-2">
+                            {book.favoriteFor.length}
+                          </div>
+                          <div>This book is your favorite</div>
+                        </div>
+                      ) : (
+                        <div className="d-flex align-items-center">
+                          <BsHeart
+                            fontSize="24px"
+                            style={{ marginRight: "10px", cursor: "pointer" }}
+                          ></BsHeart>
+                          <div className="mx-2 px-2">
+                            {book.favoriteFor.length}
+                          </div>
+                          <div>Add to my favorites</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
+                {groupId && (
+                  <div className="row no-gutters justify-content-center justify-content-sm-start disable-select">
+                    <div
+                      className="col-auto fb-btn-pro"
+                      onClick={() => {
+                        AddBookToGroup(groupId, bookId, (res) => {
+                          if (!res.error) {
+                            store.dispatch({
+                              type: "SET_NOTIFICATION",
+                              notification: {
+                                title: "Confirm",
+                                message: "Book added to your group",
+                                type: "success",
+                              },
+                            });
+                          } else {
+                            store.dispatch({
+                              type: "SET_NOTIFICATION",
+                              notification: {
+                                title: "Can not add book",
+                                message: res.error,
+                                type: "failure",
+                              },
+                            });
+                          }
+                          console.log(
+                            "Response after adding book to group",
+                            res
+                          );
+                        });
+                      }}
+                    >
+                      <div className="row no-gutters align-items-center">
+                        <BsPlus fontSize="24px" className="mr-2"></BsPlus>
+                        <div>Add to group</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="col-12">
-            <div className="row no-gutters border-right border-top border-left bg-white mt-2 flex-nowrap text-wrap">
+          <div className="col-12 static-card mt-2 overflow-hidden">
+            <div className="row no-gutters bg-white text-wrap">
               <div
                 onClick={() => setCurrentSection(0)}
                 className={`col-4 col-sm-auto p-3 text-center text-sm-left d-flex align-items-center menu-item-border-bottom${
@@ -171,6 +222,14 @@ const Book = (props) => {
               >
                 Book summaries
               </div>
+              <div
+                onClick={() => setCurrentSection(3)}
+                className={`col-4 col-sm-auto p-3 text-center text-sm-left text-wrap menu-item-border-bottom${
+                  currentSection === 3 ? " menu-item-border-bottom-active" : ""
+                }`}
+              >
+                Quiz
+              </div>
             </div>
             <div className="row no-gutters">
               <div className="col-12">
@@ -185,8 +244,10 @@ const Book = (props) => {
                   </div>
                 ) : currentSection === 1 ? (
                   <Discussion bookId={bookId}></Discussion>
-                ) : (
+                ) : currentSection === 2 ? (
                   <Summaries bookId={bookId}></Summaries>
+                ) : (
+                  <QuizList bookId={bookId} groupId={groupId}></QuizList>
                 )}
               </div>
             </div>

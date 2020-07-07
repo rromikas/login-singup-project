@@ -7,7 +7,7 @@ const PrivateRoute = ({ Component, bearerPath, ...rest }) => {
   const [validity, setValidity] = useState({ ready: false, valid: false });
 
   useEffect(() => {
-    ReadUser(localStorage["secret_token"], (res) => {
+    ReadUser(localStorage["books_user_secret_token"], (res) => {
       console.log("PRIVATE ROUTE RESPONSE", res);
       setValidity((val) =>
         Object.assign({}, val, { ready: true, valid: res.error ? false : true })
@@ -15,18 +15,21 @@ const PrivateRoute = ({ Component, bearerPath, ...rest }) => {
     });
   }, []);
 
+  console.log("validiy payhname", validity, bearerPath);
+
   return validity.ready ? (
     <Route
       {...rest}
-      render={(props) =>
-        validity.valid ? (
+      render={(props) => {
+        console.log("validit y vali paskutinsi", validity.valid);
+        return validity.valid ? (
           <Component {...props}></Component>
         ) : (
           <Redirect
             to={{ pathname: bearerPath, state: { successPath: successPath } }}
           ></Redirect>
-        )
-      }
+        );
+      }}
     ></Route>
   ) : (
     <div></div>

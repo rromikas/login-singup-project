@@ -45,7 +45,7 @@ const Summary = (props) => {
   const [summary, setSummary] = useState({
     summary: "",
     title: "",
-    author: { name: "", photo: "" },
+    author: { name: "", photo: "", _id: "" },
     rating: 0,
     ratings: [],
     bookId: { _id: 0 },
@@ -97,9 +97,11 @@ const Summary = (props) => {
     Api.AddViewToSummary({ summaryId }, (res) => {});
   }, []);
 
+  console.log("SUMMARY", summary);
+
   return (
-    <div className="row no-gutters px-3 px-md-4 px-lg-5 pt-3 pb-5 text-dark">
-      <div className="col-12 p-4 border bg-white">
+    <div className="row no-gutters justify-content-center px-3 px-md-4 px-lg-5 pt-3 pb-5 text-dark">
+      <div className="col-12 col-xl-9 col-lg-10 p-4 static-card bg-white">
         <div className="row no-gutters h1 mb-4">Summary</div>
         <div className="row no-gutters justify-content-end justify-content-md-between text-dark">
           <div className="col-12 pb-4">
@@ -182,8 +184,8 @@ const Summary = (props) => {
           </div>
         </div>
       </div>
-      <div className="col-12">
-        <div className="row no-gutters lead p-4 bg-white border my-3">
+      <div className="col-12 col-xl-9 col-lg-10">
+        <div className="row no-gutters lead p-4 bg-white static-card my-3">
           <div className="col-12 text-center">How is the summary?</div>
           <div className="col-12 text-center mt-2">
             <Rating
@@ -211,7 +213,7 @@ const Summary = (props) => {
           </div>
         </div>
       </div>
-      <div className="col-12">
+      <div className="col-12 col-xl-9 col-lg-10">
         <div
           className="row lead no-gutters ml-sm-5 ml-0 mt-4 mb-2"
           style={{ fontWeight: "500" }}
@@ -219,7 +221,7 @@ const Summary = (props) => {
           {replies.length} comments
         </div>
         <div
-          className="row no-gutters ml-sm-5 ml-0 mb-4 border"
+          className="row no-gutters ml-sm-5 ml-0 mb-4 static-card"
           style={{ background: "white", borderRadius: "8px" }}
         >
           {replies.map((x, i) => (
@@ -407,13 +409,14 @@ const Summary = (props) => {
         <div className="row no-gutters ml-sm-5 ml-0" id="reply-editor"></div>
         <div className="row no-gutters ml-sm-5 ml-0">
           <div
-            className="btn btn-primary py-3 px-5 mt-3"
+            className="fb-btn-pro py-3 px-5 mt-3"
             onClick={() => {
               if (user._id) {
                 let obj = {
                   reply,
                   bookId,
                   summaryId,
+                  summary_aurthor_id: summary.author._id,
                   userId: user._id,
                 };
                 Api.CommentSummary(obj, (res) => {

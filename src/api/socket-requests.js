@@ -1,6 +1,6 @@
 const io = require("socket.io-client");
 
-const server = "https://tasteful-jeweled-ferry.glitch.me";
+const server = "http://192.168.0.104:5000";
 
 const socket = io(server, {
   secure: true,
@@ -11,6 +11,117 @@ export const ReadUser = (token, callback) => {
   socket.emit("/users/read", token).once("/users/read", (res) => {
     callback(res);
   });
+};
+
+export const InviteMemberToGroup = (email, userId, groupId, callback) => {
+  socket
+    .emit("/groups/inviteMember", email, userId, groupId)
+    .once("/groups/inviteMember", (res) => {
+      callback(res);
+    });
+};
+
+export const AcceptInvitationToGroup = (
+  groupId,
+  userId,
+  invitationId,
+  callback
+) => {
+  socket
+    .emit("/groups/acceptInvitation", groupId, userId, invitationId)
+    .once("/groups/acceptInvitation", (res) => {
+      callback(res);
+    });
+};
+
+export const CheckInvitationValidity = (token, inivitationId, callback) => {
+  socket
+    .emit("/groups/checkInvitationValidity", token, inivitationId)
+    .once("/groups/checkInvitationValidity", (res) => {
+      callback(res);
+    });
+};
+
+export const GetFilteredGroups = (filter, callback) => {
+  socket
+    .emit("/groups/getFiltered", filter)
+    .once("/groups/getFiltered", (res) => {
+      callback(res);
+    });
+};
+
+export const GetGroup = (groupId, callback) => {
+  socket.emit("/groups/get", groupId).once("/groups/get", (res) => {
+    callback(res);
+  });
+};
+
+export const CreateGroup = (group, callback) => {
+  socket.emit("/groups/create", group).once("/groups/create", (res) => {
+    callback(res);
+  });
+};
+
+export const AddBookToGroup = (groupId, bookId, callback) => {
+  socket
+    .emit("/groups/addBook", groupId, bookId)
+    .once("/groups/addBook", (res) => {
+      callback(res);
+    });
+};
+
+export const UpdateGroup = (group, callback) => {
+  socket.emit("/groups/update", group).once("/groups/update", (res) => {
+    callback(res);
+  });
+};
+
+export const VoteForNextBook = (bookId, userId, callback) => {
+  socket
+    .emit("/groups/voteForNextBook", bookId, userId)
+    .once("/groups/voteForNextBook", (res) => {
+      callback(res);
+    });
+};
+
+export const CompleteBookReading = (groupId, bookId, callback) => {
+  socket
+    .emit("/groups/completeBookReading", groupId, bookId)
+    .once("/groups/completeBookReading", (res) => {
+      callback(res);
+    });
+};
+
+export const GetBookQuizzes = (bookId, groupId, callback) => {
+  socket
+    .emit("/books/quizzes/getAll", bookId, groupId)
+    .once("/books/quizzes/getAll", (res) => {
+      callback(res);
+    });
+};
+
+export const CreateQuiz = (quiz, callback) => {
+  socket
+    .emit("/books/quizzes/create", quiz)
+    .once("/books/quizzes/create", (res) => {
+      callback(res);
+    });
+};
+
+export const SubmitQuizResult = (result, groupId, bookId, callback) => {
+  socket
+    .emit("/books/quizzes/solved", result, groupId, bookId)
+    .once("/books/quizzes/solved", (res) => {
+      callback(res);
+    });
+};
+
+export const GetQuiz = (quizId, callback) => {
+  socket
+    .emit("/books/quizzes/getOne", quizId)
+    .once("/books/quizzes/getOne", (res) => {
+      callback(res);
+    });
 };
 
 export const FacebookSignup = (user, callback) => {
@@ -164,6 +275,14 @@ export const Signup = (user, callback = () => {}) => {
   } else {
     callback({ error: "passwords do not match" });
   }
+};
+
+export const GetNotifications = (userId, callback) => {
+  socket
+    .emit("/users/getNotifications", userId)
+    .once("/users/getNotifications", (res) => {
+      callback(res);
+    });
 };
 
 export const Login = (user, callback = () => {}) => {

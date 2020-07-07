@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FaHome, FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { BsChevronRight } from "react-icons/bs";
 import { connect } from "react-redux";
 import history from "../../routing/history";
 import store from "../../store/store";
@@ -15,19 +15,23 @@ const BreadCrumbs = ({ breadCrumbs }) => {
     };
   }, []);
   return (
-    <div className="row no-gutters py-1 px-3 border-right border-left border-bottom">
+    <div
+      className="bg-white row no-gutters py-1 px-3 border-right border-left border-bottom"
+      style={{ boxShadow: "-1px 1px 5px #dedede" }}
+    >
       {breadCrumbs.map((x, i) => {
         return (
           <div className="d-flex align-items-center" key={uid(x)}>
-            <FaAngleRight style={{ marginRight: "5px" }}></FaAngleRight>
+            <BsChevronRight style={{ marginRight: "5px" }}></BsChevronRight>
             {x.category && (
               <div>
                 {x.category}{" "}
-                <FaAngleRight style={{ marginRight: "5px" }}></FaAngleRight>
+                <BsChevronRight style={{ marginRight: "5px" }}></BsChevronRight>
               </div>
             )}
             <div
-              className="mr-2 btn-link cursor-pointer"
+              className="mr-2 cursor-pointer breadcrumb-link text-truncate"
+              style={{ maxWidth: "150px" }}
               onClick={() => {
                 if (history.location.pathname !== x.path) {
                   store.dispatch({

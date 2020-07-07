@@ -78,7 +78,7 @@ const Discussion = ({ bookId }) => {
               <div className="col-6">
                 <div className="row no-gutters justify-content-end px-3 h-100 align-items-center">
                   <div
-                    className="outline-btn-square h-85 px-3 bg-white py-3"
+                    className="fb-btn-pro"
                     onClick={() => history.push(`/books/${bookId}/threads/new`)}
                   >
                     New thread

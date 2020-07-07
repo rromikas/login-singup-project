@@ -12,10 +12,7 @@ const Summaries = ({ summaries }) => {
       {summaries.length ? (
         summaries.map((x) => {
           return (
-            <div
-              key={uid(x)}
-              className="col-12 p-4 border bg-white mb-4 convex rounded-8"
-            >
+            <div key={uid(x)} className="col-12 p-4 bg-white mb-4 static-card">
               <div className="row no-gutters">
                 <div className="col-auto pr-md-4 mb-3 mb-md-0 mx-auto">
                   <img
@@ -47,7 +44,7 @@ const Summaries = ({ summaries }) => {
                   </div>
                   <div className="row no-gutters">
                     <div
-                      className="btn-link"
+                      className="text-muted"
                       onClick={() =>
                         history.push(
                           `/books/${x.bookId._id}/summaries/${x._id}/edit`

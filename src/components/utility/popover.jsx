@@ -1,34 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-tippy/dist/tippy.css";
 import { Tooltip } from "react-tippy";
-import { FaQuestionCircle, FaQuestion } from "react-icons/fa";
 
-const Popover = ({ info }) => {
-  const [open, setOpen] = useState(false);
+const Popover = ({
+  onOpen = () => {},
+  position = "bottom",
+  theme = "light",
+  content,
+  trigger = "click",
+  delay = 0,
+  animation = "scale",
+  open = undefined,
+  onHide = () => {},
+  ...rest
+}) => {
+  useEffect(() => {
+    return function cleanUp() {
+      let popovers = document.getElementsByClassName("tippy-popper");
+      for (let i = 0; i < popovers.length; i++) {
+        popovers[i].parentNode.removeChild(popovers[i]);
+      }
+    };
+  }, []);
+  const [wasShowed, setWasShowed] = useState(false);
   return (
     <Tooltip
-      title={info}
-      position="top"
-      trigger="click"
-      theme="light"
+      onHide={onHide}
+      delay={delay}
+      hideDelay={0}
+      html={content}
+      position={position}
+      trigger={trigger}
+      theme={theme}
       arrow={true}
+      interactive={true}
+      animation={animation}
       open={open}
+      unmountHTMLWhenHide={true}
     >
-      {/* <FaQuestion color="#343a40"></FaQuestion> */}
-
-      <div
-        onMouseOver={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        style={{
-          width: "30px",
-          height: "30px",
-          borderRadius: "50%",
-          border: "1px solid",
-        }}
-        className="flex-center bg-white cursor-pointer"
-      >
-        ?
-      </div>
+      {rest.children}
     </Tooltip>
   );
 };

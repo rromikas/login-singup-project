@@ -1,12 +1,22 @@
 import { createStore, combineReducers } from "redux";
 
 function userReducer(
-  state = { username: "", photo: "", description: "", email: "" },
+  state = {
+    username: "",
+    photo: "",
+    description: "",
+    email: "",
+    groupMember: { role: "members" },
+  },
   action
 ) {
   switch (action.type) {
     case "SET_USER":
       return action.user;
+    case "UPDATE_USER":
+      return Object.assign({}, state, action.user);
+    case "SET_AUTHORIZATION_TRIED":
+      return Object.assign({}, state, { authorizationTried: true });
     default:
       return state;
   }
@@ -42,11 +52,45 @@ function breadcrumbsReducer(state = [{ title: "home", path: "/" }], action) {
       return state;
   }
 }
+function notificationReducer(
+  state = { title: "", message: "", expired: true },
+  action
+) {
+  switch (action.type) {
+    case "SET_NOTIFICATION":
+      return action.notification;
+    case "UPDATE_NOTIFICATION":
+      return Object.assign({}, state, action.notification);
+    default:
+      return state;
+  }
+}
+
+function groupReducer(
+  state = {
+    name: "",
+    _id: "",
+    interested_genres: [],
+    create_date: 0,
+    create_user: "",
+    books: [],
+  },
+  action
+) {
+  switch (action.type) {
+    case "SET_GROUP":
+      return action.group;
+    default:
+      return state;
+  }
+}
 
 const rootReducer = combineReducers({
   user: userReducer,
   query: queryReducer,
   breadCrumbs: breadcrumbsReducer,
+  group: groupReducer,
+  notification: notificationReducer,
 });
 
 const store = createStore(

@@ -76,7 +76,7 @@ const Summaries = ({ bookId }) => {
               <div className="col-5">
                 <div className="row no-gutters justify-content-end px-3 h-100 align-items-center">
                   <div
-                    className="outline-btn-square h-85 px-3 bg-white text-center py-3"
+                    className="fb-btn-pro text-center"
                     onClick={() => {
                       history.push(`/books/${bookId}/summaries/new`);
                     }}

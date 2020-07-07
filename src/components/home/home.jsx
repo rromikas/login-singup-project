@@ -23,6 +23,7 @@ const Home = () => {
   useEffect(() => {
     store.dispatch({ type: "SELECT_BREADCRUMB", breadCrumbIndex: 1 });
     GetRecentlyAddedBooks((res) => {
+      console.log("recently added books repsone home page", res);
       if (res.recentlyAddedBooks) {
         setResults({ items: res.recentlyAddedBooks, title: title });
         let choices = { genres: [], publishers: [], authors: [] };
@@ -103,10 +104,7 @@ const Home = () => {
 
   return (
     <div className="row no-gutters">
-      <div
-        className="col-lg-3 col-md-4 col-sm-5 p-4 d-sm-block d-none"
-        style={{ background: "#ffb4b4" }}
-      >
+      <div className="col-lg-3 col-xl-2 col-md-4 col-sm-5 p-4 d-md-block d-none">
         <div className="row no-gutters">
           <OptionPanel
             title="Genres"
@@ -146,7 +144,7 @@ const Home = () => {
           ></OptionPanel>
         </div>
       </div>
-      <div className="col-md-8 col-lg-9 col-sm-7 px-md-4 px-sm-3 px-2 py-4">
+      <div className="col-md-8 col-xl-10 col-lg-9 col-sm-7 px-md-4 px-sm-3 px-2 py-4">
         <Results results={results}></Results>
       </div>
     </div>

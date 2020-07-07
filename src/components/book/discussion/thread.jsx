@@ -34,7 +34,7 @@ const formatVotes = (votes) => {
         sum > 0 ? " text-success" : sum < 0 ? " text-danger" : " text-secondary"
       }`}
       style={{
-        marginRight: "15px"
+        marginRight: "15px",
       }}
     >
       {sum > 0 ? "+" : ""}
@@ -50,7 +50,7 @@ const Thread = (props) => {
 
   const [book, setBook] = useState({ image: "", title: "", authors: "" });
   const [thread, setThread] = useState({
-    createdBy: { photo: "", name: "" },
+    createdBy: { photo: "", name: "", _id: "" },
     description: "",
     title: "",
     replies: [],
@@ -105,8 +105,8 @@ const Thread = (props) => {
   }, []);
 
   return (
-    <div className="row no-gutters px-3 px-md-4  px-lg-5 pt-3 pb-5">
-      <div className="col-12 p-4 border bg-white">
+    <div className="row no-gutters justify-content-center px-3 px-md-4  px-lg-5 pt-3 pb-5">
+      <div className="col-12 col-xl-9 col-lg-10 p-4 static-card bg-white">
         <div className="row no-gutters h1 mb-4">Thread</div>
         <div className="row no-gutters justify-content-end justify-content-md-between">
           <div className="col-12 pb-4">
@@ -171,7 +171,7 @@ const Thread = (props) => {
           </div>
         </div>
       </div>
-      <div className="col-12">
+      <div className="col-12 col-xl-9 col-lg-10">
         <div
           className="row lead no-gutters ml-sm-5 ml-0 mt-4 mb-2"
           style={{ fontWeight: "500" }}
@@ -179,7 +179,7 @@ const Thread = (props) => {
           {replies.length} replies
         </div>
         <div
-          className="row no-gutters ml-sm-5 ml-0 mb-4 border"
+          className="row no-gutters ml-sm-5 ml-0 mb-4 static-card"
           style={{ background: "white", borderRadius: "8px" }}
         >
           {replies.map((x, i) => (
@@ -367,7 +367,7 @@ const Thread = (props) => {
         <div className="row no-gutters ml-sm-5 ml-0" id="reply-editor"></div>
         <div className="row no-gutters ml-sm-5 ml-0">
           <div
-            className="btn btn-primary py-3 px-5 mt-3"
+            className="fb-btn-pro py-3 px-5 mt-3"
             onClick={() => {
               if (user._id) {
                 let obj = {
@@ -375,6 +375,7 @@ const Thread = (props) => {
                   bookId,
                   threadId,
                   userId: user._id,
+                  thread_author_id: thread.createdBy._id,
                 };
                 ReplyToQuestion(obj, (res) => {
                   if (res.error) {

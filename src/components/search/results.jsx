@@ -4,6 +4,7 @@ import history from "../../routing/history";
 
 const Results = ({ results }) => {
   let pairedResults = [];
+  console.log("Results", results);
   results.items.forEach((element, i) => {
     if (i % 2 === 0) {
       pairedResults.push([element]);
@@ -24,7 +25,7 @@ const Results = ({ results }) => {
             onClick={() => history.push(`/books/${x[0]._id}`)}
           >
             <div
-              className="row h-100 no-gutters border convex overflow-hidden p-4 text-dark rounded-8"
+              className="row h-100 no-gutters static-card overflow-hidden p-4 text-dark"
               style={{
                 background:
                   color === "red"
@@ -36,11 +37,8 @@ const Results = ({ results }) => {
               <div className="col-auto mx-auto mb-2">
                 <img src={x[0].image} alt={x[0].image}></img>
               </div>
-              <div
-                className="col-sm-12 col-md col pl-3"
-                style={{ minWidth: "190px" }}
-              >
-                <div className="row no-gutters lead mb-2">
+              <div className="col pl-3" style={{ minWidth: "190px" }}>
+                <div className="row no-gutters h5 mb-2">
                   {x[0].title.length > 60
                     ? x[0].title.substring(0, 60) + "..."
                     : x[0].title}
@@ -60,7 +58,7 @@ const Results = ({ results }) => {
               onClick={() => history.push(`/books/${x[1]._id}`)}
             >
               <div
-                className="row h-100 no-gutters convex border overflow-hidden p-4 text-dark rounded-8"
+                className="row h-100 no-gutters static-card overflow-hidden p-4 text-dark"
                 style={{
                   background:
                     color === "red"
@@ -72,11 +70,8 @@ const Results = ({ results }) => {
                 <div className="col-auto mx-auto mb-2">
                   <img src={x[1].image}></img>
                 </div>
-                <div
-                  className="col-sm-12 col-md col pl-3"
-                  style={{ minWidth: "190px" }}
-                >
-                  <div className="row no-gutters lead mb-2">
+                <div className="col pl-3" style={{ minWidth: "190px" }}>
+                  <div className="row no-gutters h5 mb-2">
                     {x[1].title.length > 60
                       ? x[1].title.substring(0, 60) + "..."
                       : x[1].title}

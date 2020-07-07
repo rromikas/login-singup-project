@@ -17,7 +17,7 @@ const handleSubmit = (e, onError, setLoading, successPath) => {
     if (res.error) {
       onError(res.error.message ? res.error.message : res.error);
     } else {
-      localStorage["secret_token"] = res.token;
+      localStorage["books_user_secret_token"] = res.token;
       store.dispatch({ type: "SET_USER", user: res.user });
       history.push(successPath);
     }

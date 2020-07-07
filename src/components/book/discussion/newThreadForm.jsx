@@ -63,9 +63,9 @@ const NewThreadForm = (props) => {
   }, []);
 
   return (
-    <div className="row no-gutters px-2 px-sm-3 px-md-4 px-lg-5 pt-3 pb-5">
-      <div className="col-12 px-4">
-        <div className="row no-gutters justify-content-between border p-4 bg-white mb-3">
+    <div className="row no-gutters justify-content-center px-2 px-sm-3 px-md-4 px-lg-5 pt-3 pb-5">
+      <div className="col-12 col-xl-9 col-lg-10 px-4">
+        <div className="row no-gutters justify-content-between static-card p-4 bg-white mb-3">
           <div className="col-auto pb-5">
             <div className="row no-gutters" style={{ maxWidth: "436px" }}>
               <div className="h1 col-12">Write new post</div>
@@ -87,9 +87,9 @@ const NewThreadForm = (props) => {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="title" className="lead" style={{ fontWeight: "500" }}>
+          <div className="lead" style={{ fontWeight: "500" }}>
             Title
-          </label>
+          </div>
           <input
             value={thread.title}
             onChange={(e) => {
@@ -107,7 +107,7 @@ const NewThreadForm = (props) => {
         <div className="row no-gutters" id="question-editor"></div>
         <div className="row no-gutters">
           <div
-            className="btn btn-primary bg-theme-simple py-3 px-5 mt-3 mr-2"
+            className="fb-btn-pro py-3 px-5 mt-3 mr-2"
             onClick={() => {
               CreateThread(thread, (res) => {
                 if (res.error) {
@@ -121,7 +121,7 @@ const NewThreadForm = (props) => {
             Publish
           </div>
           <div
-            className="btn btn-outline-secondary py-3 px-5 mt-3"
+            className="fb-btn py-3 px-5 mt-3"
             onClick={() => {
               history.push(`/books/${bookId}`);
             }}

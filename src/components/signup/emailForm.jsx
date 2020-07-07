@@ -69,7 +69,7 @@ const EmailForm = ({ successPath }) => {
           I agree with{" "}
           <span
             onClick={() => history.push({ pathname: "/terms-and-conditions" })}
-            className="btn-link"
+            className="login-referals"
             style={{ color: "#ff8c8c", cursor: "pointer" }}
           >
             terms and conditions

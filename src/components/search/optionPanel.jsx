@@ -17,7 +17,7 @@ const OptionPanel = ({
 
   return (
     <div className="col-12 d-none d-sm-block">
-      <div className="row no-gutters p-4 bg-white convex border mb-4 shn disable-select text-dark rounded-8">
+      <div className="row no-gutters p-4 bg-white static-card mb-4 shn disable-select text-dark">
         <div className="col-12 mb-2">{title}</div>
         {insertEnabled && (
           <div className="col-12 d-flex align-items-center p-2">
@@ -92,7 +92,7 @@ const OptionPanel = ({
         ))}
         {choices.length > 4 && (
           <div
-            className="col-auto mx-auto"
+            className="col-auto mx-auto fb-btn"
             onClick={() => setShowAll(!showAll)}
           >
             {showAll ? (

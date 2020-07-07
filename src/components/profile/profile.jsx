@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import Results from "../search/results";
 import store from "../../store/store";
 import Summaries from "./Summaries";
+import TextareaAutosize from "react-autosize-textarea";
+import { connect } from "react-redux";
 
 const initialProfile = {
   name: "",
@@ -25,14 +27,15 @@ const Profile = (props) => {
   const [editIntro, setEditIntro] = useState(false);
 
   useEffect(() => {
-    ReadUser(localStorage["secret_token"], (res) => {
+    ReadUser(localStorage["books_user_secret_token"], (res) => {
       if (res.error) {
         toast.error(
           "Fetch failed. Configure your origin url variable in javascript/requests.js file"
         );
         history.push("/login");
       } else {
-        setUser((user) => Object.assign({}, user, res.user));
+        console.log("res.user profile1, res.user", res.user);
+        setUser((u) => Object.assign({}, u, res.user));
         let breadCrumbs = store.getState().breadCrumbs;
         if (breadCrumbs[breadCrumbs.length - 1].path !== `/profile`) {
           store.dispatch({
@@ -50,25 +53,25 @@ const Profile = (props) => {
   return (
     <div className="row no-gutters justify-content-center bg-light">
       <div
-        className="col-12 col-sm-4 bg-light px-sm-4 px-3 py-4"
+        className="col-12 col-md-5 col-lg-4 bg-light px-sm-4 px-3 py-4"
         style={{
           minHeight: "45vh",
-          background:
-            "radial-gradient(circle at left, rgb(255, 140, 140), rgba(255, 140, 140, 0.5))",
         }}
       >
-        <div className="row no-gutters justify-content-center mt-4">
-          <div className="col-12">
+        <div
+          className="row no-gutters justify-content-center bg-white static-card h-100 py-4"
+          style={{ flexFlow: "column" }}
+        >
+          <div className="col-12" style={{ flex: "0 0 auto" }}>
             <div
-              className="rounded-circle mx-auto"
+              className="rounded-circle mx-auto border"
               style={{
                 width: "120px",
                 height: "120px",
                 background: "white",
                 overflow: "hidden",
                 position: "relative",
-                backgroundImage:
-                  user.photo !== "" ? `url(${user.photo})` : "unset",
+                backgroundImage: user.photo !== "" ? `url(${user.photo})` : "",
                 backgroundSize: "cover",
                 backgorundPosition: "center",
               }}
@@ -91,71 +94,86 @@ const Profile = (props) => {
               </div>
             </div>
           </div>
-          <div className="col-12 mx-2 ml-md-3 mr-md-3">
-            <div className="text-center mt-3 h1" style={{ color: "white" }}>
-              {user.name}
-            </div>
+          <div
+            className="col-12 px-2 pl-md-3 pr-md-3"
+            style={{ flex: "0 0 auto" }}
+          >
+            <div className="text-center mt-3 h1">{user.name}</div>
           </div>
           <div
-            className="mt-3 col-auto mx-auto px-4 cursor-pointer py-2 rounded-8"
-            style={{ border: "2px solid white", color: "white" }}
+            style={{ flex: "0 0 auto" }}
+            className="my-3 col-auto mx-auto px-4 cursor-pointer py-2 fb-btn-pro"
             onClick={() => {
               store.dispatch({
                 type: "SET_USER",
-                user: { email: "", _id: "", photo: "", name: "" },
+                user: {
+                  email: "",
+                  _id: "",
+                  photo: "",
+                  name: "",
+                  authorizationTried: true,
+                },
               });
-              localStorage["secret_token"] = "";
+              localStorage["books_user_secret_token"] = "";
               history.push("/");
             }}
           >
             Logout
           </div>
+          <div className="col-auto px-4" style={{ flex: "0 0 auto" }}>
+            <div className="row no-gutters align-items-center">
+              <div className="col-12">
+                <div className="row no-gutters align-items-center">
+                  <div className="h4 col-auto mr-2 mb-0">Intro</div>
+                  <div className="col-auto">
+                    {editIntro ? (
+                      <FaCheck
+                        className="pointer text-dark"
+                        fontSize="24px"
+                        onClick={() => {
+                          setEditIntro(false);
+                          UpdateUser({
+                            description: user.description,
+                            token: localStorage["secret_token"],
+                          });
+                        }}
+                      ></FaCheck>
+                    ) : (
+                      <FaEdit
+                        className="pointer text-dark"
+                        fontSize="24px"
+                        onClick={() => setEditIntro(true)}
+                      ></FaEdit>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <TextareaAutosize
+              spellCheck={false}
+              disabled={!editIntro}
+              className={`col-12 ${
+                !editIntro ? "borderless " : "brdr-light "
+              }w-100 lead px-2`}
+              style={{
+                background: "transparent",
+                height: "15vh",
+                minHeight: "100px",
+              }}
+              value={user.description}
+              onChange={(e) => {
+                e.persist();
+                setUser((usr) =>
+                  Object.assign({}, usr, { description: e.target.value })
+                );
+              }}
+            ></TextareaAutosize>
+          </div>
+
+          <div className="col-auto" style={{ flex: "1 1 auto" }}></div>
         </div>
       </div>
-      <div className="col-12 col-sm-8 px-4 py-4">
-        <div className="d-flex align-items-center px-2">
-          <div className="h1">Intro</div>
-          <div className="mx-3">
-            {editIntro ? (
-              <FaCheck
-                className="pointer font-light"
-                fontSize="24px"
-                onClick={() => {
-                  setEditIntro(false);
-                  UpdateUser({
-                    description: user.description,
-                    token: localStorage["secret_token"],
-                  });
-                }}
-              ></FaCheck>
-            ) : (
-              <FaEdit
-                className="pointer font-light"
-                fontSize="24px"
-                onClick={() => setEditIntro(true)}
-              ></FaEdit>
-            )}
-          </div>
-        </div>
-        <textarea
-          spellCheck={false}
-          disabled={!editIntro}
-          className={`${
-            !editIntro ? "borderless " : "brdr-light "
-          }w-100 lead px-2`}
-          style={{
-            background: "transparent",
-            height: "15vh",
-            minHeight: "100px",
-          }}
-          value={user.description}
-          onChange={(e) => {
-            e.persist();
-            setUser((usr) =>
-              Object.assign({}, usr, { description: e.target.value })
-            );
-          }}
-        ></textarea>
+      <div className="col-12 col-md-7 col-lg-8 px-4 py-4">
         <div className="mb-5">
           <Results
             results={{
@@ -170,4 +188,11 @@ const Profile = (props) => {
   );
 };
 
-export default Profile;
+function mapp(state, ownProps) {
+  return {
+    user: state.user,
+    ...ownProps,
+  };
+}
+
+export default connect(mapp)(Profile);

@@ -91,10 +91,7 @@ const Search = ({ query, ...rest }) => {
 
   return (
     <div className="row no-gutters">
-      <div
-        className="col-lg-3 col-md-4 col-sm-5 p-4 d-sm-block d-none"
-        style={{ background: "#ffb4b4" }}
-      >
+      <div className="col-lg-3 col-md-4 col-sm-5 p-4 d-md-block d-none">
         <div className="row no-gutters">
           <OptionPanel
             title="Genres"
@@ -134,7 +131,7 @@ const Search = ({ query, ...rest }) => {
           ></OptionPanel>
         </div>
       </div>
-      <div className="col-md-8 col-lg-9 col-sm-7 px-sm-3 px-2 py-4 bg-light">
+      <div className="col-md-8 col-lg-9 px-sm-3 px-2 py-4 bg-light">
         <Results results={filteredResults}></Results>
       </div>
     </div>

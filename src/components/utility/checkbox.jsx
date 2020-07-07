@@ -1,22 +1,31 @@
 import React from "react";
-import { FaCheck } from "react-icons/fa";
-const CheckBox = ({ checked, setChecked, size }) => {
+import { BsCheck } from "react-icons/bs";
+const Checkbox = ({ white = false, checked, setChecked, size, ...rest }) => {
   return (
     <div
+      {...rest}
       style={{
         width: `${size}px`,
         height: `${size}px`,
         borderRadius: `${size / 3}px`,
         flexShrink: 0,
       }}
-      className="d-flex justify-content-center align-items-center concave border"
+      className={`d-flex justify-content-center align-items-center${
+        white ? " checkbox-white " : " checkbox-pro "
+      }${rest.className ? rest.className : ""}`}
       onClick={() => {
         setChecked(!checked);
       }}
     >
-      {checked && <FaCheck fontSize={`${size - 10}px`}></FaCheck>}
+      {checked && (
+        <BsCheck
+          strokeWidth="0.5px"
+          fontSize={`${size - 10}px`}
+          color={white ? "white" : "unset"}
+        ></BsCheck>
+      )}
     </div>
   );
 };
 
-export default CheckBox;
+export default Checkbox;

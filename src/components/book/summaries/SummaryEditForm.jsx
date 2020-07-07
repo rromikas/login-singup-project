@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import history from "../../../routing/history";
 import { connect } from "react-redux";
 import CheckBox from "../../utility/checkbox1";
-import Popover from "../../utility/popover";
+import Popover from "../../utility/Popover";
 import store from "../../../store/store";
 
 const SummaryEditForm = (props) => {
