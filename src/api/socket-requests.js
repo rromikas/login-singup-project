@@ -1,6 +1,9 @@
 const io = require("socket.io-client");
 
-const server = "http://192.168.0.104:5000";
+const server =
+  process.env.NODE_ENV === "production"
+    ? "https://tasteful-jeweled-ferry.glitch.me"
+    : "http://192.168.0.104:5000";
 
 const socket = io(server, {
   secure: true,
