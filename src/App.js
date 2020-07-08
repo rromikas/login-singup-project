@@ -205,7 +205,16 @@ function App() {
       }
     }, [user]);
     return (
-      <div className="row no-gutters flex-center" style={{ height: "500px" }}>
+      <div
+        className="row no-gutters flex-center"
+        style={{
+          height: "100vh",
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "100vw",
+        }}
+      >
         <PuffLoader size={105} color="#f88888"></PuffLoader>
       </div>
     );
