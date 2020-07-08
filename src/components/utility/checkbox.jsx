@@ -7,7 +7,7 @@ const Checkbox = ({ white = false, checked, setChecked, size, ...rest }) => {
       style={{
         width: `${size}px`,
         height: `${size}px`,
-        borderRadius: `${size / 3}px`,
+        borderRadius: `${size / 3.5}px`,
         flexShrink: 0,
       }}
       className={`d-flex justify-content-center align-items-center${

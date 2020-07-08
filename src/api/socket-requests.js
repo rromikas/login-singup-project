@@ -79,9 +79,9 @@ export const UpdateGroup = (group, callback) => {
   });
 };
 
-export const VoteForNextBook = (bookId, userId, callback) => {
+export const VoteForNextBook = (bookId, userId, groupId, callback) => {
   socket
-    .emit("/groups/voteForNextBook", bookId, userId)
+    .emit("/groups/voteForNextBook", bookId, userId, groupId)
     .once("/groups/voteForNextBook", (res) => {
       callback(res);
     });
@@ -301,7 +301,6 @@ export const UpdateUser = (updatedUser, callback = () => {}) => {
 };
 
 export const AddSummary = (props, callback = () => {}) => {
-  console.log("ADD SUMMARY PROPS", props);
   let response = {};
   if (!props.summary.authorId) {
     response = { error: "You have to login to craete new summaries" };

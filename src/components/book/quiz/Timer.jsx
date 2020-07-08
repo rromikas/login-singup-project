@@ -17,17 +17,21 @@ function formatTime(sec_num) {
   return hours + ":" + minutes + ":" + seconds;
 }
 
-const Timer = ({ initialTime, go = false }) => {
-  const [time, setTime] = useState(0);
+const Timer = ({ initialTime, go = false, onFinish = () => {} }) => {
+  const [time, setTime] = useState(100);
   useEffect(() => {
     let timeout;
     if (go) {
-      timeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
+      if (time > 0) {
+        timeout = setTimeout(() => {
+          setTime(time - 1);
+        }, 1000);
+      } else {
+        onFinish();
+      }
     }
     return function cleanUp() {
-      if (go) {
+      if (go && time > 0) {
         clearTimeout(timeout);
       }
     };

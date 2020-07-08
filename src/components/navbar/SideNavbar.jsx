@@ -1,12 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import history from "../../routing/history";
+import { BsX } from "react-icons/bs";
 
 const SideNavbar = ({ isMenuOpened, setMenu }) => {
   return (
     <div
       className="col-md-3 col-sm-7 col-12 vh-100"
-      style={{ position: "absolute" }}
+      style={{
+        position: "fixed",
+        top: "62px",
+        left: 0,
+        zIndex: isMenuOpened ? 5 : -1,
+      }}
     >
       <div className="w-100 h-100" style={{ position: "relative" }}>
         <div
@@ -22,7 +28,7 @@ const SideNavbar = ({ isMenuOpened, setMenu }) => {
           }}
         >
           <div
-            className="py-3 menu-item-custom"
+            className="py-3 fb-btn"
             onClick={() => {
               setMenu(!isMenuOpened);
               history.push("/");
@@ -31,7 +37,7 @@ const SideNavbar = ({ isMenuOpened, setMenu }) => {
             Home
           </div>
           <div
-            className="py-3 menu-item-custom"
+            className="py-3 fb-btn"
             onClick={() => {
               setMenu(!isMenuOpened);
               history.push("/search");
@@ -40,7 +46,7 @@ const SideNavbar = ({ isMenuOpened, setMenu }) => {
             Search
           </div>
           <div
-            className="py-3 menu-item-custom"
+            className="py-3 fb-btn"
             onClick={() => {
               setMenu(!isMenuOpened);
               history.push("/add-book");

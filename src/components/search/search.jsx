@@ -35,7 +35,6 @@ const Search = ({ query, ...rest }) => {
     }
 
     SearchBooks(query, (res) => {
-      console.log("query serh", query);
       if (res.error) {
         toast.error(res.error.toString());
       } else {

@@ -29,7 +29,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import Quiz from "./components/book/quiz/Quiz";
 import { connect } from "react-redux";
 import Toast from "./components/utility/Toast";
-import { BsSearch } from "react-icons/bs";
+import { BsSearch, BsPlus } from "react-icons/bs";
 import { GetFilteredGroups } from "./api/socket-requests";
 import { BsImage } from "react-icons/bs";
 import { uid } from "react-uid";
@@ -46,7 +46,6 @@ function App() {
       setIsAuthenticationPage(true);
     }
     const unlisten = history.listen((location) => {
-      console.log(location);
       if (location.pathname === "/login" || location.pathname === "/signup") {
         setIsAuthenticationPage(true);
       } else {
@@ -61,7 +60,6 @@ function App() {
   useEffect(() => {
     ReadUser(localStorage["books_user_secret_token"], (res) => {
       if (!res.error && res.user) {
-        console.log("APP>JS RES USER", res.user);
         store.dispatch({
           type: "SET_USER",
           user: Object.assign({}, res.user, { authorizationTried: true }),
@@ -79,7 +77,6 @@ function App() {
     const [groups, setGroups] = useState([]);
     useEffect(() => {
       GetFilteredGroups({}, (res) => {
-        console.log("FITLERED GROUPS,", res);
         if (res.groups) {
           setGroups(res.groups);
         }
@@ -87,13 +84,13 @@ function App() {
     }, []);
     return (
       <div className="row no-gutters justify-content-center">
-        <div className="col-7 p-3">
-          <div className="row no-gutters static-card bg-white p-4 mb-2">
-            <div className="col mr-4">
+        <div className="col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7 p-3">
+          <div className="row no-gutters static-card bg-white p-4">
+            <div className="col-12 col-md mr-4 my-2">
               <div className="row no-gutters flex-center position-relative">
                 <BsSearch
                   style={{
-                    zIndex: 5,
+                    zIndex: 2,
                     position: "absolute",
                     left: "18px",
                     top: 0,
@@ -102,6 +99,7 @@ function App() {
                   }}
                 ></BsSearch>
                 <input
+                  spellCheck={false}
                   type="text"
                   value={filter.interested_genres}
                   onKeyUp={(e) => {
@@ -113,7 +111,6 @@ function App() {
                           if (res.groups) {
                             setGroups(res.groups);
                           } else {
-                            console.log("error", res.error);
                           }
                         }
                       );
@@ -132,9 +129,10 @@ function App() {
               </div>
             </div>
             <div
-              className="col-auto fb-btn"
+              className="col-auto fb-btn-success my-2"
               onClick={() => history.push("/create-group")}
             >
+              <BsPlus className="mr-2" fontSize="24px"></BsPlus>
               Create group
             </div>
           </div>
@@ -165,7 +163,7 @@ function App() {
                             {x.interested_genres.length
                               ? x.interested_genres.map((y) => (
                                   <div
-                                    className="p-2 static-card border col-auto mr-2"
+                                    className="p-2 static-card border col-auto mr-2 mb-2"
                                     key={uid(y)}
                                   >
                                     <div className="row no-gutters align-items-center">
@@ -193,7 +191,6 @@ function App() {
   };
 
   const Redirecter = ({ user }) => {
-    console.log("REDIRECTER", user);
     useEffect(() => {
       if (user.authorizationTried || user._id) {
         if (user._id) {
@@ -252,8 +249,8 @@ function App() {
               className="w-100 h-100"
               style={{
                 transition: "opacity 0.3s",
-                position: "absolute",
-                top: 0,
+                position: "fixed",
+                top: "62px",
                 left: 0,
                 background: "black",
                 visibility: isMenuOpened ? "visible" : "hidden",

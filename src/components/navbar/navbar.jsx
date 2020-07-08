@@ -6,6 +6,7 @@ import { BsBell, BsSearch } from "react-icons/bs";
 import { GetNotifications } from "../../api/socket-requests";
 import Popover from "../utility/popover";
 import { format } from "timeago.js";
+import uniqid from "uniqid";
 
 const Navbar = ({ user, isMenuOpened, setMenu }) => {
   const searchBar = useRef(null);
@@ -15,7 +16,6 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
   useEffect(() => {
     if (user._id) {
       GetNotifications(user._id, (res) => {
-        console.log("Notifications", res.notifications);
         setNotifications(res.notifications);
       });
     }
@@ -81,47 +81,49 @@ const Navbar = ({ user, isMenuOpened, setMenu }) => {
               content={
                 <div
                   className="p-2"
-                  style={{ maxHeight: "400px", overflow: "auto" }}
+                  style={{ maxHeight: "70vh", overflow: "auto" }}
                 >
-                  {notifications.map((x) => (
-                    <div
-                      className="d-flex flex-wrap notification-item"
-                      onClick={() => {
-                        notificationsPopover.current.click();
-                        history.push(x.link);
-                      }}
-                    >
-                      <div className="col-auto p-2">
-                        <div
-                          className="bg-image rounded-circle square-60"
-                          style={{
-                            backgroundImage: `url(${
-                              x.sender_id
-                                ? x.sender_id.photo
-                                  ? x.sender_id.photo
-                                  : ""
-                                : ""
-                            })`,
-                          }}
-                        ></div>
-                      </div>
-                      <div className="col px-2 text-left py-4">
-                        <div className="row no-gutters mb-1">
-                          <span className="font-weight-bold mr-1">
-                            {x.sender_id
-                              ? x.sender_id.name
+                  {notifications.map((x) => {
+                    let imageUrl = x.sender_id
+                      ? x.sender_id.photo
+                        ? x.sender_id.photo
+                        : ""
+                      : "";
+                    return (
+                      <div
+                        key={uniqid("notification-")}
+                        className="d-flex flex-wrap notification-item"
+                        onClick={() => {
+                          notificationsPopover.current.click();
+                          history.push(x.link);
+                        }}
+                      >
+                        <div className="col-auto p-2">
+                          <div
+                            className="bg-image rounded-circle square-60"
+                            style={{
+                              backgroundImage: `url(${imageUrl})`,
+                            }}
+                          ></div>
+                        </div>
+                        <div className="col px-2 text-left py-4">
+                          <div className="row no-gutters mb-1">
+                            <span className="font-weight-bold mr-1">
+                              {x.sender_id
                                 ? x.sender_id.name
-                                : ""
-                              : ""}
-                          </span>
-                          {` ${x.message}`}
-                        </div>
-                        <div className="row no-gutters text-primary">
-                          {format(x.date)}
+                                  ? x.sender_id.name
+                                  : ""
+                                : ""}
+                            </span>
+                            {` ${x.message}`}
+                          </div>
+                          <div className="row no-gutters text-primary">
+                            {format(x.date)}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               }
             >

@@ -43,7 +43,7 @@ const Toast = ({ notification }) => {
     >
       <div className="row no-gutters p-3">
         {notification.type && (
-          <div className="col-auto mr-2">
+          <div className="col-auto pr-2">
             {notification.type === "success" ? (
               <BsCheck
                 strokeWidth="1px"
@@ -59,25 +59,20 @@ const Toast = ({ notification }) => {
             )}
           </div>
         )}
-        <div className="col">
-          <div className="row no-gutters justify-content-between">
-            <div className="col-auto mr-2 toast-title">
-              {notification.title}
-            </div>
-            <div
-              className="col-auto toast-close-icon"
-              onClick={() =>
-                store.dispatch({
-                  type: "UPDATE_NOTIFICATION",
-                  notification: { expired: true },
-                })
-              }
-            >
-              <BsX fontSize="24px"></BsX>
-            </div>
-          </div>
+        <div className="col pr-2 toast-title">{notification.title}</div>
+        <div
+          className="col-auto toast-close-icon"
+          onClick={() =>
+            store.dispatch({
+              type: "UPDATE_NOTIFICATION",
+              notification: { expired: true },
+            })
+          }
+        >
+          <BsX fontSize="24px"></BsX>
         </div>
       </div>
+
       <div className="row no-gutters p-3">{notification.message}</div>
     </div>
   );

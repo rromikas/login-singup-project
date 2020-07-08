@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEdit, FaCheck, FaCamera } from "react-icons/fa";
-import RelaxReading from "../../images/relaxReading";
 import { ReadUser, UpdateUser } from "../../api/socket-requests";
 import PhotoUploader from "./photoUploader";
 import history from "../../routing/history";
@@ -34,7 +33,6 @@ const Profile = (props) => {
         );
         history.push("/login");
       } else {
-        console.log("res.user profile1, res.user", res.user);
         setUser((u) => Object.assign({}, u, res.user));
         let breadCrumbs = store.getState().breadCrumbs;
         if (breadCrumbs[breadCrumbs.length - 1].path !== `/profile`) {

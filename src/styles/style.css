@@ -12314,6 +12314,26 @@ textarea:focus {
           box-shadow: 0 0 0 3px #85c4ff !important;
 }
 
+.general-input::-webkit-input-placeholder {
+  color: #b1afaf;
+  font-weight: 500;
+}
+
+.general-input:-ms-input-placeholder {
+  color: #b1afaf;
+  font-weight: 500;
+}
+
+.general-input::-ms-input-placeholder {
+  color: #b1afaf;
+  font-weight: 500;
+}
+
+.general-input::placeholder {
+  color: #b1afaf;
+  font-weight: 500;
+}
+
 .general-input {
   border: 1px solid #dadada;
   border-radius: 10px;

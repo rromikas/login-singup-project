@@ -4,8 +4,7 @@ import { uid } from "react-uid";
 import Timer from "./Timer";
 import CorrectSound from "./correct-sound.mp3";
 import { SubmitQuizResult } from "../../../api/socket-requests";
-
-console.log("orect sound", CorrectSound);
+import store from "../../../store/store";
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -26,13 +25,19 @@ const StoreResult = (questions, userId, quizId, groupId, bookId) => {
     groupId,
     bookId,
     (res) => {
-      console.log("response after sumbit result", res);
+      store.dispatch({
+        type: "SET NOTIFICATION",
+        notification: {
+          title: "Congratulations!",
+          message: "You completed quiz",
+          type: "success",
+        },
+      });
     }
   );
 };
 
 const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
-  console.log("useId game", userId);
   const [questions, setQuestions] = useState([]);
   const [time, setTime] = useState(0);
 
@@ -40,7 +45,6 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
     let gameQuestions = [];
     let arr = JSON.parse(JSON.stringify(quiz.questions));
     arr.forEach((x) => {
-      console.log("A");
       let q = Object.assign({}, x, { answer: -1 });
       gameQuestions.push(q);
     });
@@ -50,6 +54,8 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
 
   const [help, setHelp] = useState({ cutHalf: 3, cutOne: 3 });
 
+  const [timeOver, setTimeOver] = useState(false);
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   const correctAnswers = questions.filter((x) => x.correctAnswer === x.answer)
@@ -57,7 +63,7 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
   const score = Math.floor((correctAnswers / questions.length) * 100);
   return (
     <div
-      className="container-fluid px-3 bg-light"
+      className="container-fluid px-3 bg-light overflow-auto"
       style={{
         position: "fixed",
         left: 0,
@@ -68,10 +74,10 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
       }}
     >
       <div className="row no-gutters py-5 justify-content-center">
-        {!questions.filter((x) => x.answer === -1).length ? (
+        {!questions.filter((x) => x.answer === -1).length || timeOver ? (
           <div className="col-12 col-md-8 col-lg-7" style={{ fontWeight: 500 }}>
             <div className="row no-gutters">
-              <div className="col-12 bg-white p-4 basic-card">
+              <div className="col-12 bg-white p-4 static-card">
                 <div className="row no-gutters h1 justify-content-center mb-4">
                   {score < 50
                     ? "No one is perfect"
@@ -116,11 +122,9 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
                   <div className="col-auto">50:50 help used</div>
                   <div className="col-auto">{3 - help.cutHalf} out of 3</div>
                 </div>
-              </div>
-              <div className="col-12">
                 <div className="row no-gutters justify-content-center pt-2">
                   <div
-                    className="col-12 col-sm-auto text-center text-white m-1 basic-card py-4 px-5 bg-primary cursor-pointer"
+                    className="col-12 col-sm-auto text-center m-1 fb-btn-primary cursor-pointer"
                     onClick={() => {
                       let quiz = getQuizAgain();
                       let gameQuestions = [];
@@ -137,7 +141,7 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
                     Play again
                   </div>
                   <div
-                    className="col-12 col-sm-auto text-center basic-card m-1 py-4 px-5 cursor-pointer"
+                    className="col-12 col-sm-auto text-center fb-btn-pro m-1 cursor-pointer"
                     onClick={onGoHome}
                   >
                     Go home
@@ -152,7 +156,7 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
             style={{ fontSize: "24px", fontWeight: "600" }}
           >
             <div className="row no-gutters justify-content-between px-2">
-              <div className="col-auto">
+              <div className="col-auto mb-2">
                 <div className="row no-gutters">
                   <div className="col-auto mr-3">
                     <div
@@ -276,10 +280,17 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-auto">
-                <Timer initialTime={time} go={true}></Timer>
+              <div className="col-auto mb-2">
+                <Timer
+                  initialTime={time}
+                  go={time > 0}
+                  onFinish={() => {
+                    setTimeOver(true);
+                    StoreResult(questions, userId, quiz._id, groupId, bookId);
+                  }}
+                ></Timer>
               </div>
-              <div className="col-auto">
+              <div className="col-auto mb-2">
                 <div className="row no-gutters">
                   <div className="col-auto mr-3 cursor-pointer">
                     <div
@@ -328,7 +339,7 @@ const Game = ({ userId, quiz, onGoHome, getQuizAgain, groupId, bookId }) => {
                   {questions[currentQuestion].answers.map((x, i) => (
                     <div
                       key={uid(`answer-${i}`)}
-                      className="col-6 p-2"
+                      className="col-12 col-md-6 p-2"
                       style={{ opacity: x === "" ? 0 : 1 }}
                     >
                       <div

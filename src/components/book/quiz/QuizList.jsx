@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GetBookQuizzes } from "../../../api/socket-requests";
 import history from "../../../routing/history";
 import { BsClock, BsQuestionCircle } from "react-icons/bs";
+import uniqid from "uniqid";
 
 function formatTime(sec_num) {
   var hours = Math.floor(sec_num / 3600);
@@ -22,21 +23,22 @@ function formatTime(sec_num) {
 
 const QuizList = ({ bookId, groupId }) => {
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    console.log("AAA grou", groupId, bookId);
+    setLoading(true);
     GetBookQuizzes(bookId, groupId, (res) => {
-      console.log("response quiz list", res);
       if (!res.error) {
         setQuizzes(res.quizzes);
       }
+      setLoading(false);
     });
   }, []);
   return (
-    <div className="row no-gutters">
+    <div className="row no-gutters" style={{ opacity: loading ? 0.5 : 1 }}>
       <div className="col-12">
         <div className="row no-gutters p-4 border bg-white">
           <div
-            className="col-auto btn-pro"
+            className="col-auto fb-btn-pro"
             onClick={() => history.push(`/books/${bookId}/quiz/new`)}
           >
             Create quiz
@@ -44,10 +46,13 @@ const QuizList = ({ bookId, groupId }) => {
         </div>
         {quizzes.length ? (
           quizzes.map((x) => (
-            <div className="row no-gutters bg-white border-left border-bottom border-right">
+            <div
+              className="row no-gutters bg-white border-left border-bottom border-right"
+              key={uniqid("quiz-")}
+            >
               <div className="col-sm col-12 col-lg-auto pt-4 pb-2 pb-sm-4">
                 <div className="row no-gutters">
-                  <div className="col-12 col-lg-auto px-4 py-2 py-lg-4">
+                  <div className="col-12 col-lg-auto px-lg-0 px-4 py-2 py-lg-4">
                     <div className="row no-gutters">
                       <div className="col-12 text-lg-center">
                         <label>Author</label>
@@ -71,7 +76,7 @@ const QuizList = ({ bookId, groupId }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-lg-auto px-4 py-2 py-lg-4">
+                  <div className="col-12 col-lg-auto px-lg-0 px-4 py-2 py-lg-4">
                     <div className="row no-gutters justify-content-start justify-content-lg-center">
                       <div className="col-12 mr-lg-2 text-lg-center">
                         <label>Questions</label>
@@ -87,7 +92,7 @@ const QuizList = ({ bookId, groupId }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-lg-auto px-4 py-2 py-lg-4">
+                  <div className="col-12 col-lg-auto px-lg-0 px-4 py-2 py-lg-4">
                     <div className="row no-gutters justify-content-start justify-content-lg-center">
                       <div className="col-12 text-lg-center">
                         <label>Time</label>
@@ -106,16 +111,16 @@ const QuizList = ({ bookId, groupId }) => {
                 </div>
               </div>
 
-              <div className="col-12 col-sm col-lg px-4 py-4">
+              <div className="col-12 col-sm col-lg px-lg-0 px-4 py-4">
                 <div className="row no-gutters justify-content-center h-100 align-items-center">
                   <div
                     onClick={() =>
                       history.push(`/books/${bookId}/quiz/${x._id}`)
                     }
-                    className="col-auto py-3 px-5 quiz-play-btn"
+                    className="col-auto py-3 px-5 fb-btn-primary"
                     style={{ fontSize: "24px", fontWeight: "600" }}
                   >
-                    Play
+                    <div className="row no-gutters px-4">Play</div>
                   </div>
                 </div>
               </div>

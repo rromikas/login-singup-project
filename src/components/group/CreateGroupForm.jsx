@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Popover from "../utility/popover";
 import { connect } from "react-redux";
 import { uid } from "react-uid";
@@ -18,6 +18,15 @@ const CreateGroupForm = ({ user }) => {
   });
   const [problem, setProblem] = useState("");
   const [newGenre, setNewGenre] = useState("");
+  useEffect(() => {
+    let breadCrumbs = store.getState().breadCrumbs;
+    if (breadCrumbs[breadCrumbs.length - 1].path !== "/create-group") {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        breadCrumb: { title: "new", category: "groups", path: "/create-group" },
+      });
+    }
+  }, []);
   return (
     <div className="row no-gutters justify-content-center p-3">
       <div className="col-12 col-xl-9 col-lg-10 p-5 static-card bg-white">
@@ -25,7 +34,7 @@ const CreateGroupForm = ({ user }) => {
           <div className="col-12 h2">Create group</div>
           <div className="col-12">
             <div className="row no-gutters mb-2">
-              <div className="col-8">
+              <div className="col-xl-8 col-lg-9 col-md-10 col-sm-12">
                 <label>Name</label>
                 <input
                   spellCheck={false}
@@ -42,7 +51,7 @@ const CreateGroupForm = ({ user }) => {
               </div>
             </div>
             <div className="row no-gutters mb-2">
-              <div className="col-8">
+              <div className="col-xl-8 col-lg-9 col-md-10 col-sm-12">
                 <label>Description</label>
                 <textarea
                   spellCheck={false}
@@ -85,7 +94,7 @@ const CreateGroupForm = ({ user }) => {
                   </div>
                 ))
               ) : (
-                <div className="p-2 border col-auto mb-2 mr-2 rounded">
+                <div className="p-2 col-auto mb-2 mr-2 rounded">
                   No interested genres added
                 </div>
               )}

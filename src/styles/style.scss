@@ -639,6 +639,11 @@ textarea:focus {
   box-shadow: 0 0 0 3px $themeLighterMain !important;
 }
 
+.general-input::placeholder {
+  color: $color-500;
+  font-weight: 500;
+}
+
 .general-input {
   border: 1px solid #dadada;
   border-radius: 10px;

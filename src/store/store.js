@@ -37,10 +37,7 @@ function breadcrumbsReducer(state = [{ title: "home", path: "/" }], action) {
       return state
         .concat([
           {
-            title:
-              action.breadCrumb.title.length > 10
-                ? action.breadCrumb.title.substring(0, 10) + ". . ."
-                : action.breadCrumb.title,
+            title: action.breadCrumb.title,
             category: action.breadCrumb.category,
             path: action.breadCrumb.path,
           },

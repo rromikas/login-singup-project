@@ -138,7 +138,6 @@ const WriteSummaryForm = (props) => {
                   }),
                 },
                 (res) => {
-                  console.log("response after add sum", res);
                   if (res.error) {
                     toast.error(res.error.toString());
                   } else {

@@ -3,6 +3,7 @@ import { GetQuiz } from "../../../api/socket-requests";
 import { BsClock, BsQuestionCircle, BsFillPlayFill } from "react-icons/bs";
 import Game from "./Game";
 import { connect } from "react-redux";
+import store from "../../../store/store";
 
 function formatTime(sec_num) {
   var hours = Math.floor(sec_num / 3600);
@@ -27,7 +28,6 @@ const Quiz = (props) => {
   const groupId = props.user.groupMember.group_id
     ? props.user.groupMember.group_id
     : 0;
-  console.log("PRPS USER", props.user);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [quiz, setQuiz] = useState({
@@ -40,16 +40,29 @@ const Quiz = (props) => {
 
   useEffect(() => {
     GetQuiz(quizId, (res) => {
-      console.log("Response after getting quiz", res);
       if (res.quiz) {
         setQuiz(res.quiz);
       }
     });
+
+    let breadCrumbs = store.getState().breadCrumbs;
+    if (
+      breadCrumbs[breadCrumbs.length - 1].path !==
+      `/books/${bookId}/quiz/${quizId}`
+    ) {
+      store.dispatch({
+        type: "ADD_BREADCRUMB",
+        breadCrumb: {
+          title: quizId,
+          path: `/books/${bookId}/quiz/${quizId}`,
+          category: "quiz",
+        },
+      });
+    }
   }, []);
-  console.log("Quiz (bookid, quizid)", bookId, quizId);
 
   return (
-    <div className="row no-gutters p-4 justify-content-center">
+    <div className="row no-gutters p-0 p-sm-2 p-md-4 justify-content-center">
       {isPlaying && (
         <Game
           bookId={bookId}
@@ -61,29 +74,34 @@ const Quiz = (props) => {
           getQuizAgain={() => JSON.parse(JSON.stringify(quiz))}
         ></Game>
       )}
-      <div className="col-lg-10 static-card bg-white p-4">
+      <div className="col-12 col-xl-9 col-lg-10 static-card bg-white p-4 p-md-5">
         <div className="row no-gutters">
           <div className="col-12 mb-4">
             <div className="row no-gutters align-items-center">
-              <div className="col-auto mr-5 h2">Quiz</div>
-              <BsClock fontSize="40px" className="mr-2 col-auto"></BsClock>
-              <div
-                className="col-auto mr-4"
-                style={{ fontSize: "24px", weight: 600 }}
-              >
-                {formatTime(quiz.time)}
+              <div className="col-auto mr-5 h2 mb-3">Quiz</div>
+              <div className="col-auto mb-3">
+                <div className="row no-gutters">
+                  <BsClock fontSize="40px" className="mr-2 col-auto"></BsClock>
+                  <div
+                    className="col-auto mr-4"
+                    style={{ fontSize: "24px", weight: 600 }}
+                  >
+                    {formatTime(quiz.time)}
+                  </div>
+                  <BsQuestionCircle
+                    fontSize="40px"
+                    className="col-auto mr-2"
+                  ></BsQuestionCircle>
+                  <div
+                    className="col-auto mr-4"
+                    style={{ fontSize: "24px", weight: 600 }}
+                  >
+                    {quiz.questions.length}
+                  </div>
+                </div>
               </div>
-              <BsQuestionCircle
-                fontSize="40px"
-                className="col-auto mr-2"
-              ></BsQuestionCircle>
-              <div
-                className="col-auto mr-4"
-                style={{ fontSize: "24px", weight: 600 }}
-              >
-                {quiz.questions.length}
-              </div>
-              <div className="col-auto quiz-play-btn user-select-none">
+
+              <div className="col-auto quiz-play-btn user-select-none mb-3">
                 <div
                   className="row no-gutters align-items-center px-4 h-100"
                   onClick={() => setIsPlaying(true)}

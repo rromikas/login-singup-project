@@ -4,7 +4,6 @@ import history from "../../routing/history";
 
 const Results = ({ results }) => {
   let pairedResults = [];
-  console.log("Results", results);
   results.items.forEach((element, i) => {
     if (i % 2 === 0) {
       pairedResults.push([element]);

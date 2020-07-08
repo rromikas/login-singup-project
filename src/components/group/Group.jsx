@@ -11,7 +11,6 @@ import {
 } from "../../api/socket-requests";
 import { connect } from "react-redux";
 import Popover from "../utility/popover";
-import CheckBox from "../utility/checkbox";
 import {
   BsImage,
   BsStar,
@@ -22,7 +21,7 @@ import {
 import store from "../../store/store";
 import history from "../../routing/history";
 import PhotoUploader from "../utility/PhotoUplaoder";
-import { FaRss } from "react-icons/fa";
+import uniqid from "uniqid";
 import jwt from "jsonwebtoken";
 
 const initialCurrentReading = {
@@ -30,14 +29,13 @@ const initialCurrentReading = {
 };
 
 function setBreadcrumb(breadCrumb) {
-  store.dispatch({
-    type: "ADD_BREADCRUMB",
-    breadCrumb: {
-      title: breadCrumb.title,
-      path: breadCrumb.path,
-      category: breadCrumb.category,
-    },
-  });
+  let breadCrumbs = store.getState().breadCrumbs;
+  if (breadCrumbs[breadCrumbs.length - 1].path !== breadCrumb.path) {
+    store.dispatch({
+      type: "ADD_BREADCRUMB",
+      breadCrumb,
+    });
+  }
 }
 
 const Group = (props) => {
@@ -48,7 +46,6 @@ const Group = (props) => {
   let groupId = props.match.params.groupId;
 
   let user = props.user;
-  console.log("USER GROUP", user);
   let myVote = user.groupMember.current_vote
     ? user.groupMember.current_vote
     : -1;
@@ -83,7 +80,6 @@ const Group = (props) => {
       // err
     }
   }
-  console.log("Invitation token decoded", invitationId);
   const [invitation, setInvitation] = useState({
     invitationId: "",
     invitationToken: "",
@@ -103,10 +99,8 @@ const Group = (props) => {
   useEffect(() => {
     setLoading(true);
     GetGroup(groupId, (res) => {
-      console.log("Get group response", res);
       if (!res.error) {
         let currentReadIndex = res.books.findIndex((x) => x.currently_reading);
-        console.log("currentl reading index", currentReadIndex);
 
         setCurrentlyReading(
           currentReadIndex !== -1
@@ -157,6 +151,31 @@ const Group = (props) => {
           : 0
       )[0]
     : { book_id: { title: "", image: "", _id: "" } };
+
+  const SendInvitation = () => {
+    inviteMaker.current.click();
+    InviteMemberToGroup(inviteEmail, user._id, groupId, (res) => {
+      if (!res.error) {
+        store.dispatch({
+          type: "SET_NOTIFICATION",
+          notification: {
+            title: "Invitation sent",
+            message: "You send invitation to " + inviteEmail,
+            type: "success",
+          },
+        });
+      } else {
+        store.dispatch({
+          type: "SET_NOTIFICATION",
+          notification: {
+            message: "Failed to send invitation",
+            type: "failure",
+            title: "Invitation not sent",
+          },
+        });
+      }
+    });
+  };
 
   return (
     <div className="row no-gutters pb-5" style={{ opacity: loading ? 0.5 : 1 }}>
@@ -217,7 +236,7 @@ const Group = (props) => {
                 </div>
                 <Popover
                   content={
-                    <div>
+                    <div className="p-2">
                       <div
                         className="fb-btn"
                         onClick={() => {
@@ -279,7 +298,6 @@ const Group = (props) => {
                       user._id,
                       invitationId,
                       (res) => {
-                        console.log("Repsose after accepting invitation", res);
                         if (!res.error) {
                           store.dispatch({
                             type: "SET_NOTIFICATION",
@@ -336,6 +354,12 @@ const Group = (props) => {
                           <div className="text-left">
                             <label>email</label>
                             <input
+                              onKeyUp={(e) => {
+                                e.persist();
+                                if (e.keyCode === 13) {
+                                  SendInvitation();
+                                }
+                              }}
                               value={inviteEmail}
                               onChange={(e) => {
                                 e.persist();
@@ -348,37 +372,7 @@ const Group = (props) => {
                           <div className="d-flex flex-nowrap justify-content-center">
                             <div
                               className="col-auto mr-2 btn-pro"
-                              onClick={() => {
-                                inviteMaker.current.click();
-                                InviteMemberToGroup(
-                                  inviteEmail,
-                                  user._id,
-                                  groupId,
-                                  (res) => {
-                                    if (!res.error) {
-                                      store.dispatch({
-                                        type: "SET_NOTIFICATION",
-                                        notification: {
-                                          title: "Invitation sent",
-                                          message:
-                                            "You send invitation to " +
-                                            inviteEmail,
-                                          type: "success",
-                                        },
-                                      });
-                                    } else {
-                                      store.dispatch({
-                                        type: "SET_NOTIFICATION",
-                                        notification: {
-                                          message: "Failed to send invitation",
-                                          type: "failure",
-                                          title: "Invitation not sent",
-                                        },
-                                      });
-                                    }
-                                  }
-                                );
-                              }}
+                              onClick={() => SendInvitation()}
                             >
                               Invite
                             </div>
@@ -418,7 +412,7 @@ const Group = (props) => {
                       {(role === "admin" || role === "co-admin") && (
                         <Popover
                           content={
-                            <div>
+                            <div className="p-2">
                               <div
                                 className="fb-btn"
                                 onClick={() => {
@@ -439,10 +433,6 @@ const Group = (props) => {
                                           });
                                           setTick(!tick);
                                         }
-                                        console.log(
-                                          "Response after complete",
-                                          res
-                                        );
                                       }
                                     );
                                   } else {
@@ -599,7 +589,10 @@ const Group = (props) => {
                       <div className="row no-gutters">
                         {readNextBooks.length ? (
                           readNextBooks.map((x) => (
-                            <div className="col-12 p-3">
+                            <div
+                              className="col-12 p-3"
+                              key={uniqid("read-next-")}
+                            >
                               <div className="row no-gutters h-100">
                                 <div
                                   className="col-auto mx-auto text-center mb-2 cursor-pointer"
@@ -623,6 +616,7 @@ const Group = (props) => {
                                         VoteForNextBook(
                                           x.book_id._id,
                                           user._id,
+                                          groupId,
                                           (res) => {
                                             if (!res.error) {
                                               setTick(!tick);
@@ -648,10 +642,6 @@ const Group = (props) => {
                                                 },
                                               });
                                             } else {
-                                              console.log(
-                                                "Res.error",
-                                                res.error
-                                              );
                                               store.dispatch({
                                                 type: "SET_NOTIFICATION",
                                                 notification: {
@@ -709,7 +699,10 @@ const Group = (props) => {
                       <div className="row no-gutters">
                         {readBooks.length ? (
                           readBooks.map((x) => (
-                            <div className="col-12 p-3">
+                            <div
+                              className="col-12 p-3"
+                              key={uniqid("already-read-")}
+                            >
                               <div
                                 className="row no-gutters h-100 cursor-pointer"
                                 onClick={() =>

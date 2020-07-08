@@ -8,20 +8,16 @@ const PrivateRoute = ({ Component, bearerPath, ...rest }) => {
 
   useEffect(() => {
     ReadUser(localStorage["books_user_secret_token"], (res) => {
-      console.log("PRIVATE ROUTE RESPONSE", res);
       setValidity((val) =>
         Object.assign({}, val, { ready: true, valid: res.error ? false : true })
       );
     });
   }, []);
 
-  console.log("validiy payhname", validity, bearerPath);
-
   return validity.ready ? (
     <Route
       {...rest}
       render={(props) => {
-        console.log("validit y vali paskutinsi", validity.valid);
         return validity.valid ? (
           <Component {...props}></Component>
         ) : (

@@ -37,7 +37,6 @@ function submitQuiz(quiz, user, bookId, onError, onSuccess) {
         formatedQuiz["group_id"] = user.groupMember.group_id;
       }
       CreateQuiz(formatedQuiz, (res) => {
-        console.log("response after creating quiz", res);
         if (!res.error) {
           onSuccess(res.newQuiz._id);
         }
@@ -49,13 +48,12 @@ function submitQuiz(quiz, user, bookId, onError, onSuccess) {
 const CreateQuizForm = (props) => {
   const user = props.user;
   const bookId = props.match.params.bookId;
-  console.log("bokid quiz", bookId);
   const [newQuestion, setNewQuestion] = useState(getInitialState());
   const [quiz, setQuiz] = useState({ questions: [], minutes: 0, seconds: 0 });
   const [problem, setProblem] = useState("");
   return (
     <div className="row no-gutters justify-content-center p-2">
-      <div className="col-10 static-card bg-white">
+      <div className="col-12 col-md-11 col-lg-10 static-card bg-white">
         <div className="row no-gutters pb-4 pt-4">
           <div className="col-12 h3 px-4">
             <div className="row no-gutters align-items-center justify-content-between">
@@ -200,7 +198,7 @@ const CreateQuizForm = (props) => {
                 <Popover
                   theme={"dark"}
                   content={
-                    <div className="popover-inner text-light">
+                    <div className="popover-inner text-light p-2">
                       {!newQuestion.question
                         ? "Enter the question"
                         : newQuestion.answers.filter((x) => x === "").length
