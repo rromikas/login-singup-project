@@ -2,8 +2,8 @@ const io = require("socket.io-client");
 
 const server =
   process.env.NODE_ENV === "production"
-    ? "http://quiet-tor-52115.herokuapp.com"
-    : "192.168.0.104:5000";
+    ? "https://quiet-tor-52115.herokuapp.com/"
+    : "http://192.168.0.104:5000";
 
 const socket = io(server, {
   secure: true,
