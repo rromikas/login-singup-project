@@ -112,31 +112,42 @@ const CreateQuizForm = (props) => {
               <div
                 className="col-auto fb-btn-primary"
                 onClick={() => {
-                  submitQuiz(
-                    quiz,
-                    user,
-                    bookId,
-                    (pr) =>
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          type: "failure",
-                          message: "Set a time",
-                          title: "You missed something",
-                        },
-                      }),
-                    (quizId) => {
-                      store.dispatch({
-                        type: "SET_NOTIFICATION",
-                        notification: {
-                          type: "success",
-                          message: "Your quiz is online now!",
-                          title: "Quiz made",
-                        },
-                      });
-                      history.push(`/books/${bookId}/quiz/${quizId}`);
-                    }
-                  );
+                  if (quiz.questions.length > 2) {
+                    submitQuiz(
+                      quiz,
+                      user,
+                      bookId,
+                      (pr) =>
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            type: "failure",
+                            message: "Set a time",
+                            title: "You missed something",
+                          },
+                        }),
+                      (quizId) => {
+                        store.dispatch({
+                          type: "SET_NOTIFICATION",
+                          notification: {
+                            type: "success",
+                            message: "Your quiz is online now!",
+                            title: "Quiz made",
+                          },
+                        });
+                        history.push(`/books/${bookId}/quiz/${quizId}`);
+                      }
+                    );
+                  } else {
+                    store.dispatch({
+                      type: "SET_NOTIFICATION",
+                      notification: {
+                        message: "Come up with at least 3 questions",
+                        title: "Questions missing",
+                        type: "failure",
+                      },
+                    });
+                  }
                 }}
               >
                 Done!
